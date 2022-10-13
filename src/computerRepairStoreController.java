@@ -128,6 +128,8 @@ public class computerRepairStoreController {
 		private void clearPurchaseButtonPressed(ActionEvent event) {
 			
 		}
+
+		// Test
 		
 		@FXML
 		private void exitButtonPressed(ActionEvent event) {
