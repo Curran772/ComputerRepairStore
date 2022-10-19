@@ -125,6 +125,7 @@ public class computerRepairStoreController implements Initializable {
 
 	@FXML
 	private TextField totalDueField;
+
 	
 
 	
