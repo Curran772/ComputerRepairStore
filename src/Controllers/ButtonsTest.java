@@ -1,3 +1,4 @@
+package Controllers;
 
 public class ButtonsTest {
 	public static void main(String[] args) {

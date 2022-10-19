@@ -1,13 +1,15 @@
+package Controllers;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
-import javax.print.DocFlavor.URL;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import DBStructure.DBMethods;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,9 +26,9 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+
 
 public class computerRepairStoreController implements Initializable {
 
@@ -149,20 +151,18 @@ public class computerRepairStoreController implements Initializable {
 			// These items are for the choiceBox
 			// initializing choice box
 			pmtMethodField.getItems().addAll(pmtType);
-			pmtMethodField.setOnAction(this::choiceBoxField);	
-			
-			
+			pmtMethodField.setOnAction(this::choiceBoxField);
 
 		}
 	
 /**
- * This method allows us to switch to the ComputerRepairstore FXML file
+ * This method allows us to switch to the ComputerRepairStore FXML file
  * 
  * 
  */
 		@FXML
 		public void switchToComputerRepairStore(ActionEvent event) throws IOException {
-			Parent root = FXMLLoader.load(getClass().getResource("ComputerRepairStore.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("Resources/Controllers.ComputerRepairStore.fxml"));
 			stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 			scene = new Scene(root);
 			stage.setScene(scene);
@@ -321,100 +321,7 @@ public class computerRepairStoreController implements Initializable {
 			 enterNumber = pmtAmountField.getText() + button7.getText();
 			 pmtAmountField.setText(enterNumber); 
 			 }
-		 
-		 //if (enterNumber == "") { 
-			 //pmtAmountField.setText(button8.getText());
-		  //} else { 
-			// enterNumber = pmtAmountField.getText() + button8.getText();
-		  //pmtAmountField.setText(enterNumber); }
 	 }
-	 /*String enterNumber
-	 * = pmtAmountField.getText();
-	 * 
-	 * switch (enterNumber) { case "7": if (enterNumber == "") {
-	 * pmtAmountField.setText(button7.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button7.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * case "8": if (enterNumber == "") { pmtAmountField.setText(button8.getText());
-	 * } else { enterNumber = pmtAmountField.getText() + button8.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "9": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button9.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button9.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "4": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button4.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button4.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "5": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button5.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button5.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "6": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button6.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button6.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "1": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button1.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button1.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "2": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button2.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button2.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "3": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button3.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button3.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "0": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button0.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button0.getText();
-	 * pmtAmountField.setText(enterNumber); } break;
-	 * 
-	 * }
-	 */
-	/*
-	 * if (enterNumber == "") { pmtAmountField.setText(button7.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button7.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button8.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button8.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button9.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button9.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button4.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button4.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button5.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button5.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button6.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button6.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button1.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button1.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button2.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button2.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button3.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button3.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button0.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button0.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 */
-
-	// }
-
-	// public void initialize( URL url, ResourceBundle rb) {
-
-	// }
-
-	
 
 	/**
 	 * This method creates a dummy data list for the table
@@ -423,7 +330,7 @@ public class computerRepairStoreController implements Initializable {
 	public ObservableList<Products> getProducts() {
 		ObservableList<Products> products = FXCollections.observableArrayList();
 		products.add(new Products("Hard Drive", 1, 56.99));
-		products.add(new Products("Charging Chord", 2, 6.99));
+		products.add(new Products("Charging Cord", 2, 6.99));
 		products.add(new Products("Flash Drive", 2, 15.99));
 		products.add(new Products("Power Chord", 1, 23.99));
 		return products;
