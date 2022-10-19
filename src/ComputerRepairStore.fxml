@@ -107,7 +107,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="clearPurchaseButton" layoutX="252.0" layoutY="27.0" mnemonicParsing="false" onAction="#clearPurchaseButtonPressed" prefHeight="50.0" prefWidth="210.0" text="Clear Purchase">
+            <Button fx:id="clearPaymentButton" layoutX="252.0" layoutY="27.0" mnemonicParsing="false" onAction="#clearButtonPressed" prefHeight="50.0" prefWidth="210.0" text="Clear Payment">
                <font>
                   <Font size="20.0" />
                </font>
