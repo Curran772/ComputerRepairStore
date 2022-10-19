@@ -314,7 +314,19 @@ public class computerRepairStoreController implements Initializable {
 
 	
 	 @FXML public void numberButtonPressed(ActionEvent event) {
-		
+		 String enterNumber = pmtAmountField.getText();
+		 if (enterNumber == "") { 
+			 pmtAmountField.setText(button7.getText()); 
+			 }else {
+			 enterNumber = pmtAmountField.getText() + button7.getText();
+			 pmtAmountField.setText(enterNumber); 
+			 }
+		 
+		 //if (enterNumber == "") { 
+			 //pmtAmountField.setText(button8.getText());
+		  //} else { 
+			// enterNumber = pmtAmountField.getText() + button8.getText();
+		  //pmtAmountField.setText(enterNumber); }
 	 }
 	 /*String enterNumber
 	 * = pmtAmountField.getText();
