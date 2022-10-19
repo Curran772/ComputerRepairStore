@@ -9,6 +9,7 @@ public class ComputerRepairStore extends Application {
 	public void start(Stage stage) throws Exception {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("ComputerRepairStore.fxml"));
+
 			Scene scene = new Scene(root); // attach scene graph to scene
 			stage.setTitle("ComputerRepairStore"); // displayed in window's title bar
 			stage.setScene(scene); // attach scene to stage
