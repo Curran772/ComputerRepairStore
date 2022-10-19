@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -85,7 +86,10 @@
               <tabs>
                 <Tab text="Hardware" />
                 <Tab text="Software" />
-                  <Tab text="Service" />
+                  <Tab text="Service">
+                     <content>
+                        <ScrollBar fx:id="scrollBar" orientation="VERTICAL" />
+                     </content></Tab>
               </tabs>
             </TabPane>
          </children>
