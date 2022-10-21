@@ -1,7 +1,11 @@
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 public class ComputerRepairStore extends Application {
@@ -14,9 +18,29 @@ public class ComputerRepairStore extends Application {
 			stage.setTitle("ComputerRepairStore"); // displayed in window's title bar
 			stage.setScene(scene); // attach scene to stage
 			stage.show(); // display the stage
+			
+			stage.setOnCloseRequest(event -> {// alert box confirming exit will show before closing
+				event.consume();				// when the x button in the top corner is pressed
+			    exitButtonPressed(stage);
+			    
+			});
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void exitButtonPressed(Stage stage) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Exit");
+		alert.setHeaderText("You are about to Exit!");
+		//alert.setContentText("Do you want to Exit?");
+				
+		if(alert.showAndWait().get() == ButtonType.OK) {		
+		System.out.println("You successfully logged out!");
+		stage.close();
+		}
+		
 	}
 
 	public static void main(String[] args) {

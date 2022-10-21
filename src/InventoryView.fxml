@@ -20,7 +20,7 @@
             </TableView>
          </children>
       </Pane>
-      <Button fx:id="returnButton" alignment="CENTER" layoutX="383.0" layoutY="602.0" mnemonicParsing="false" onAction="#switchToComputerRepairStore" prefHeight="50.0" prefWidth="210.0" text="Return to Purchase" textAlignment="CENTER">
+      <Button fx:id="returnButton" alignment="CENTER" layoutX="383.0" layoutY="602.0" mnemonicParsing="false" onAction="#switchToComputerRepairStoreView" prefHeight="50.0" prefWidth="210.0" text="Return to Purchase" textAlignment="CENTER">
          <font>
             <Font size="20.0" />
          </font>
