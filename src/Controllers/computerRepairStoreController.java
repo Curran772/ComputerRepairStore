@@ -139,7 +139,11 @@ public class computerRepairStoreController implements Initializable {
 			amountColumn.setCellValueFactory(new PropertyValueFactory<Products, Double>("amount"));
 
 			// load dummy data
-			tableView.setItems(getProducts());
+			try {
+				tableView.setItems(getProducts());
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
 
 			// update the table to allow quantity to be changed
 			tableView.setEditable(true);
@@ -327,12 +331,24 @@ public class computerRepairStoreController implements Initializable {
 	 * This method creates a dummy data list for the table
 	 * 
 	 */
-	public ObservableList<Products> getProducts() {
+	public ObservableList<Products> getProducts() throws SQLException {
 		ObservableList<Products> products = FXCollections.observableArrayList();
-		products.add(new Products("Hard Drive", 1, 56.99));
-		products.add(new Products("Charging Cord", 2, 6.99));
-		products.add(new Products("Flash Drive", 2, 15.99));
-		products.add(new Products("Power Chord", 1, 23.99));
+
+		try {
+			Connection conn = DBMethods.getConnection();
+
+			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM inventory_db.item");
+
+			while (rs.next()) {
+				products.add(new Products(rs.getString("item"),
+						rs.getInt("quantity"), rs.getDouble("amount")));
+			}
+
+		} catch (SQLException e) {
+			System.out.println("DB Connection failed at table population!");
+			throw e;
+		}
+
 		return products;
 	}
 
