@@ -11,7 +11,10 @@ import java.util.ResourceBundle;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -140,10 +143,11 @@ public class ComputerRepairStoreController implements Initializable {
 			Update.runSqlScript("schema");
 
 			Connection conn = DBMethods.getConnection();
-			ResultSet rs = conn.createStatement().executeQuery("SELECT item_name FROM item_db.product LIMIT 1");
+			ResultSet rs = conn.createStatement().executeQuery("SELECT item_name FROM item_db.inventory LIMIT 1");
+			ResultSet cs = conn.createStatement().executeQuery("SELECT item_name FROM item_db.customer_items LIMIT 1");
 
 			// Only populates table with first time data if table is empty
-			if (!rs.next()) {
+			if (!rs.next() && !cs.next()) {
 				Update.runSqlScript("seed");
 				System.out.println("Database table is empty... planting seed data!");
 			}
@@ -152,9 +156,9 @@ public class ComputerRepairStoreController implements Initializable {
 
 			tableView.setItems(getProducts());
 		} catch (SQLException e) {
-			System.out.println("DB Connection failed at table population!");
-		} catch (Exception e) {
-			System.out.println("DB Connection failed at runSqlScript!");
+			System.out.println("DB Connection failed at table population!" + e);
+		} catch (Exception ex) {
+			System.out.println("DB Connection failed at runSqlScript!" + ex);
 		}
 
 		// update the table to allow quantity to be changed
@@ -168,6 +172,8 @@ public class ComputerRepairStoreController implements Initializable {
 		// initializing choice box
 		pmtMethodField.getItems().addAll(pmtType);
 		pmtMethodField.setOnAction(this::choiceBoxField);
+
+
 	}
 		
 	/**
@@ -304,6 +310,7 @@ public class ComputerRepairStoreController implements Initializable {
 			taxField.setText(currency.format(tax));
 			totalDueField.setText(currency.format(total));
 			currency.setRoundingMode(RoundingMode.HALF_UP);
+
 		} catch (NumberFormatException ex) {
 			 subTotalField.setText("Enter Item Cost ");
 			 subTotalField.selectAll();
@@ -311,15 +318,33 @@ public class ComputerRepairStoreController implements Initializable {
 		}
 	}
 
-	 @FXML public void numberButtonPressed(ActionEvent event) {
-		 String enterNumber = pmtAmountField.getText();
-		 if (enterNumber == "") {
-			 pmtAmountField.setText(button7.getText());
-		 } else {
-			 enterNumber = pmtAmountField.getText() + button7.getText();
-			 pmtAmountField.setText(enterNumber);
-		 }
-	 }
+	/**
+	 * This method allows user to add numbers to the payment Amount Field
+	 */
+	@FXML
+	public void numberButtonPressed(ActionEvent event) {
+		if (event.getSource() == button0) {
+			pmtAmountField.setText(pmtAmountField.getText() + "0");
+		} else if (event.getSource() == button1) {
+			pmtAmountField.setText(pmtAmountField.getText() + "1");
+		} else if (event.getSource() == button2) {
+			pmtAmountField.setText(pmtAmountField.getText() + "2");
+		} else if (event.getSource() == button3) {
+			pmtAmountField.setText(pmtAmountField.getText() + "3");
+		} else if (event.getSource() == button4) {
+			pmtAmountField.setText(pmtAmountField.getText() + "4");
+		} else if (event.getSource() == button5) {
+			pmtAmountField.setText(pmtAmountField.getText() + "5");
+		} else if (event.getSource() == button6) {
+			pmtAmountField.setText(pmtAmountField.getText() + "6");
+		} else if (event.getSource() == button7) {
+			pmtAmountField.setText(pmtAmountField.getText() + "7");
+		} else if (event.getSource() == button8) {
+			pmtAmountField.setText(pmtAmountField.getText() + "8");
+		} else if (event.getSource() == button9) {
+			pmtAmountField.setText(pmtAmountField.getText() + "9");
+		}
+	}
 
 	/**
 	 * Method that returns an observable list of the items in the database table
@@ -331,7 +356,7 @@ public class ComputerRepairStoreController implements Initializable {
 		try {
 			Connection conn = DBMethods.getConnection();
 
-			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM item_db.product");
+			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM item_db.customer_items");
 
 			while (rs.next()) {
 				products.add(new Product(rs.getString("item_name"),
