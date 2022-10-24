@@ -1,8 +1,6 @@
 package DBStructure;
 
 import Controllers.Product;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 import java.io.BufferedReader;
@@ -13,50 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Update {
-
-    // Use ResultSet from DB as parameter and set Product Object's attributes and
-    // return Product object.
-    private static Product getProductsFromResultSet(ResultSet rs) throws SQLException {
-        Product product = null;
-        if (rs.next()) {
-            product = new Product();
-            product.setItem(rs.getString("item_name"));
-            product.setAmount(rs.getDouble("item_amount"));
-            product.setQuantity(rs.getInt("item_qty"));
-        }
-        return product;
-    }
-
-    // Search for all products
-    public static ObservableList<Product> searchProduct() throws SQLException, ClassNotFoundException {
-
-        // Declare the SELECT statement
-        String select = "SELECT * FROM item_db.product";
-
-        // Execute SELECT statement
-        try {
-            // ResultSet from dataExecuteQuery method
-            ResultSet rs = DBMethods.dataExecuteQuery(select);
-
-            // Send the ResultSet to the getItemList method and get the item object
-            ObservableList<Product> productList = getProductList(rs);
-            return productList;
-        } catch (SQLException e) {
-            System.out.println("SQL select operation failed: " + e);
-            throw e;
-        }
-    }
-
-    // Select * from items operation
-    private static ObservableList<Product> getProductList(ResultSet rs) throws SQLException, ClassNotFoundException {
-        ObservableList<Product> productList = FXCollections.observableArrayList();
-
-        while (rs.next()) {
-            productList.add(new Product(rs.getString(rs.getString("item_name")),
-                    rs.getDouble("item_amount"), rs.getInt("item_qty")));
-        }
-        return productList;
-    }
 
     // Delete item with name
     public static void deleteProduct(String productName) throws SQLException, ClassNotFoundException {

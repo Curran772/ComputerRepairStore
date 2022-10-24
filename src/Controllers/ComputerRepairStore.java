@@ -10,31 +10,33 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class ComputerRepairStore extends Application {
 
-	Stage stage;
+	public static Scene scene;
+	public static Stage stage;
 
 	@Override
 	public void start(Stage stage) throws Exception {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/Resources/ComputerRepairStore.fxml"));
-
-			Scene scene = new Scene(root); // attach scene graph to scene
-			stage.setTitle("Controllers.ComputerRepairStore"); // displayed in window's title bar
+			ComputerRepairStore.stage = stage;
+			scene = new Scene(loadFXML("ComputerRepairStore"));
+			stage.setTitle("Computer Repair Store"); // displayed in window's title bar
 			stage.setScene(scene); // attach scene to stage
 			stage.show(); // display the stage
 			
 			stage.setOnCloseRequest(event -> {// alert box confirming exit will show before closing
 				event.consume();				// when the x button in the top corner is pressed
 			    exitButtonPressed(stage);
-			    
 			});
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+	// When any exit button is pressed in the application
 	public static void exitButtonPressed(Stage stage) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Exit");
@@ -44,6 +46,22 @@ public class ComputerRepairStore extends Application {
 		System.out.println("You successfully logged out!");
 		System.exit(0);
 		}
+	}
+
+	// Loads the passed in string and returns the loaded fxml file with the matching name
+	public static Parent loadFXML(String fxml) throws IOException {
+		FXMLLoader fxmlLoader = new FXMLLoader(ComputerRepairStore.class.getResource("/Resources/" + fxml + ".fxml"));
+		return fxmlLoader.load();
+	}
+
+	// Change the root scene
+	public static void setRoot(String fxml) throws IOException {
+		scene.setRoot(loadFXML(fxml));
+	}
+
+	// Change the window title
+	public static void changeStageTitle(String title) {
+		stage.setTitle(title);
 	}
 
 	public static void main(String[] args) {

@@ -27,6 +27,7 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
@@ -171,29 +172,19 @@ public class computerRepairStoreController implements Initializable {
 		pmtMethodField.getItems().addAll(pmtType);
 		pmtMethodField.setOnAction(this::choiceBoxField);
 	}
-
-	/**
-	 * This method allows us to switch to the ComputerRepairStore FXML file
-	 */
-	@FXML
-	public void switchToComputerRepairStore(ActionEvent event) throws IOException {
-		Parent root = FXMLLoader.load(getClass().getResource("ComputerRepairStore.fxml"));
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
-	}
 		
 	/**
 	 * This method allows us to switch to the InventoryView FXML file
 	 */
 	@FXML
 	public void switchToInventoryView(ActionEvent event) throws IOException {
-		Parent root = FXMLLoader.load(getClass().getResource("InventoryView.fxml"));
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
+		Stage InvView = new Stage();
+		InvView.initModality(Modality.APPLICATION_MODAL);
+		InvView.setTitle("Inventory");
+		Scene inventory = new Scene(ComputerRepairStore.loadFXML("InventoryView"));
+
+		InvView.setScene(inventory);
+		InvView.showAndWait();
 	}
 
 	/**
@@ -270,9 +261,10 @@ public class computerRepairStoreController implements Initializable {
 	 * This method clears the payment and change fields
 	 */
 	@FXML
-	public void clearButtonPressed(ActionEvent event) {
+	public void buttonClearPressed(ActionEvent event) {
 		pmtAmountField.setText("");
 		pmtChangeField.setText("");
+		count = 0;
 	}
 
 	/**
@@ -353,8 +345,5 @@ public class computerRepairStoreController implements Initializable {
 			throw e;
 		}
 		return products;
-	}
-
-	public void buttonClearPressed(ActionEvent actionEvent) {
 	}
 }
