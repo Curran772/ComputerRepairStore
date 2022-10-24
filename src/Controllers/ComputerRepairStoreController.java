@@ -21,13 +21,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -40,6 +35,8 @@ public class ComputerRepairStoreController implements Initializable {
 
 	private int count = 0;
 	private double total = 0;
+	private double tax = 0;
+	private double totalDue = 0;
 
 	private Stage stage;
 	private Scene scene;
@@ -173,13 +170,7 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.getItems().addAll(pmtType);
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
-		// Add all the item prices together
-		setTotal(0);
-		for (Product product : tableView.getItems()) {
-			setTotal(total += product.getAmount());
-		}
-
-		subTotalField.setText(String.valueOf(getTotal()));
+		updateTotalFields();
 	}
 		
 	/**
@@ -231,13 +222,7 @@ public class ComputerRepairStoreController implements Initializable {
 			allProducts.remove(products);
 		}
 
-		// Add all the item prices together
-		setTotal(0);
-		for (Product product : tableView.getItems()) {
-			setTotal(getTotal() + product.getAmount());
-		}
-
-		subTotalField.setText(String.valueOf(getTotal()));
+		updateTotalFields();
 	}
 
 	/**
@@ -245,9 +230,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void clearPurchaseButtonPressed(ActionEvent event) {
-		ObservableList<Product> selectedRows, allProducts;
-		allProducts = tableView.getItems();
-		selectedRows = tableView.getSelectionModel().getSelectedItems();
+		tableView.setItems(null);
 	}
 
 	@FXML
@@ -292,15 +275,25 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private void payButtonPressed(ActionEvent event) {
 		try {
-			BigDecimal pmtAmount = new BigDecimal(pmtAmountField.getText());
-			BigDecimal total = new BigDecimal(totalDueField.getText());
+			BigDecimal pmtAmount = new BigDecimal(String.valueOf(pmtAmountField.getText()));
+			BigDecimal total = new BigDecimal(getTotalDue());
 			BigDecimal change = total.subtract(pmtAmount);
 
-			pmtChangeField.setText(currency.format(change));
+			if (pmtAmount.doubleValue() < getTotalDue()) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Not enough payment entered");
+				alert.setHeaderText("Please enter payment greater than or equal to total due!");
+				alert.showAndWait();
+			} else {
+				pmtChangeField.setText(currency.format(change));
+			}
 
 		} catch (IllegalArgumentException e) {
 			if (pmtAmountField.getText().isEmpty()) {
-				System.out.println("Payment Received must be >= 0.");
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("No payment entered");
+				alert.setHeaderText("Please enter a payment amount!");
+				alert.showAndWait();
 			}
 		}
 	}
@@ -370,7 +363,7 @@ public class ComputerRepairStoreController implements Initializable {
 		try {
 			Connection conn = DBMethods.getConnection();
 
-			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM item_db.customer_items");
+			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM item_db.inventory");
 
 			while (rs.next()) {
 				products.add(new Product(rs.getString("item_name"),
@@ -383,9 +376,36 @@ public class ComputerRepairStoreController implements Initializable {
 		return products;
 	}
 
-	// Setter for the total double, keeps track of users running total
-	public void setTotal(double total) { this.total = total; }
+	/**
+	 * When called, this method updates the total, tax, and total due text fields
+	 */
+	public void updateTotalFields() {
 
-	// Running total getter
+		setTotal(0);
+		setTax(0);
+		setTotalDue(0);
+
+		// Add all the item prices together
+		for (Product product : tableView.getItems()) {
+			setTotal(total += product.getAmount());
+		}
+
+		setTax(getTotal() * 0.05);
+		setTotalDue(getTotal() + getTax());
+
+		// Set all the text fields to their respective values
+		subTotalField.setText(String.format("$%.2f", getTotal()));
+		taxField.setText(String.format("$%.2f", getTax()));
+		totalDueField.setText(String.format("$%.2f", getTotalDue()));
+	}
+
+	// Setters
+	public void setTotal(double total) { this.total = total; }
+	public void setTax(double tax) { this.tax = tax; }
+	public void setTotalDue(double totalDue) { this.totalDue = totalDue; }
+
+	// Getters
 	public double getTotal() { return this.total; }
+	public double getTax() { return this.tax; }
+	public double getTotalDue() { return this.totalDue; }
 }
