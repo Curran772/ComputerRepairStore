@@ -1,12 +1,11 @@
-import java.math.BigDecimal;
+package Controllers;
 
-public class Products {
-
+public class Product {
 	private String item;
 	private int quantity;
 	private double amount;
 	
-	public Products(String item, int quantity, double amount) {
+	public Product(String item, double amount, int quantity) {
 		super();
 		this.item = item;
 		this.quantity = quantity;
@@ -19,6 +18,8 @@ public class Products {
 			this.amount = amount * quantity;
 		}
 	}
+
+	public Product() {}
 	
 	public String getItem() {
 		return item;
