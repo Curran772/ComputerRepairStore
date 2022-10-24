@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.computerRepairStoreController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1450.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.computerRepairStoreController">
    <children>
       <Pane layoutY="551.0" prefHeight="250.0" prefWidth="525.0">
          <children>
@@ -102,7 +102,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="printRecieptButton" layoutX="14.0" layoutY="174.0" mnemonicParsing="false" onAction="#printReceiptButtonPressed" prefHeight="50.0" prefWidth="210.0" text="Print Reciept">
+            <Button fx:id="printReceiptButton" layoutX="14.0" layoutY="174.0" mnemonicParsing="false" onAction="#printReceiptButtonPressed" prefHeight="50.0" prefWidth="210.0" text="Print Receipt">
                <font>
                   <Font size="20.0" />
                </font>

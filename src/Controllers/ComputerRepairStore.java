@@ -11,6 +11,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 public class ComputerRepairStore extends Application {
+
+	Stage stage;
+
 	@Override
 	public void start(Stage stage) throws Exception {
 		try {
@@ -32,17 +35,15 @@ public class ComputerRepairStore extends Application {
 		}
 	}
 	
-	public void exitButtonPressed(Stage stage) {
+	public static void exitButtonPressed(Stage stage) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Exit");
 		alert.setHeaderText("You are about to Exit!");
-		//alert.setContentText("Do you want to Exit?");
 				
 		if(alert.showAndWait().get() == ButtonType.OK) {		
 		System.out.println("You successfully logged out!");
-		stage.close();
+		System.exit(0);
 		}
-		
 	}
 
 	public static void main(String[] args) {

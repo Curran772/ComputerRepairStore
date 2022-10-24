@@ -59,7 +59,7 @@ public class Update {
     }
 
     // Delete item with name
-    public static void deleteProductWithName(String productName) throws SQLException, ClassNotFoundException {
+    public static void deleteProduct(String productName) throws SQLException, ClassNotFoundException {
         // Delete statement
         String updateStatement = "   DELETE FROM item_db.item\n" +
                 "         WHERE item_name =" + productName + ";";

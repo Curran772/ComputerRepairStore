@@ -94,7 +94,7 @@ public class computerRepairStoreController implements Initializable {
 	private String[] pmtType = { "Cash", "Check", "Card" };
 
 	@FXML
-	private Button printRecieptButton;
+	private Button printReceiptButton;
 
 	@FXML
 	private TableView<Product> tableView;
@@ -125,85 +125,77 @@ public class computerRepairStoreController implements Initializable {
 
 	@FXML
 	private TextField totalDueField;
-	
-
-	
-	// @Override
-		public void initialize(java.net.URL location, ResourceBundle resources) {
 
 
-			// set up the columns in the table
-			itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
-			quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
-			amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
+	public void initialize(java.net.URL location, ResourceBundle resources) {
 
-			// load database
-			try {
-				Update.runSqlScript("schema");
+		// set up the columns in the table
+		itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
+		quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
+		amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
 
-				Connection conn = DBMethods.getConnection();
-				ResultSet rs = conn.createStatement().executeQuery("SELECT item_name FROM item_db.product LIMIT 1");
+		// load database
+		try {
+			Update.runSqlScript("schema");
 
-				// Only populates table with first time data if table is empty
-				if (!rs.next()) {
-					Update.runSqlScript("seed");
-					System.out.println("Database table is empty... planting seed data!");
-				}
+			Connection conn = DBMethods.getConnection();
+			ResultSet rs = conn.createStatement().executeQuery("SELECT item_name FROM item_db.product LIMIT 1");
 
-				System.out.println("Database connected and populated!");
-
-				tableView.setItems(getProducts());
-			} catch (SQLException e) {
-				System.out.println("DB Connection failed at table population!");
-				throw new RuntimeException(e);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
+			// Only populates table with first time data if table is empty
+			if (!rs.next()) {
+				Update.runSqlScript("seed");
+				System.out.println("Database table is empty... planting seed data!");
 			}
 
-			// update the table to allow quantity to be changed
-			tableView.setEditable(true);
-			quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+			System.out.println("Database connected and populated!");
 
-			// This will allow the user to select multiple rows for deletion
-			tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+			tableView.setItems(getProducts());
+		} catch (SQLException e) {
+			System.out.println("DB Connection failed at table population!");
+			throw new RuntimeException(e);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
-			// These items are for the choiceBox
-			// initializing choice box
-			pmtMethodField.getItems().addAll(pmtType);
-			pmtMethodField.setOnAction(this::choiceBoxField);	
-			
-			
+		// update the table to allow quantity to be changed
+		tableView.setEditable(true);
+		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-		}
-	
-/**
- * This method allows us to switch to the ComputerRepairStore FXML file
- */
-		@FXML
-		public void switchToComputerRepairStore(ActionEvent event) throws IOException {
-			Parent root = FXMLLoader.load(getClass().getResource("ComputerRepairStore.fxml"));
-			stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-			scene = new Scene(root);
-			stage.setScene(scene);
-			stage.show();
-		}
-		
-		/**
-		 * This method allows us to switch to the InventoryView FXML file
-		 * 
-		 * 
-		 */
-		@FXML
-		public void switchToInventoryView(ActionEvent event) throws IOException {
-			Parent root = FXMLLoader.load(getClass().getResource("InventoryView.fxml"));
-			stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-			scene = new Scene(root);
-			stage.setScene(scene);
-			stage.show();
-		}
+		// This will allow the user to select multiple rows for deletion
+		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+		// These items are for the choiceBox
+		// initializing choice box
+		pmtMethodField.getItems().addAll(pmtType);
+		pmtMethodField.setOnAction(this::choiceBoxField);
+	}
+
 	/**
-	 * This method gets the value from the choicebox and sets it.
-	 * 
+	 * This method allows us to switch to the ComputerRepairStore FXML file
+	 */
+	@FXML
+	public void switchToComputerRepairStore(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("ComputerRepairStore.fxml"));
+		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
+		
+	/**
+	 * This method allows us to switch to the InventoryView FXML file
+	 */
+	@FXML
+	public void switchToInventoryView(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("InventoryView.fxml"));
+		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
+
+	/**
+	 * This method gets the value from the choice box and sets it.
 	 */
 	@FXML
 	public void choiceBoxField(ActionEvent event) {
@@ -213,7 +205,6 @@ public class computerRepairStoreController implements Initializable {
 
 	/**
 	 * This method allows user to double-click on the quantity column cell and edit it to update the purchase table
-	 * 
 	 */
 	@FXML
 	public void changeQuantityColumnEvent(CellEditEvent<Product, Integer> editedCell) {
@@ -223,7 +214,6 @@ public class computerRepairStoreController implements Initializable {
 
 	/**
 	 * this method will remove the selected row(s) from the table
-	 * 
 	 */
 	@FXML
 	private void removeItemButtonPressed() {
@@ -239,8 +229,10 @@ public class computerRepairStoreController implements Initializable {
 			allProducts.remove(products);
 		}
 	}
-	
-	
+
+	/**
+	 * Action event when the clear purchase button is pressed
+	 */
 	@FXML
 	private void clearPurchaseButtonPressed(ActionEvent event) {
 		ObservableList<Product> selectedRows, allProducts;
@@ -255,7 +247,7 @@ public class computerRepairStoreController implements Initializable {
 
 	@FXML
 	private void exitButtonPressed(ActionEvent event) {
-
+		ComputerRepairStore.exitButtonPressed(stage);
 	}
 
 	/**
@@ -295,20 +287,17 @@ public class computerRepairStoreController implements Initializable {
 		} catch (IllegalArgumentException e) {
 			if (pmtAmountField.getText().isEmpty()) {
 				System.out.println("Payment Received must be >= 0.");
-
 			}
-
 		}
 	}
 
 	/**
 	 * This method calculates the total of all items added to purchase list,
-	 * calculates the tax and adds it to the sub total, then calculates the total
+	 * calculates the tax and adds it to the subtotal, then calculates the total
 	 * due
 	 */
 	@FXML //
 	private void totalBoxes(ActionEvent event) {
-
 		try {
 			BigDecimal itemCost = new BigDecimal(amountColumn.getText());
 			BigDecimal subtotal = itemCost.add(itemCost);
@@ -328,7 +317,6 @@ public class computerRepairStoreController implements Initializable {
 		}
 	}
 
-	
 	 @FXML public void numberButtonPressed(ActionEvent event) {
 		 String enterNumber = pmtAmountField.getText();
 		 if (enterNumber == "") {
@@ -340,8 +328,7 @@ public class computerRepairStoreController implements Initializable {
 	 }
 
 	/**
-	 * This method creates a dummy data list for the table
-	 * 
+	 * Method that returns an observable list of the items in the database table
 	 */
 	public ObservableList<Product> getProducts() throws SQLException {
 		ObservableList<Product> products = FXCollections.observableArrayList();
@@ -356,15 +343,12 @@ public class computerRepairStoreController implements Initializable {
 				products.add(new Product(rs.getString("item_name"),
 						rs.getDouble("item_amount"), rs.getInt("item_qty")));
 			}
-
 		} catch (SQLException e) {
 			System.out.println("DB Connection failed at table population!");
 			throw e;
 		}
-
 		return products;
 	}
-
 
 	public void buttonClearPressed(ActionEvent actionEvent) {
 	}
