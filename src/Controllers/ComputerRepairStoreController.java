@@ -174,11 +174,12 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
 		// Add all the item prices together
+		setTotal(0);
 		for (Product product : tableView.getItems()) {
-			total += product.getAmount();
+			setTotal(total += product.getAmount());
 		}
 
-		subTotalField.setText(String.valueOf(total));
+		subTotalField.setText(String.valueOf(getTotal()));
 	}
 		
 	/**
@@ -230,8 +231,13 @@ public class ComputerRepairStoreController implements Initializable {
 			allProducts.remove(products);
 		}
 
+		// Add all the item prices together
+		setTotal(0);
+		for (Product product : tableView.getItems()) {
+			setTotal(getTotal() + product.getAmount());
+		}
 
-		subTotalField.setText(String.valueOf(total));
+		subTotalField.setText(String.valueOf(getTotal()));
 	}
 
 	/**
@@ -376,4 +382,10 @@ public class ComputerRepairStoreController implements Initializable {
 		}
 		return products;
 	}
+
+	// Setter for the total double, keeps track of users running total
+	public void setTotal(double total) { this.total = total; }
+
+	// Running total getter
+	public double getTotal() { return this.total; }
 }
