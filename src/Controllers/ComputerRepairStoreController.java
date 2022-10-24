@@ -153,9 +153,8 @@ public class ComputerRepairStoreController implements Initializable {
 			tableView.setItems(getProducts());
 		} catch (SQLException e) {
 			System.out.println("DB Connection failed at table population!");
-			throw new RuntimeException(e);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			System.out.println("DB Connection failed at runSqlScript!");
 		}
 
 		// update the table to allow quantity to be changed
