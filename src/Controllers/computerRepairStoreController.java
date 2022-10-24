@@ -35,7 +35,9 @@ public class computerRepairStoreController implements Initializable {
 	private static final NumberFormat currency = NumberFormat.getCurrencyInstance();
 
 	private BigDecimal taxPercentage = new BigDecimal(0.07);
-	
+
+	private int count = 0;
+
 	private Stage stage;
 	private Scene scene;
 	private Parent root;
