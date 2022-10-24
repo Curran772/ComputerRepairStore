@@ -177,6 +177,8 @@ public class ComputerRepairStoreController implements Initializable {
 		for (Product product : tableView.getItems()) {
 			total += product.getAmount();
 		}
+
+		subTotalField.setText(String.valueOf(total));
 	}
 		
 	/**
@@ -227,6 +229,9 @@ public class ComputerRepairStoreController implements Initializable {
 		for (Product products : selectedRows) {
 			allProducts.remove(products);
 		}
+
+
+		subTotalField.setText(String.valueOf(total));
 	}
 
 	/**
