@@ -1,5 +1,6 @@
 package DBStructure;
 
+import Controllers.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -13,75 +14,33 @@ import java.sql.SQLException;
 
 public class Update {
 
-    public static Item searchItemByName(String itemName) throws SQLException, ClassNotFoundException {
-        String selectStmt = "SELECT * FROM item WHERE item_name=" + itemName;
-        try {
-            // Get ResultSet from dataExecuteQuery and send it
-            // to the getItemFromResultSet method and get the item object
-            ResultSet rsItem = DBMethods.dataExecuteQuery(selectStmt);
-            Item item = getItemFromResultSet(rsItem);
-            return item;
-        } catch (SQLException e) {
-            System.out.println("While searching an item with name " + itemName + ", an error occurred: " + e);
-            throw e;
-        }
-    }
-
-    public static Item searchItemByAmount(Double itemAmount) throws SQLException, ClassNotFoundException {
-        String selectStmt = "SELECT * FROM item WHERE item_amount=" + itemAmount;
-        try {
-            // Get ResultSet from dataExecuteQuery and send it
-            // to the getItemFromResultSet method and get the item object
-            ResultSet rsItem = DBMethods.dataExecuteQuery(selectStmt);
-            Item item = getItemFromResultSet(rsItem);
-            return item;
-        } catch (SQLException e) {
-            System.out.println("While searching an item with price " + itemAmount + ", an error occurred: " + e);
-            throw e;
-        }
-    }
-
-    public static Item searchItemByQty(Double itemQty) throws SQLException, ClassNotFoundException {
-        String selectStmt = "SELECT * FROM item WHERE item_qty=" + itemQty;
-        try {
-            // Get ResultSet from dataExecuteQuery and send it
-            // to the getItemFromResultSet method and get the item object
-            ResultSet rsItem = DBMethods.dataExecuteQuery(selectStmt);
-            Item item = getItemFromResultSet(rsItem);
-            return item;
-        } catch (SQLException e) {
-            System.out.println("While searching an item with id " + itemQty + ", an error occurred: " + e);
-            throw e;
-        }
-    }
-
-    // Use ResultSet from DB as parameter and set Employee Object's attributes and
-    // return employee object.
-    private static Item getItemFromResultSet(ResultSet rs) throws SQLException {
-        Item item = null;
+    // Use ResultSet from DB as parameter and set Product Object's attributes and
+    // return Product object.
+    private static Product getProductsFromResultSet(ResultSet rs) throws SQLException {
+        Product product = null;
         if (rs.next()) {
-            item = new Item();
-            item.setItemName(rs.getString("item_name"));
-            item.setItemPrice(rs.getDouble("item_amount"));
-            item.setItemQuantity(rs.getDouble("item_qty"));
+            product = new Product();
+            product.setItem(rs.getString("item_name"));
+            product.setAmount(rs.getDouble("item_amount"));
+            product.setQuantity(rs.getInt("item_qty"));
         }
-        return item;
+        return product;
     }
 
-    // Observer : SELECT item
-    public static ObservableList<Item> searchItems() throws SQLException, ClassNotFoundException {
+    // Search for all products
+    public static ObservableList<Product> searchProduct() throws SQLException, ClassNotFoundException {
 
         // Declare the SELECT statement
-        String select = "SELECT * FROM inventory_db.item";
+        String select = "SELECT * FROM item_db.product";
 
         // Execute SELECT statement
         try {
             // ResultSet from dataExecuteQuery method
-            ResultSet rsItem = DBMethods.dataExecuteQuery(select);
+            ResultSet rs = DBMethods.dataExecuteQuery(select);
 
             // Send the ResultSet to the getItemList method and get the item object
-            ObservableList<Item> itemList = getItemList(rsItem);
-            return itemList;
+            ObservableList<Product> productList = getProductList(rs);
+            return productList;
         } catch (SQLException e) {
             System.out.println("SQL select operation failed: " + e);
             throw e;
@@ -89,21 +48,21 @@ public class Update {
     }
 
     // Select * from items operation
-    private static ObservableList<Item> getItemList(ResultSet rs) throws SQLException, ClassNotFoundException {
-        ObservableList<Item> itemList = FXCollections.observableArrayList();
+    private static ObservableList<Product> getProductList(ResultSet rs) throws SQLException, ClassNotFoundException {
+        ObservableList<Product> productList = FXCollections.observableArrayList();
 
         while (rs.next()) {
-            itemList.add(new Item(rs.getString(rs.getString("item_name")),
-                    rs.getDouble("item_amount"), rs.getDouble("item_qty")));
+            productList.add(new Product(rs.getString(rs.getString("item_name")),
+                    rs.getDouble("item_amount"), rs.getInt("item_qty")));
         }
-        return itemList;
+        return productList;
     }
 
     // Delete item with name
-    public static void deleteItemWithName(String itemName) throws SQLException, ClassNotFoundException {
+    public static void deleteProductWithName(String productName) throws SQLException, ClassNotFoundException {
         // Delete statement
-        String updateStatement = "   DELETE FROM inventory_db.item\n" +
-                "         WHERE item_name =" + itemName + ";";
+        String updateStatement = "   DELETE FROM item_db.item\n" +
+                "         WHERE item_name =" + productName + ";";
 
         try {
             DBMethods.dataExecuteUpdate(updateStatement);
@@ -114,9 +73,9 @@ public class Update {
     }
 
     // Insert an item into the item table
-    public static void insertItem(String name, Double amount, Double qty) throws SQLException, ClassNotFoundException {
+    public static void insertProduct(String name, Double amount, Double qty) throws SQLException, ClassNotFoundException {
         // Insert statement
-        String updateStatement = "INSERT INTO inventory_db.item(item_name, item_amount, item_qty)\n" +
+        String updateStatement = "INSERT INTO item_db.item(item_name, item_amount, item_qty)\n" +
                 "VALUES('" + name + "','" + amount + "','" + qty + "');\n";
         try {
             DBMethods.dataExecuteUpdate(updateStatement);
@@ -127,8 +86,8 @@ public class Update {
     }
 
     // Edit the name of an item
-    public static void updateItemName(String nameOld, String nameNew) throws SQLException, ClassNotFoundException {
-        String updateStatement = "  UPDATE inventory_db.item\n" + " SET item_name= '" +
+    public static void updateProductName(String nameOld, String nameNew) throws SQLException, ClassNotFoundException {
+        String updateStatement = "  UPDATE item_db.item\n" + " SET item_name= '" +
                 nameNew + "'\n" + " WHERE item_name = " + nameOld + ";";
 
         try {
@@ -140,11 +99,11 @@ public class Update {
     }
 
     // Edit an item price
-    public static void updateItemAmount(String itemName, String itemAmount) throws SQLException, ClassNotFoundException {
+    public static void updateProductAmount(String productName, String productAmount) throws SQLException, ClassNotFoundException {
         // Declare the UPDATE sql statement
-        String updateStatement = "   UPDATE inventory_db.item\n" +
-                "       SET item_amount = '" + itemAmount + "'\n" +
-                "   WHERE item_name = " + itemName + ";";
+        String updateStatement = "   UPDATE item_db.item\n" +
+                "       SET item_amount = '" + productAmount + "'\n" +
+                "   WHERE item_name = " + productName + ";";
         try {
             DBMethods.dataExecuteUpdate(updateStatement);
         } catch (SQLException e) {
@@ -154,11 +113,11 @@ public class Update {
     }
 
     // Edit an item quantity
-    public static void updateItemQty(String itemName, String itemQty) throws SQLException, ClassNotFoundException {
+    public static void updateProductQty(String productName, String productQty) throws SQLException, ClassNotFoundException {
         // Declare the UPDATE sql statement
-        String updateStatement = "   UPDATE inventory_db.item\n" +
-                "       SET item_qty = '" + itemQty + "'\n" +
-                "   WHERE item_name = " + itemName + ";";
+        String updateStatement = "   UPDATE item_db.item\n" +
+                "       SET item_qty = '" + productQty + "'\n" +
+                "   WHERE item_name = " + productName + ";";
         try {
             DBMethods.dataExecuteUpdate(updateStatement);
         } catch (SQLException e) {

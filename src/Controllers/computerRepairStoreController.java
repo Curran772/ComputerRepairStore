@@ -1,13 +1,16 @@
+package Controllers;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
-import javax.print.DocFlavor.URL;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import DBStructure.DBMethods;
+import DBStructure.Update;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,15 +27,12 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
 public class computerRepairStoreController implements Initializable {
 
 	private static final NumberFormat currency = NumberFormat.getCurrencyInstance();
-	// private static final NumberFormat percent =
-	// NumberFormat.getPercentInstance();
 
 	private BigDecimal taxPercentage = new BigDecimal(0.07);
 	
@@ -97,16 +97,16 @@ public class computerRepairStoreController implements Initializable {
 	private Button printRecieptButton;
 
 	@FXML
-	private TableView<Products> tableView;
+	private TableView<Product> tableView;
 
 	@FXML
-	private TableColumn<Products, Double> amountColumn;
+	private TableColumn<Product, Double> amountColumn;
 
 	@FXML
-	private TableColumn<Products, Integer> quantityColumn;
+	private TableColumn<Product, Integer> quantityColumn;
 
 	@FXML
-	private TableColumn<Products, String> itemColumn;
+	private TableColumn<Product, String> itemColumn;
 
 	@FXML
 	private Button removeItemButton;
@@ -131,17 +131,38 @@ public class computerRepairStoreController implements Initializable {
 	// @Override
 		public void initialize(java.net.URL location, ResourceBundle resources) {
 
-			// set up the columns in the table
-			itemColumn.setCellValueFactory(new PropertyValueFactory<Products, String>("item"));
-			quantityColumn.setCellValueFactory(new PropertyValueFactory<Products, Integer>("quantity"));
-			amountColumn.setCellValueFactory(new PropertyValueFactory<Products, Double>("amount"));
 
-			// load dummy data
-			tableView.setItems(getProducts());
+			// set up the columns in the table
+			itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
+			quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
+			amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
+
+			// load database
+			try {
+				Update.runSqlScript("schema");
+
+				Connection conn = DBMethods.getConnection();
+				ResultSet rs = conn.createStatement().executeQuery("SELECT item_name FROM item_db.product LIMIT 1");
+
+				// Only populates table with first time data if table is empty
+				if (!rs.next()) {
+					Update.runSqlScript("seed");
+					System.out.println("Database table is empty... planting seed data!");
+				}
+
+				System.out.println("Database connected and populated!");
+
+				tableView.setItems(getProducts());
+			} catch (SQLException e) {
+				System.out.println("DB Connection failed at table population!");
+				throw new RuntimeException(e);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 
 			// update the table to allow quantity to be changed
 			tableView.setEditable(true);
-			quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));//TextFieldTableCell.forTableColumn());
+			quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
 			// This will allow the user to select multiple rows for deletion
 			tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -156,9 +177,7 @@ public class computerRepairStoreController implements Initializable {
 		}
 	
 /**
- * This method allows us to switch to the ComputerRepairstore FXML file
- * 
- * 
+ * This method allows us to switch to the ComputerRepairStore FXML file
  */
 		@FXML
 		public void switchToComputerRepairStore(ActionEvent event) throws IOException {
@@ -193,12 +212,12 @@ public class computerRepairStoreController implements Initializable {
 	}
 
 	/**
-	 * This method allows user to double click on the quantity column cell and edit it to update the purchase table
+	 * This method allows user to double-click on the quantity column cell and edit it to update the purchase table
 	 * 
 	 */
 	@FXML
-	public void changeQuantityColumnEvent(CellEditEvent<Products, Integer> editedCell) {
-		Products quantitySelected = tableView.getSelectionModel().getSelectedItem();
+	public void changeQuantityColumnEvent(CellEditEvent<Product, Integer> editedCell) {
+		Product quantitySelected = tableView.getSelectionModel().getSelectedItem();
 		quantitySelected.setQuantity((int)editedCell.getNewValue());
 	}
 
@@ -208,7 +227,7 @@ public class computerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void removeItemButtonPressed() {
-		ObservableList<Products> selectedRows, allProducts;
+		ObservableList<Product> selectedRows, allProducts;
 		allProducts = tableView.getItems();
 
 		// this gives us the rows that were selected
@@ -216,7 +235,7 @@ public class computerRepairStoreController implements Initializable {
 
 		// loop over selected rows and remove the products from the list that are
 		// selected
-		for (Products products : selectedRows) {
+		for (Product products : selectedRows) {
 			allProducts.remove(products);
 		}
 	}
@@ -224,7 +243,7 @@ public class computerRepairStoreController implements Initializable {
 	
 	@FXML
 	private void clearPurchaseButtonPressed(ActionEvent event) {
-		ObservableList<Products> selectedRows, allProducts;
+		ObservableList<Product> selectedRows, allProducts;
 		allProducts = tableView.getItems();
 		selectedRows = tableView.getSelectionModel().getSelectedItems();
 	}
@@ -251,8 +270,7 @@ public class computerRepairStoreController implements Initializable {
 	}
 
 	/**
-	 * This method clears any amounts entered in the payment field and change field
-	 *
+	 * This method clears the payment and change fields
 	 */
 	@FXML
 	public void clearButtonPressed(ActionEvent event) {
@@ -307,128 +325,47 @@ public class computerRepairStoreController implements Initializable {
 			 subTotalField.setText("Enter Item Cost ");
 			 subTotalField.selectAll();
 			 subTotalField.requestFocus();
-
 		}
-
 	}
 
 	
 	 @FXML public void numberButtonPressed(ActionEvent event) {
 		 String enterNumber = pmtAmountField.getText();
-		 if (enterNumber == "") { 
-			 pmtAmountField.setText(button7.getText()); 
-			 }else {
+		 if (enterNumber == "") {
+			 pmtAmountField.setText(button7.getText());
+		 } else {
 			 enterNumber = pmtAmountField.getText() + button7.getText();
-			 pmtAmountField.setText(enterNumber); 
-			 }
-		 
-		 //if (enterNumber == "") { 
-			 //pmtAmountField.setText(button8.getText());
-		  //} else { 
-			// enterNumber = pmtAmountField.getText() + button8.getText();
-		  //pmtAmountField.setText(enterNumber); }
+			 pmtAmountField.setText(enterNumber);
+		 }
 	 }
-	 /*String enterNumber
-	 * = pmtAmountField.getText();
-	 * 
-	 * switch (enterNumber) { case "7": if (enterNumber == "") {
-	 * pmtAmountField.setText(button7.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button7.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * case "8": if (enterNumber == "") { pmtAmountField.setText(button8.getText());
-	 * } else { enterNumber = pmtAmountField.getText() + button8.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "9": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button9.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button9.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "4": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button4.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button4.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "5": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button5.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button5.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "6": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button6.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button6.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "1": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button1.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button1.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "2": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button2.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button2.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "3": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button3.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button3.getText();
-	 * pmtAmountField.setText(enterNumber); } break; case "0": if (enterNumber ==
-	 * "") { pmtAmountField.setText(button0.getText()); } else { enterNumber =
-	 * pmtAmountField.getText() + button0.getText();
-	 * pmtAmountField.setText(enterNumber); } break;
-	 * 
-	 * }
-	 */
-	/*
-	 * if (enterNumber == "") { pmtAmountField.setText(button7.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button7.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button8.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button8.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button9.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button9.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button4.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button4.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button5.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button5.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button6.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button6.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button1.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button1.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button2.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button2.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button3.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button3.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 * 
-	 * if (enterNumber == "") { pmtAmountField.setText(button0.getText()); } else {
-	 * enterNumber = pmtAmountField.getText() + button0.getText();
-	 * pmtAmountField.setText(enterNumber); }
-	 */
-
-	// }
-
-	// public void initialize( URL url, ResourceBundle rb) {
-
-	// }
-
-	
 
 	/**
 	 * This method creates a dummy data list for the table
 	 * 
 	 */
-	public ObservableList<Products> getProducts() {
-		ObservableList<Products> products = FXCollections.observableArrayList();
-		products.add(new Products("Hard Drive", 1, 56.99));
-		products.add(new Products("Charging Chord", 2, 6.99));
-		products.add(new Products("Flash Drive", 2, 15.99));
-		products.add(new Products("Power Chord", 1, 23.99));
+	public ObservableList<Product> getProducts() throws SQLException {
+		ObservableList<Product> products = FXCollections.observableArrayList();
+
+		// Try to populate the table with data from the MySQL database
+		try {
+			Connection conn = DBMethods.getConnection();
+
+			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM item_db.product");
+
+			while (rs.next()) {
+				products.add(new Product(rs.getString("item_name"),
+						rs.getDouble("item_amount"), rs.getInt("item_qty")));
+			}
+
+		} catch (SQLException e) {
+			System.out.println("DB Connection failed at table population!");
+			throw e;
+		}
+
 		return products;
 	}
 
 
-
+	public void buttonClearPressed(ActionEvent actionEvent) {
+	}
 }

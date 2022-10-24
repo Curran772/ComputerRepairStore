@@ -1,4 +1,4 @@
-use inventory_db;
+use item_db;
 
 INSERT INTO product (item_name, item_amount, item_qty) VALUES
 ("Hard Drive", 1.0, 56.99),
