@@ -39,6 +39,7 @@ public class ComputerRepairStoreController implements Initializable {
 	private BigDecimal taxPercentage = new BigDecimal(0.07);
 
 	private int count = 0;
+	private double total = 0;
 
 	private Stage stage;
 	private Scene scene;
@@ -144,10 +145,9 @@ public class ComputerRepairStoreController implements Initializable {
 
 			Connection conn = DBMethods.getConnection();
 			ResultSet rs = conn.createStatement().executeQuery("SELECT item_name FROM item_db.inventory LIMIT 1");
-			ResultSet cs = conn.createStatement().executeQuery("SELECT item_name FROM item_db.customer_items LIMIT 1");
 
 			// Only populates table with first time data if table is empty
-			if (!rs.next() && !cs.next()) {
+			if (!rs.next()) {
 				Update.runSqlScript("seed");
 				System.out.println("Database table is empty... planting seed data!");
 			}
@@ -173,7 +173,10 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.getItems().addAll(pmtType);
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
-
+		// Add all the item prices together
+		for (Product product : tableView.getItems()) {
+			total += product.getAmount();
+		}
 	}
 		
 	/**
