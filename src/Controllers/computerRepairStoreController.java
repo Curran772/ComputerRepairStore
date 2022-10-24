@@ -255,9 +255,12 @@ public class computerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	public void periodButtonPressed(ActionEvent event) {
-		if (!pmtAmountField.getText().contains(".")) {
-			pmtAmountField.setText(buttonPeriod.getText() + buttonPeriod.getText());
 
+		if (event.getSource() == buttonPeriod) {
+			if(count < 1) {
+				pmtAmountField.setText(pmtAmountField.getText() + ".");
+				count ++;
+			}
 		}
 	}
 
