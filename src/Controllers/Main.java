@@ -1,7 +1,6 @@
 package Controllers;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ComputerRepairStore extends Application {
+public class Main extends Application {
 
 	public static Scene scene;
 	public static Stage stage;
@@ -20,7 +19,7 @@ public class ComputerRepairStore extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		try {
-			ComputerRepairStore.stage = stage;
+			Main.stage = stage;
 			scene = new Scene(loadFXML("ComputerRepairStore"));
 			stage.setTitle("Computer Repair Store"); // displayed in window's title bar
 			stage.setScene(scene); // attach scene to stage
@@ -50,7 +49,7 @@ public class ComputerRepairStore extends Application {
 
 	// Loads the passed in string and returns the loaded fxml file with the matching name
 	public static Parent loadFXML(String fxml) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(ComputerRepairStore.class.getResource("/Resources/" + fxml + ".fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/Resources/" + fxml + ".fxml"));
 		return fxmlLoader.load();
 	}
 

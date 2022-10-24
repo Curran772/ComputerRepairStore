@@ -15,7 +15,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -29,9 +28,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 
-public class computerRepairStoreController implements Initializable {
+public class ComputerRepairStoreController implements Initializable {
 
 	private static final NumberFormat currency = NumberFormat.getCurrencyInstance();
 
@@ -181,7 +179,7 @@ public class computerRepairStoreController implements Initializable {
 		Stage InvView = new Stage();
 		InvView.initModality(Modality.APPLICATION_MODAL);
 		InvView.setTitle("Inventory");
-		Scene inventory = new Scene(ComputerRepairStore.loadFXML("InventoryView"));
+		Scene inventory = new Scene(Main.loadFXML("InventoryView"));
 
 		InvView.setScene(inventory);
 		InvView.showAndWait();
@@ -240,7 +238,7 @@ public class computerRepairStoreController implements Initializable {
 
 	@FXML
 	private void exitButtonPressed(ActionEvent event) {
-		ComputerRepairStore.exitButtonPressed(stage);
+		Main.exitButtonPressed(stage);
 	}
 
 	/**
