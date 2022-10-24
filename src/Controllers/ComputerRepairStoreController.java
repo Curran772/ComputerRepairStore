@@ -231,6 +231,7 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private void clearPurchaseButtonPressed(ActionEvent event) {
 		tableView.setItems(null);
+		updateTotalFields();
 	}
 
 	@FXML
