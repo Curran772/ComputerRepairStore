@@ -109,62 +109,62 @@
                                  <children>
                                     <ImageView fx:id="ddr4RAM" fitHeight="127.0" fitWidth="253.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/ddr4RAM.jpg" />
+                                          <Image url="@pictures/ddr4RAM.jpg" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="cpuCooler1" fitHeight="127.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/cpuCooler1.jpg" />
+                                          <Image url="@pictures/cpuCooler1.jpg" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="thumbDrives" fitHeight="127.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/thumbDrives.jpg" />
+                                          <Image url="@pictures/thumbDrives.jpg" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="usbRJ45" fitHeight="127.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/usbRJ45.jpg" />
+                                          <Image url="@pictures/usbRJ45.jpg" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="vgaAdapter" fitHeight="127.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/vgaAdapter.jpg" />
+                                          <Image url="@pictures/vgaAdapter.jpg" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="ddr3RAM" fitHeight="127.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/ddr3RAM.jpg" />
+                                          <Image url="@pictures/ddr3RAM.jpg" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="i9Intel" fitHeight="127.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/i9Intel.jpg" />
+                                          <Image url="@pictures/i9Intel.jpg" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="cpuCooler2" fitHeight="130.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/cpuCooler2.jpg" />
+                                          <Image url="@pictures/cpuCooler2.jpg" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="usbCAdapter" fitHeight="128.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/usbCAdapter.jpg" />
+                                          <Image url="@pictures/usbCAdapter.jpg" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="rgbKeyBoard" fitHeight="190.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/rgbKeyBoard.jpg" />
+                                          <Image url="@pictures/rgbKeyBoard.jpg" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="miniDisplayAdapter" fitHeight="127.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/miniDisplayAdapter.jpg" />
+                                          <Image url="@pictures/miniDisplayAdapter.jpg" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="ssd" fitHeight="127.0" fitWidth="256.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                                        <image>
-                                          <Image url="@../pictures/ssd.jpg" />
+                                          <Image url="@pictures/ssd.jpg" />
                                        </image>
                                     </ImageView>
                                  </children>
