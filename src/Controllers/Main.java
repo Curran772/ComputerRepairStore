@@ -24,6 +24,7 @@ public class Main extends Application {
 			stage.setTitle("Computer Repair Store"); // displayed in window's title bar
 			stage.setScene(scene); // attach scene to stage
 			stage.show(); // display the stage
+			stage.setResizable(false);
 			
 			stage.setOnCloseRequest(event -> {// alert box confirming exit will show before closing
 				event.consume();				// when the x button in the top corner is pressed

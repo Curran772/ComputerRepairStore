@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
@@ -230,13 +231,13 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void clearPurchaseButtonPressed(ActionEvent event) {
-		tableView.setItems(null);
+		tableView.getItems().clear();
 		updateTotalFields();
 	}
 
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
-
+		System.out.println("Pretend the program just printed a receipt :)");
 	}
 
 	@FXML
