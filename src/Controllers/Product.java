@@ -18,8 +18,6 @@ public class Product {
 			this.amount = amount * quantity;
 		}
 	}
-
-	public Product() {}
 	
 	public String getItem() {
 		return item;
