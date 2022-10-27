@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-public class InventoryView {
+public class InventoryViewController {
 
     @FXML
     private Button returnButton;
@@ -13,7 +13,7 @@ public class InventoryView {
     @FXML
     void switchToComputerRepairStoreView(ActionEvent event) {
         Stage stage = (Stage) returnButton.getScene().getWindow();
-        stage.close();
+        stage.hide();
     }
 
 }
