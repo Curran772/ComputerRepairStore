@@ -18,8 +18,6 @@ public class Product {
 			this.amount = amount * quantity;
 		}
 	}
-
-	public Product() {}
 	
 	public String getItem() {
 		return item;
@@ -45,6 +43,9 @@ public class Product {
 		this.amount = amount;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return String.format("%s", getItem());
+	}
 	
 }

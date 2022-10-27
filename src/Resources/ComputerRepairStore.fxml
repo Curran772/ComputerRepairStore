@@ -27,7 +27,7 @@
                   <Font size="20.0" />
                </font>
             </TextField>
-            <TextField editable="false" focusTraversable="false" layoutX="14.0" layoutY="100.0" prefHeight="50.0" prefWidth="230.0" text="Tax">
+            <TextField editable="false" focusTraversable="false" layoutX="14.0" layoutY="100.0" prefHeight="50.0" prefWidth="230.0" text="Tax (5%)">
                <font>
                   <Font size="20.0" />
                </font>
