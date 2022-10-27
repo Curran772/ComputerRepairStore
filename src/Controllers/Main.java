@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class Main extends Application {
 			stage.setScene(scene); // attach scene to stage
 			stage.show(); // display the stage
 			stage.setResizable(false);
+			stage.getIcons().add(new Image("/Resources/ComputerIcon.png"));
 			
 			stage.setOnCloseRequest(event -> {// alert box confirming exit will show before closing
 				event.consume();				// when the x button in the top corner is pressed
