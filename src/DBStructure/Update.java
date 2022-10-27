@@ -6,15 +6,16 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Reader;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Update extends DBMethods {
 
     // Delete item with name
-    public static void deleteProduct(String productName) throws SQLException, ClassNotFoundException {
+    public static void deleteProduct(String productName) throws SQLException {
         // Delete statement
         String updateStatement = "   DELETE FROM item_db.inventory\n" +
-                "         WHERE item_name =" + productName + ";";
+                "         WHERE item_name ='" + productName + "';";
 
         try {
             dataExecuteUpdate(updateStatement);
@@ -25,7 +26,7 @@ public class Update extends DBMethods {
     }
 
     // Insert an item into the item table
-    public static void insertProduct(String name, Double amount, Double qty) throws SQLException, ClassNotFoundException {
+    public static void insertProduct(String name, Double amount, Double qty) throws SQLException {
         // Insert statement
         String updateStatement = "INSERT INTO item_db.inventory(item_name, item_amount, item_qty)\n" +
                 "VALUES('" + name + "','" + amount + "','" + qty + "');\n";
@@ -38,7 +39,7 @@ public class Update extends DBMethods {
     }
 
     // Edit the name of an item
-    public static void updateProductName(String nameOld, String nameNew) throws SQLException, ClassNotFoundException {
+    public static void updateProductName(String nameOld, String nameNew) throws SQLException {
         String updateStatement = "  UPDATE item_db.inventory\n" + " SET item_name= '" +
                 nameNew + "'\n" + " WHERE item_name = " + nameOld + ";";
 
@@ -51,7 +52,7 @@ public class Update extends DBMethods {
     }
 
     // Edit an item price
-    public static void updateProductAmount(String productName, String productAmount) throws SQLException, ClassNotFoundException {
+    public static void updateProductAmount(String productName, String productAmount) throws SQLException {
         // Declare the UPDATE sql statement
         String updateStatement = "   UPDATE item_db.inventory\n" +
                 "       SET item_amount = '" + productAmount + "'\n" +
@@ -65,7 +66,7 @@ public class Update extends DBMethods {
     }
 
     // Edit an item quantity
-    public static void updateProductQty(String productName, String productQty) throws SQLException, ClassNotFoundException {
+    public static void updateProductQty(String productName, String productQty) throws SQLException {
         // Declare the UPDATE sql statement
         String updateStatement = "   UPDATE item_db.inventory\n" +
                 "       SET item_qty = '" + productQty + "'\n" +
@@ -79,16 +80,5 @@ public class Update extends DBMethods {
     }
 
 
-    // Run passed in .sql scripts
-    public static void runSqlScript(String script) throws Exception {
 
-        // Connect to the DB
-        Connection conn = DBMethods.getConnection();
-        System.out.println("SQL Script method has been connected");
-
-        ScriptRunner sr = new ScriptRunner(conn);
-        Reader reader = new BufferedReader(new FileReader("src/db/" + script + ".sql"));
-
-        sr.runScript(reader);
-    }
 }

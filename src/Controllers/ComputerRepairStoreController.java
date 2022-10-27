@@ -3,9 +3,11 @@ package Controllers;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
@@ -130,7 +132,7 @@ public class ComputerRepairStoreController implements Initializable {
 	private TextField totalDueField;
 
 
-	public void initialize(java.net.URL location, ResourceBundle resources) {
+	public void initialize(URL location, ResourceBundle resources) {
 
 		// set up the columns in the table
 		itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
@@ -140,9 +142,7 @@ public class ComputerRepairStoreController implements Initializable {
 		// load database
 		try {
 			Update.runSqlScript("schema");
-
-			Connection conn = DBMethods.getConnection();
-			ResultSet rs = conn.createStatement().executeQuery("SELECT item_name FROM item_db.inventory LIMIT 1");
+			ResultSet rs = DBMethods.dataExecuteQuery("SELECT item_name FROM item_db.inventory LIMIT 1");
 
 			// Only populates table with first time data if table is empty
 			if (!rs.next()) {
@@ -210,17 +210,17 @@ public class ComputerRepairStoreController implements Initializable {
 	 * this method will remove the selected row(s) from the table
 	 */
 	@FXML
-	private void removeItemButtonPressed() {
+	private void removeItemButtonPressed() throws SQLException {
 		ObservableList<Product> selectedRows, allProducts;
 		allProducts = tableView.getItems();
 
 		// this gives us the rows that were selected
 		selectedRows = tableView.getSelectionModel().getSelectedItems();
 
-		// loop over selected rows and remove the products from the list that are
-		// selected
+		// loop over selected rows and remove the products from the list that are selected
 		for (Product products : selectedRows) {
 			allProducts.remove(products);
+			Update.deleteProduct(products.toString());
 		}
 
 		updateTotalFields();
@@ -230,7 +230,12 @@ public class ComputerRepairStoreController implements Initializable {
 	 * Action event when the clear purchase button is pressed
 	 */
 	@FXML
-	private void clearPurchaseButtonPressed(ActionEvent event) {
+	private void clearPurchaseButtonPressed(ActionEvent event) throws SQLException {
+
+		for (Product products : tableView.getItems()) {
+			Update.deleteProduct(products.toString());
+		}
+
 		tableView.getItems().clear();
 		updateTotalFields();
 	}
@@ -363,18 +368,18 @@ public class ComputerRepairStoreController implements Initializable {
 
 		// Try to populate the table with data from the MySQL database
 		try {
-			Connection conn = DBMethods.getConnection();
 
-			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM item_db.inventory");
+			ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db.inventory");
 
 			while (rs.next()) {
 				products.add(new Product(rs.getString("item_name"),
 						rs.getDouble("item_amount"), rs.getInt("item_qty")));
 			}
+
 		} catch (SQLException e) {
 			System.out.println("DB Connection failed at table population!");
-			throw e;
 		}
+
 		return products;
 	}
 

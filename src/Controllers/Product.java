@@ -45,6 +45,9 @@ public class Product {
 		this.amount = amount;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return String.format("%s", getItem());
+	}
 	
 }

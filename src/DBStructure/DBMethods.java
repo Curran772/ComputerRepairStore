@@ -1,28 +1,21 @@
 package DBStructure;
 
-import Controllers.ComputerRepairStoreController;
+import org.apache.ibatis.jdbc.ScriptRunner;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.Reader;
 import java.sql.*;
 
 public class DBMethods {
 
     // Class variables
     private static Connection conn = null;
-    private static final String JDBS_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     // Connect to the database
-    public static void connect() throws SQLException, ClassNotFoundException {
-        try {
-            Class.forName(JDBS_DRIVER);
-        } catch (ClassNotFoundException e) {
-            System.out.println("Driver is broken...");
-            e.printStackTrace();
-            throw e;
-        }
-
-        System.out.println("MySQL Driver has been registered");
+    public static void connect() throws SQLException {
 
         // Establish connection
         try {
@@ -32,13 +25,6 @@ public class DBMethods {
             e.printStackTrace();
             throw e;
         }
-    }
-
-    // Get connection with return type
-    public static Connection getConnection() throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
-
-        return conn;
     }
 
     // Disconnect from the database
@@ -53,7 +39,7 @@ public class DBMethods {
     }
 
     // Execute the passed in Query statement
-    public static ResultSet dataExecuteQuery(String queryStmt) throws SQLException, ClassNotFoundException {
+    public static ResultSet dataExecuteQuery(String queryStmt) throws SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         CachedRowSet crs = null;
@@ -83,7 +69,7 @@ public class DBMethods {
     }
 
     // Execute update in the database
-    public static void dataExecuteUpdate(String sqlStmt) throws SQLException, ClassNotFoundException {
+    public static void dataExecuteUpdate(String sqlStmt) throws SQLException {
         Statement stmt = null;
         try {
             connect();
@@ -98,5 +84,17 @@ public class DBMethods {
             }
             disconnect();
         }
+    }
+
+    // Run passed in .sql scripts
+    public static void runSqlScript(String script) throws Exception {
+
+        // Connect to the DB
+        System.out.println("SQL Script method has been connected");
+        connect();
+        ScriptRunner sr = new ScriptRunner(conn);
+        Reader reader = new BufferedReader(new FileReader("src/db/" + script + ".sql"));
+
+        sr.runScript(reader);
     }
 }
