@@ -26,7 +26,7 @@ public class Main extends Application {
 			stage.setScene(scene); // attach scene to stage
 			stage.show(); // display the stage
 			stage.setResizable(false);
-			stage.getIcons().add(new Image("/Resources/ComputerIcon.png"));
+			stage.getIcons().add(new Image(Main.class.getResourceAsStream("/Resources/ComputerIcon.png")));
 			
 			stage.setOnCloseRequest(event -> {// alert box confirming exit will show before closing
 				event.consume();				// when the x button in the top corner is pressed
