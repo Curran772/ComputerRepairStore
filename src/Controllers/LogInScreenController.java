@@ -31,16 +31,18 @@ public class LogInScreenController {
     }
     
     private void checkLogin() throws IOException{
-    	Stage LogInView = new Stage();
-		LogInView.initModality(Modality.APPLICATION_MODAL);
-		LogInView.setTitle("System Log In");
-		Scene login = new Scene(Main.loadFXML("ComputerRepairStore"));
-
-		LogInView.setScene(login);
-		LogInView.showAndWait();
+    	
     	    	
     	if(usernameTextField.getText().toString().equals("admin") && passwordTextField.getText().toString().equals("123")) {
     		wrongLogIn.setText("Success!");
+    		
+    		Stage LogInView = new Stage();
+    		LogInView.initModality(Modality.APPLICATION_MODAL);
+    		LogInView.setTitle("System Log In");
+    		Scene login = new Scene(Main.loadFXML("ComputerRepairStore"));
+
+    		LogInView.setScene(login);
+    		LogInView.showAndWait();
     	
     		
     	}else if (usernameTextField.getText().isEmpty() && passwordTextField.getText().isEmpty()) {

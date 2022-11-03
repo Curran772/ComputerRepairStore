@@ -39,91 +39,63 @@ public class ComputerRepairStoreController implements Initializable {
 	private Scene scene;
 	private Parent root;
 
-	@FXML
-	private Button returnButton;
+	@FXML	private Button returnButton;
 	
-	@FXML
-	private Button button0;
+	@FXML	private Button button0;
 
-	@FXML
-	private Button button1;
+	@FXML	private Button button1;
 
-	@FXML
-	private Button button2;
+	@FXML	private Button button2;
 
-	@FXML
-	private Button button3;
+	@FXML	private Button button3;
 
-	@FXML
-	private Button button4;
+	@FXML	private Button button4;
 
-	@FXML
-	private Button button5;
+	@FXML	private Button button5;
 
-	@FXML
-	private Button button6;
+	@FXML	private Button button6;
 
-	@FXML
-	private Button button7;
+	@FXML	private Button button7;
 
-	@FXML
-	private Button button8;
+	@FXML	private Button button8;
 
-	@FXML
-	private Button button9;
+	@FXML	private Button button9;
 
-	@FXML
-	private Button buttonClear;
+	@FXML	private Button buttonClear;
 
-	@FXML
-	private Button buttonPeriod;
+	@FXML	private Button buttonPeriod;
 
-	@FXML
-	private Button payButton;
+	@FXML	private Button payButton;
 
-	@FXML
-	private TextField pmtAmountField;
+	@FXML	private TextField pmtAmountField;
 
-	@FXML
-	private TextField pmtChangeField;
+	@FXML	private TextField pmtChangeField;
 
-	@FXML
-	private ChoiceBox<String> pmtMethodField;
+	@FXML	private ChoiceBox<String> pmtMethodField;
 
 	private String[] pmtType = { "Cash", "Check", "Card" };
 
-	@FXML
-	private Button printReceiptButton;
+	@FXML	private Button printReceiptButton;
 
-	@FXML
-	private TableView<Product> tableView;
+	@FXML	private TableView<Product> tableView;
 
-	@FXML
-	private TableColumn<Product, Double> amountColumn;
+	@FXML	private TableColumn<Product, Double> amountColumn;
 
-	@FXML
-	private TableColumn<Product, Integer> quantityColumn;
+	@FXML	private TableColumn<Product, Integer> quantityColumn;
 
-	@FXML
-	private TableColumn<Product, String> itemColumn;
+	@FXML	private TableColumn<Product, String> itemColumn;
 
-	@FXML
-	private Button removeItemButton;
+	@FXML	private Button removeItemButton;
 
-	@FXML
-	private Button clearPurchaseButton;
+	@FXML	private Button clearPurchaseButton;
 
-	@FXML
-	private Button checkInventoryButton;
+	@FXML	private Button checkInventoryButton;
 
-	@FXML
-	private TextField subTotalField;
+	@FXML	private TextField subTotalField;
 
-	@FXML
-	private TextField taxField;
+	@FXML	private TextField taxField;
 
-	@FXML
-	private TextField totalDueField;
+	@FXML	private TextField totalDueField;
 
 
 	public void initialize(URL location, ResourceBundle resources) {
@@ -238,7 +210,10 @@ public class ComputerRepairStoreController implements Initializable {
 	private void printReceiptButtonPressed(ActionEvent event) {
 		System.out.println("Pretend the program just printed a receipt :)");
 	}
-
+/**
+ *This method exits the program when exit button is pressed
+ * 
+ */
 	@FXML
 	private void exitButtonPressed(ActionEvent event) {
 		Main.exitButtonPressed(stage);
