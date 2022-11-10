@@ -3,8 +3,6 @@
 	<exclude-output/>
 	<contentEntry url="file://$MODULE_DIR$"/>
 	<levels>
-		<level name="mysql-connector-java-8.0.28" value="project"/>
-		<level name="ApacheiBatis" value="project"/>
-		<level name="ibatis-core-3.0" value="project"/>
+		<level name="lib" value="project"/>
 	</levels>
 </component>
