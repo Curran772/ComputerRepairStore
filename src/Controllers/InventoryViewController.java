@@ -1,7 +1,9 @@
 package Controllers;
 
+import java.awt.print.Book;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -54,49 +56,31 @@ public class InventoryViewController {
 	
 	@FXML
 	private TextField inventoryCostTextField;
-	
 
-	private final ObservableList<Product> products = FXCollections.observableArrayList();
-	
-	public void initialize(URL location, ResourceBundle resources) {
-		 // load database
-		
-		  try {
-		  Update.runSqlScript("schema"); ResultSet rs =
-		  DBMethods.dataExecuteQuery("SELECT item_name FROM item_db.inventory LIMIT 1"
-		  );
-		  
-		  System.out.println("Database connected and populated!");
-		  
-		  searchInventoryListView.setItems(products); // bind contact to contactListView
-		  } 
-		  catch (SQLException e) {
-		  System.out.println("DB Connection failed at table population!" + e); 
-		  }
-		  catch
-		  (Exception ex) { System.out.println("DB Connection failed at runSqlScript!" +
-		  ex); 
-		  }
-		  
+	private static ObservableList<Product> prodData = FXCollections.observableArrayList();
 
-		  searchInventoryListView.setItems(products.sorted()); 
+	public InventoryViewController() throws SQLException {
 
-			// when ListView selection changes, show large cover in ImageView
-		  searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Product>() {
-				@Override
-				public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
-					//inventoryPic.setImage(new Image(newValue.getThumbImage()));
-					productNameTextField.setText(newValue.getItem());
-					inventoryCostTextField.setValue(new Double(amount));
-					quantityTextField.setValue(newValue.getQuantity());
-					
-
-				}
-			});
+		// when ListView selection changes, show large cover in ImageView
+//		searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Product>() {
+//			@Override
+//			public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
+//				// inventoryPic.setImage(new Image(newValue.getThumbImage()));
+//				// productNameTextField.setText(newValue.getItem());
+//				// inventoryCostTextField.setValue(new Double(amount));
+//				// quantityTextField.setValue(newValue.getQuantity());
+//			}
+//		});
 	}
 	@FXML
-	void searchInventoryPressed(ActionEvent event) {
-
+	void searchInventoryPressed(ActionEvent event) throws ClassNotFoundException, SQLException {
+		try {
+			String productName = productNameTextField.getText().toString();
+			Product product = Update.searchProducts(productName);
+			popProduct(product);
+		} catch (SQLException e) {
+			System.out.println("An error occurred while fetching item information from database!\n");
+		}
 	}
 
 	@FXML
@@ -117,5 +101,13 @@ public class InventoryViewController {
 		/*
 		 * Stage stage = (Stage) returnButton.getScene().getWindow(); stage.hide();
 		 */
-}
+	}
+
+	// Pop Items for TableView
+	@FXML
+	void popProduct(Product product) throws ClassNotFoundException {
+		ObservableList<Product> prodData = FXCollections.observableArrayList();
+		prodData.add(new Product(product.getItem(), product.getAmount(), product.getQuantity()));
+		searchInventoryListView.setItems(prodData);
+	}
 }

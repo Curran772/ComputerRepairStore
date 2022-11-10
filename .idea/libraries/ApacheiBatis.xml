@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="ApacheiBatis">
-    <CLASSES />
-    <JAVADOC />
-    <SOURCES>
-      <root url="file://$PROJECT_DIR$/src/lib/ApacheiBatis" />
-    </SOURCES>
-  </library>
-</component>

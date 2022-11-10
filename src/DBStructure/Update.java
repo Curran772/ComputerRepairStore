@@ -1,8 +1,45 @@
 package DBStructure;
 
+import Controllers.Product;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Update extends DBMethods {
+
+    // Use ResultSet from DB as parameter and set Employee Object's attributes and
+    // return employee object.
+    private static Product getProdFromResultSet(ResultSet rs) throws SQLException {
+        Product prod;
+        if (rs.next()) {
+            prod = new Product();
+            prod.setProdName(rs.getString("item_name"));
+            prod.setProdAmount(rs.getDouble("item_amount"));
+            prod.setProdQty(rs.getDouble("item_qty"));
+            return prod;
+        } else {
+            return null;
+        }
+    }
+
+    // Search the products
+    public static Product searchProducts(String searchProducts) throws SQLException, ClassNotFoundException {
+        // Execute SELECT statement
+        try {
+            // ResultSet from dataExecuteQuery method
+            ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db.inventory " +
+                    "WHERE item_name=" + searchProducts);
+            Product product = getProdFromResultSet(rs);
+
+            return product;
+
+        } catch (SQLException e) {
+            System.out.println("SQL select operation failed: " + e);
+            throw e;
+        }
+    }
 
     // Delete item with name
     public static void deleteProduct(String productName) throws SQLException {
@@ -71,7 +108,4 @@ public class Update extends DBMethods {
             throw e;
         }
     }
-
-
-
 }

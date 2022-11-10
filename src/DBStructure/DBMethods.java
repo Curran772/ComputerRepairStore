@@ -1,5 +1,8 @@
 package DBStructure;
 
+import Controllers.Product;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 import javax.sql.rowset.CachedRowSet;
@@ -19,11 +22,9 @@ public class DBMethods {
 
         // Establish connection
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
+            conn = DriverManager.getConnection("jdbc:mysql://item-db.c2cdh2umtdwx.us-east-2.rds.amazonaws.com:3306/", "root", "fMM4JMBwpsUQTan");
         } catch (SQLException e) {
             System.out.println("Connection failed... SAD");
-            e.printStackTrace();
-            throw e;
         }
     }
 
@@ -34,7 +35,7 @@ public class DBMethods {
                 conn.close();
             }
         } catch (Exception e) {
-            throw e;
+            System.out.println("Failed to disconnect!");
         }
     }
 
@@ -42,7 +43,7 @@ public class DBMethods {
     public static ResultSet dataExecuteQuery(String queryStmt) throws SQLException {
         Statement stmt = null;
         ResultSet rs = null;
-        CachedRowSet crs = null;
+        CachedRowSet crs;
         try {
             // Connect to the database
             connect();
@@ -83,6 +84,27 @@ public class DBMethods {
                 stmt.close();
             }
             disconnect();
+        }
+    }
+
+    /**
+     * Method that returns an observable list of the items in the database table
+     */
+    public static ObservableList<Product> getProducts() throws SQLException {
+        ObservableList<Product> products = FXCollections.observableArrayList();
+
+        // Try to populate the table with data from the MySQL database
+        try {
+            ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db.inventory");
+
+            while (rs.next()) {
+                products.add(new Product(rs.getString("item_name"),
+                        rs.getDouble("item_amount"), rs.getInt("item_qty")));
+            }
+            return products;
+        } catch (SQLException e) {
+            System.out.println("DB Connection failed at table population!");
+            throw e;
         }
     }
 

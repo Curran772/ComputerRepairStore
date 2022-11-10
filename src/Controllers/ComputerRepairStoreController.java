@@ -35,6 +35,7 @@ public class ComputerRepairStoreController implements Initializable {
 	private double total = 0;
 	private double tax = 0;
 	private double totalDue = 0;
+	private double change = 0;
 
 	private Stage stage;
 	private Scene scene;
@@ -126,7 +127,7 @@ public class ComputerRepairStoreController implements Initializable {
 
 			System.out.println("Database connected and populated!");
 
-			tableView.setItems(getProducts());
+			tableView.setItems(DBMethods.getProducts());
 		} catch (SQLException e) {
 			System.out.println("DB Connection failed at table population!" + e);
 		} catch (Exception ex) {
@@ -244,7 +245,7 @@ public class ComputerRepairStoreController implements Initializable {
 		//String.valueOf(allProduct);
 		//	pmtAmountField.getText(), pmtChangeField.getText());
 		System.out.printf("SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nChange: $%.02f%n", 
-				this.total, this.tax, this.totalDue, pmtMethodField.getValue(), pmtChangeField.getText());
+				getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getChange());
 	//Payment Amount: $%.02f%n pmtAmountField.getValue(),}
 	}
 
@@ -292,6 +293,7 @@ public class ComputerRepairStoreController implements Initializable {
 			BigDecimal pmtAmount = new BigDecimal(String.valueOf(pmtAmountField.getText()));
 			BigDecimal total = new BigDecimal(getTotalDue());
 			BigDecimal change = total.subtract(pmtAmount);
+			setChange(getTotalDue() - pmtAmount.doubleValue());
 
 			if (pmtAmount.doubleValue() < getTotalDue()) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -367,28 +369,7 @@ public class ComputerRepairStoreController implements Initializable {
 		}
 	}
 
-	/**
-	 * Method that returns an observable list of the items in the database table
-	 */
-	public ObservableList<Product> getProducts() throws SQLException {
-		ObservableList<Product> products = FXCollections.observableArrayList();
 
-		// Try to populate the table with data from the MySQL database
-		try {
-
-			ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db.inventory");
-
-			while (rs.next()) {
-				products.add(new Product(rs.getString("item_name"),
-						rs.getDouble("item_amount"), rs.getInt("item_qty")));
-			}
-
-		} catch (SQLException e) {
-			System.out.println("DB Connection failed at table population!");
-		}
-
-		return products;
-	}
 
 	/**
 	 * When called, this method updates the total, tax, and total due text fields
@@ -417,9 +398,13 @@ public class ComputerRepairStoreController implements Initializable {
 	public void setTotal(double total) { this.total = total; }
 	public void setTax(double tax) { this.tax = tax; }
 	public void setTotalDue(double totalDue) { this.totalDue = totalDue; }
+	public void setChange(double change) { this.change = Math.abs(change); }
+
 
 	// Getters
 	public double getTotal() { return this.total; }
 	public double getTax() { return this.tax; }
 	public double getTotalDue() { return this.totalDue; }
+	public double getChange() { return this.change; }
+
 }
