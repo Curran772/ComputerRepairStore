@@ -86,7 +86,7 @@ public class DBMethods {
         }
     }
 
-    // Run passed in .sql scripts
+    // Run passed in sql scripts
     public static void runSqlScript(String script) throws Exception {
 
         // Connect to the DB

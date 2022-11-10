@@ -23,8 +23,8 @@ public class Main extends Application {
 	public void start(Stage stage) throws Exception {
 		try {
 			Main.stage = stage;
-			scene = new Scene(loadFXML("ComputerRepairStore"));
-			stage.setTitle("Computer Repair Store"); // displayed in window's title bar
+			scene = new Scene(loadFXML("LogInScreen"));
+			stage.setTitle("System Log In"); // displayed in window's title bar
 			stage.setScene(scene); // attach scene to stage
 			stage.show(); // display the stage
 			stage.setResizable(false);
@@ -61,6 +61,7 @@ public class Main extends Application {
 	// Change the root scene
 	public static void setRoot(String fxml) throws IOException {
 		scene.setRoot(loadFXML(fxml));
+		stage.sizeToScene();
 	}
 
 	// Change the window title
