@@ -21,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -38,7 +39,13 @@ public class ComputerRepairStoreController implements Initializable {
 	private Stage stage;
 	private Scene scene;
 	private Parent root;
-
+	
+	@FXML 	private TextField searchBar;
+	
+	@FXML   private GridPane gridPane;
+	
+	@FXML 	private Button searchBtn;
+	
 	@FXML	private Button returnButton;
 	
 	@FXML	private Button button0;
@@ -98,6 +105,7 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML	private TextField totalDueField;
 
 
+
 	public void initialize(URL location, ResourceBundle resources) {
 
 		// set up the columns in the table
@@ -129,6 +137,8 @@ public class ComputerRepairStoreController implements Initializable {
 		tableView.setEditable(true);
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
+		
+		
 		// This will allow the user to select multiple rows for deletion
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -138,6 +148,7 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
 		updateTotalFields();
+		
 	}
 		
 	/**
@@ -190,6 +201,8 @@ public class ComputerRepairStoreController implements Initializable {
 		}
 
 		updateTotalFields();
+		
+		
 	}
 
 	/**
@@ -208,8 +221,33 @@ public class ComputerRepairStoreController implements Initializable {
 
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
-		System.out.println("Pretend the program just printed a receipt :)");
+		//System.out.println("Pretend the program just printed a receipt :)");
+		/*
+		 * try { if (pmtAmountField < this.totalDue); { Alert alert = new
+		 * Alert(Alert.AlertType.ERROR); alert.setTitle("Not enough payment entered");
+		 * alert.
+		 * setHeaderText("Please enter payment greater than or equal to total due!");
+		 * alert.showAndWait(); } else { System.out.println("Thank You");; }
+		 * 
+		 * } catch (IllegalArgumentException e) { if
+		 * (pmtAmountField.getText().isEmpty()) { Alert alert = new
+		 * Alert(Alert.AlertType.ERROR); alert.setTitle("No payment entered");
+		 * alert.setHeaderText("Please enter a payment amount!"); alert.showAndWait(); }
+		 */
+		
+		System.out.println("***********************************************");
+		System.out.println("					CRS						");
+		System.out.println("		  Computer Repair Store				");
+		System.out.println("***********************************************");
+		System.out.println();
+		//System.out.println(allProducts);
+		//String.valueOf(allProduct);
+		//	pmtAmountField.getText(), pmtChangeField.getText());
+		System.out.printf("SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nChange: $%.02f%n", 
+				this.total, this.tax, this.totalDue, pmtMethodField.getValue(), pmtChangeField.getText());
+	//Payment Amount: $%.02f%n pmtAmountField.getValue(),}
 	}
+
 /**
  *This method exits the program when exit button is pressed
  * 

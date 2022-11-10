@@ -61,6 +61,7 @@ public class Main extends Application {
 	// Change the root scene
 	public static void setRoot(String fxml) throws IOException {
 		scene.setRoot(loadFXML(fxml));
+		stage.sizeToScene();
 	}
 
 	// Change the window title
