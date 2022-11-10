@@ -19,7 +19,7 @@ public class DBMethods {
 
         // Establish connection
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
+            conn = DriverManager.getConnection("jdbc:mysql://item-db.c2cdh2umtdwx.us-east-2.rds.amazonaws.com:3306/", "root", "fMM4JMBwpsUQTan");
         } catch (SQLException e) {
             System.out.println("Connection failed... SAD");
             e.printStackTrace();
@@ -34,7 +34,7 @@ public class DBMethods {
                 conn.close();
             }
         } catch (Exception e) {
-            throw e;
+            System.out.println("Failed to disconnect!");
         }
     }
 
@@ -42,7 +42,7 @@ public class DBMethods {
     public static ResultSet dataExecuteQuery(String queryStmt) throws SQLException {
         Statement stmt = null;
         ResultSet rs = null;
-        CachedRowSet crs = null;
+        CachedRowSet crs;
         try {
             // Connect to the database
             connect();
