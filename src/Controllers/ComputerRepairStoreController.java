@@ -1,5 +1,6 @@
 package Controllers;
 
+import java.util.Date;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -222,32 +223,36 @@ public class ComputerRepairStoreController implements Initializable {
 
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
-		//System.out.println("Pretend the program just printed a receipt :)");
-		/*
-		 * try { if (pmtAmountField < this.totalDue); { Alert alert = new
-		 * Alert(Alert.AlertType.ERROR); alert.setTitle("Not enough payment entered");
-		 * alert.
-		 * setHeaderText("Please enter payment greater than or equal to total due!");
-		 * alert.showAndWait(); } else { System.out.println("Thank You");; }
-		 * 
-		 * } catch (IllegalArgumentException e) { if
-		 * (pmtAmountField.getText().isEmpty()) { Alert alert = new
-		 * Alert(Alert.AlertType.ERROR); alert.setTitle("No payment entered");
-		 * alert.setHeaderText("Please enter a payment amount!"); alert.showAndWait(); }
-		 */
-		
-		System.out.println("***********************************************");
-		System.out.println("					CRS						");
-		System.out.println("		  Computer Repair Store				");
-		System.out.println("***********************************************");
-		System.out.println();
-		//System.out.println(allProducts);
-		//String.valueOf(allProduct);
-		//	pmtAmountField.getText(), pmtChangeField.getText());
-		System.out.printf("SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nChange: $%.02f%n", 
-				getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getChange());
-	//Payment Amount: $%.02f%n pmtAmountField.getValue(),}
+		BigDecimal pmtAmount = new BigDecimal(String.valueOf(pmtAmountField.getText()));
+		//String pmtAmount = pmtAmountField.getText();
+		Date date = new Date();
+		Employee e1 = new Employee("111111","Jane", "Green");
+	
+			if (pmtChangeField.getText().isEmpty()) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Invalid payment");
+				alert.setHeaderText("Please Press Pay Button!");
+				alert.showAndWait();
+			} else {
+				System.out.println("***********************************************");
+				System.out.println("					CRS						");
+				System.out.println("		  Computer Repair Store				");
+				System.out.println("***********************************************");
+				System.out.println();				
+				System.out.println(date.toString());
+				System.out.println();
+				// System.out.println(allProducts);
+				// String.valueOf(allProduct);
+				System.out.printf(
+						"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02f%nChange: $%.02f%n",
+						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), pmtAmount, getChange());
+				System.out.println();
+				System.out.printf("You were helped by %s.%n  Thank you for your purchase!", e1.toString());
+			}
+
 	}
+			 
+	
 
 /**
  *This method exits the program when exit button is pressed
