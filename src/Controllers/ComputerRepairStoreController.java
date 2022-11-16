@@ -164,7 +164,7 @@ public class ComputerRepairStoreController implements Initializable {
 		   products.add(new Product("DDR4 RAM", 13.00 , 2, "/Resources.pictures/ddr4RAM.jpg"));
 		   products.add(new Product("I9Intel Core", 123.00 , 2, "/Resources.pictures/i9Intel.jpg"));
 		   
-		   purchaseListView.setItems(products); // bind booksListView to books
+		   purchaseListView.setItems(products);
 
 	      // when ListView selection changes, show large cover in ImageView
 		   purchaseListView.getSelectionModel().selectedItemProperty().
@@ -173,8 +173,7 @@ public class ComputerRepairStoreController implements Initializable {
 	               @Override                                                     
 	               public void changed(ObservableValue<? extends Product> ov,
 	                  Product oldValue, Product newValue) {                        
-	            	   //inventoryPic.setImage(
-	                     //new Image(newValue.getThumbImage()));
+
 	               }
 	            }
 	         );                                                                  

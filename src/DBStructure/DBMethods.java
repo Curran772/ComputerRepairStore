@@ -19,10 +19,9 @@ public class DBMethods {
 
     // Connect to the database
     public static void connect() throws SQLException {
-
         // Establish connection
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3307", "root", "password");
         } catch (SQLException e) {
             System.out.println("Connection failed... SAD");
         }
@@ -99,7 +98,8 @@ public class DBMethods {
 
             while (rs.next()) {
                 products.add(new Product(rs.getString("item_name"),
-                        rs.getDouble("item_amount"), rs.getInt("item_qty")));
+                        rs.getDouble("item_amount"), rs.getInt("item_qty"),
+                        rs.getString("item_image")));
             }
             return products;
         } catch (SQLException e) {
