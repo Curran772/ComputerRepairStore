@@ -72,15 +72,16 @@ public class InventoryViewController {
 //			}
 //		});
 	}
-	/*
-	 * @FXML void searchInventoryPressed(ActionEvent event) throws
-	 * ClassNotFoundException, SQLException { try { String productName =
-	 * productNameTextField.getText().toString(); Product product =
-	 * Update.searchProducts(productName); popProduct(product); } catch
-	 * (SQLException e) { System.out.
-	 * println("An error occurred while fetching item information from database!\n"
-	 * ); } }
-	 */
+	
+	@FXML 
+	void searchInventoryPressed(ActionEvent event) throws
+	  ClassNotFoundException, SQLException { /*try { String productName =
+	  productNameTextField.getText().toString(); Product product =
+	  Update.searchProducts(productName); popProduct(product); } catch
+	  (SQLException e) { System.out.
+	  println("An error occurred while fetching item information from database!\n"
+	  ); }*/ }
+	 
 
 	@FXML
 	void updateInventoryPressed(ActionEvent event) {
