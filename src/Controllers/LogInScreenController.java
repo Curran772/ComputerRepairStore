@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -34,8 +36,8 @@ public class LogInScreenController {
 
 	private void checkLogin() throws IOException {
 
-		if (usernameTextField.getText().toString().equals("admin")
-				&& passwordTextField.getText().toString().equals("123")) {
+		if (usernameTextField.getText().toString().equals("")
+				&& passwordTextField.getText().toString().equals("")) {
 			wrongLogIn.setText("Success!");
 			
 			Main.setRoot("ComputerRepairStore");
@@ -52,5 +54,10 @@ public class LogInScreenController {
 		
 
 	}
-
+	@FXML
+	public void handleEnterPressed(KeyEvent event) throws IOException {
+		if(event.getCode().equals(KeyCode.ENTER)){
+		checkLogin();
+	}
+	}
 }

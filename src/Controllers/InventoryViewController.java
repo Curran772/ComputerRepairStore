@@ -1,6 +1,6 @@
 package Controllers;
 
-import java.awt.print.Book;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -84,7 +84,7 @@ public class InventoryViewController {
 
 	@FXML
 	void updateInventoryPressed(ActionEvent event) {
-
+		
 	}
 
 	@FXML

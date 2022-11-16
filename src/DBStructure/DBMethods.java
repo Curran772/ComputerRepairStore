@@ -22,7 +22,7 @@ public class DBMethods {
 
         // Establish connection
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://item-db.c2cdh2umtdwx.us-east-2.rds.amazonaws.com:3306/", "root", "fMM4JMBwpsUQTan");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
         } catch (SQLException e) {
             System.out.println("Connection failed... SAD");
         }
