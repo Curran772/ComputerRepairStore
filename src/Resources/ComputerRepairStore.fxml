@@ -81,7 +81,11 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <children>
-            <ListView fx:id="purchaseListView" prefHeight="478.0" prefWidth="525.0" />
+            <ListView fx:id="purchaseListView" orientation="HORIZONTAL" prefHeight="478.0" prefWidth="517.0">
+               <padding>
+                  <Insets top="8.0" />
+               </padding>
+            </ListView>
          </children>
       </Pane>
       <Pane layoutX="916.0" layoutY="551.0" prefHeight="250.0" prefWidth="525.0">
@@ -230,7 +234,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <TextField fx:id="searchBar" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="275.0">
+                  <TextField fx:id="searchBar" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="282.0">
                      <HBox.margin>
                         <Insets bottom="8.0" left="8.0" right="8.0" />
                      </HBox.margin>

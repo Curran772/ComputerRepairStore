@@ -26,9 +26,11 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class ComputerRepairStoreController implements Initializable {
 
@@ -51,6 +53,8 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML 	private Button searchBtn;
 	
 	@FXML	private ListView<Product> purchaseListView;
+	
+	 @FXML  private ImageView productImageView;
 	
 	@FXML	private Button returnButton;
 	
@@ -158,29 +162,39 @@ public class ComputerRepairStoreController implements Initializable {
 		updateTotalFields();
 		
 		// populate the ObservableList<Product>
-		   products.add(new Product("CPU Cooler", 23.00 , 2, "/Resources.pictures/cpuCooler1.jpg"));
-		   products.add(new Product("CPU Cooler", 25.00 , 2, "/Resources.pictures/cpuCooler2.jpg"));
-		   products.add(new Product("DDR3 RAM", 54.00 , 2, "/Resources.pictures/ddr3RAM.jpg"));
-		   products.add(new Product("DDR4 RAM", 13.00 , 2, "/Resources.pictures/ddr4RAM.jpg"));
-		   products.add(new Product("I9Intel Core", 123.00 , 2, "/Resources.pictures/i9Intel.jpg"));
+		   products.add(new Product("Hard Drive", 56.99 , 1, "Resources/pictures/ssd.jpg"));
+		   products.add(new Product("Charging Cord", 6.99 , 2, "Resources/pictures/usbCAdapter.jpg"));
+		   products.add(new Product("Flash Drive", 15.99 , 2, "Resources/pictures/thumbDrives.jpg"));
+		   products.add(new Product("Power Cord", 23.99 , 1, "Resources/pictures/usbCadapter.jpg"));
 		   
-		   purchaseListView.setItems(products); // bind booksListView to books
+		   purchaseListView.setItems(products); // bind purchseListView to products
 
-	      // when ListView selection changes, show large cover in ImageView
+	      // when ListView selection changes, show product ImageView
 		   purchaseListView.getSelectionModel().selectedItemProperty().
 	         addListener(
-	            new ChangeListener<Product>() {                                   
-	               @Override                                                     
-	               public void changed(ObservableValue<? extends Product> ov,
-	                  Product oldValue, Product newValue) {                        
-	            	   //inventoryPic.setImage(
-	                     //new Image(newValue.getThumbImage()));
-	               }
-	            }
-	         );                                                                  
-	   }     
+					
+					  new ChangeListener<Product>() {
+					  
+					  @Override public void changed(ObservableValue<? extends Product> ov, Product
+					  oldValue, Product newValue) { itemColumn.setCellValueFactory( 
+							  (new PropertyValueFactory<Product, String>("item")));//new Image(newValue.getThumbImage())); 
+							  } }
+					 
+	         );  //productImageView.setImage
+	
+		// set custom ListView cell factory
+		      purchaseListView.setCellFactory(
+		         new Callback<ListView<Product>, ListCell<Product>>() {
+		            @Override
+		            public ListCell<Product> call(ListView<Product> listView) {
+		               return new ImageTextCell();
+		            }
+		         }
+		      );   
+	   }   
+
 		
-	//}
+	
 		
 	/**
 	 * This method allows us to switch to the InventoryView FXML file
