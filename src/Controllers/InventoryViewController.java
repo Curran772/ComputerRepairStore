@@ -1,6 +1,5 @@
 package Controllers;
 
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -53,11 +52,39 @@ public class InventoryViewController {
 
 	@FXML
 	private Button updateInventory;
-	
+
 	@FXML
 	private TextField inventoryCostTextField;
+	private int quanity = 0;
+	private double cost = 0.00;
 
 	private static ObservableList<Product> prodData = FXCollections.observableArrayList();
+	private final ObservableList<Product> products = FXCollections.observableArrayList();
+
+	public void initialize() {
+
+		// populate the ObservableList<Product>
+		products.add(new Product("Hard Drive", 56.99, 1, "Resources/pictures/ssd.jpg"));
+		products.add(new Product("Charging Cord", 6.99, 2, "Resources/pictures/usbCAdapter.jpg"));
+		products.add(new Product("Flash Drive", 15.99, 2, "Resources/pictures/thumbDrives.jpg"));
+		products.add(new Product("Power Cord", 23.99, 1, "Resources/pictures/usbCadapter.jpg"));
+
+		searchInventoryListView.setItems(products.sorted()); // bind purchseListView to products
+
+		// when ListView selection changes, show product ImageView
+		searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(
+
+				new ChangeListener<Product>() {
+
+					@Override
+					public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
+						inventoryPic.setImage(new Image(newValue.getThumbImage()));
+						productNameTextField.setText(newValue.getItem());
+						quantityTextField.setText(String.valueOf(quanity));
+						inventoryCostTextField.setText(String.valueOf(cost));
+					}
+				});
+	}
 
 	public InventoryViewController() throws SQLException {
 
@@ -72,32 +99,32 @@ public class InventoryViewController {
 //			}
 //		});
 	}
-	
-	@FXML 
-	void searchInventoryPressed(ActionEvent event) throws
-	  ClassNotFoundException, SQLException { /*try { String productName =
-	  productNameTextField.getText().toString(); Product product =
-	  Update.searchProducts(productName); popProduct(product); } catch
-	  (SQLException e) { System.out.
-	  println("An error occurred while fetching item information from database!\n"
-	  ); }*/ }
-	 
+
+	@FXML
+	void searchInventoryPressed(ActionEvent event) throws ClassNotFoundException, SQLException {
+		/*
+		 * try { String productName = productNameTextField.getText().toString(); Product
+		 * product = Update.searchProducts(productName); popProduct(product); } catch
+		 * (SQLException e) { System.out.
+		 * println("An error occurred while fetching item information from database!\n"
+		 * ); }
+		 */ }
 
 	@FXML
 	void updateInventoryPressed(ActionEvent event) {
-		
+
 	}
 
 	@FXML
 	void switchToComputerRepairStoreView(ActionEvent event) throws IOException {
-			Stage MainView = new Stage();
-			MainView.initModality(Modality.APPLICATION_MODAL);
-			MainView.setTitle("Computer Repair Store");
-			Scene inventory = new Scene(Main.loadFXML("ComputerRepairStore"));
+		Stage MainView = new Stage();
+		MainView.initModality(Modality.APPLICATION_MODAL);
+		MainView.setTitle("Computer Repair Store");
+		Scene inventory = new Scene(Main.loadFXML("ComputerRepairStore"));
 
-			MainView.setScene(inventory);
-			MainView.showAndWait();
-		
+		MainView.setScene(inventory);
+		MainView.showAndWait();
+
 		/*
 		 * Stage stage = (Stage) returnButton.getScene().getWindow(); stage.hide();
 		 */

@@ -47,76 +47,106 @@ public class ComputerRepairStoreController implements Initializable {
 	private Stage stage;
 	private Scene scene;
 	private Parent root;
-	
-	@FXML 	private TextField searchBar;
-	
-	@FXML 	private Button searchBtn;
-	
-	@FXML	private ListView<Product> purchaseListView;
-	
-	 @FXML  private ImageView productImageView;
-	
-	@FXML	private Button returnButton;
-	
-	@FXML	private Button button0;
 
-	@FXML	private Button button1;
+	@FXML
+	private TextField searchBar;
 
-	@FXML	private Button button2;
+	@FXML
+	private Button searchBtn;
 
-	@FXML	private Button button3;
+	@FXML
+	private ListView<Product> purchaseListView;
 
-	@FXML	private Button button4;
+	@FXML
+	private ImageView productImageView;
 
-	@FXML	private Button button5;
+	@FXML
+	private Button returnButton;
 
-	@FXML	private Button button6;
+	@FXML
+	private Button button0;
 
-	@FXML	private Button button7;
+	@FXML
+	private Button button1;
 
-	@FXML	private Button button8;
+	@FXML
+	private Button button2;
 
-	@FXML	private Button button9;
+	@FXML
+	private Button button3;
 
-	@FXML	private Button buttonClear;
+	@FXML
+	private Button button4;
 
-	@FXML	private Button buttonPeriod;
+	@FXML
+	private Button button5;
 
-	@FXML	private Button payButton;
+	@FXML
+	private Button button6;
 
-	@FXML	private TextField pmtAmountField;
+	@FXML
+	private Button button7;
 
-	@FXML	private TextField pmtChangeField;
+	@FXML
+	private Button button8;
 
-	@FXML	private ChoiceBox<String> pmtMethodField;
+	@FXML
+	private Button button9;
+
+	@FXML
+	private Button buttonClear;
+
+	@FXML
+	private Button buttonPeriod;
+
+	@FXML
+	private Button payButton;
+
+	@FXML
+	private TextField pmtAmountField;
+
+	@FXML
+	private TextField pmtChangeField;
+
+	@FXML
+	private ChoiceBox<String> pmtMethodField;
 
 	private String[] pmtType = { "Cash", "Check", "Card" };
 
-	@FXML	private Button printReceiptButton;
+	@FXML
+	private Button printReceiptButton;
 
-	@FXML	private TableView<Product> tableView;
+	@FXML
+	private TableView<Product> tableView;
 
-	@FXML	private TableColumn<Product, Double> amountColumn;
+	@FXML
+	private TableColumn<Product, Double> amountColumn;
 
-	@FXML	private TableColumn<Product, Integer> quantityColumn;
+	@FXML
+	private TableColumn<Product, Integer> quantityColumn;
 
-	@FXML	private TableColumn<Product, String> itemColumn;
+	@FXML
+	private TableColumn<Product, String> itemColumn;
 
-	@FXML	private Button removeItemButton;
+	@FXML
+	private Button removeItemButton;
 
-	@FXML	private Button clearPurchaseButton;
+	@FXML
+	private Button clearPurchaseButton;
 
-	@FXML	private Button checkInventoryButton;
+	@FXML
+	private Button checkInventoryButton;
 
-	@FXML	private TextField subTotalField;
+	@FXML
+	private TextField subTotalField;
 
-	@FXML	private TextField taxField;
+	@FXML
+	private TextField taxField;
 
-	@FXML	private TextField totalDueField;
-	
-	 private final ObservableList<Product> products = 
-   	      FXCollections.observableArrayList();
+	@FXML
+	private TextField totalDueField;
 
+	private final ObservableList<Product> products = FXCollections.observableArrayList();
 
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -146,11 +176,10 @@ public class ComputerRepairStoreController implements Initializable {
 		}
 
 		// update the table to allow quantity to be changed
-		
-		 tableView.setEditable(true); 
+
+		tableView.setEditable(true);
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-		 
-			
+
 		// This will allow the user to select multiple rows for deletion
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -160,42 +189,41 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
 		updateTotalFields();
-		
+
 		// populate the ObservableList<Product>
-		   products.add(new Product("Hard Drive", 56.99 , 1, "Resources/pictures/ssd.jpg"));
-		   products.add(new Product("Charging Cord", 6.99 , 2, "Resources/pictures/usbCAdapter.jpg"));
-		   products.add(new Product("Flash Drive", 15.99 , 2, "Resources/pictures/thumbDrives.jpg"));
-		   products.add(new Product("Power Cord", 23.99 , 1, "Resources/pictures/usbCadapter.jpg"));
-		   
-		   purchaseListView.setItems(products); // bind purchseListView to products
+		products.add(new Product("Hard Drive", 56.99, 1, "Resources/pictures/ssd.jpg"));
+		products.add(new Product("Charging Cord", 6.99, 2, "Resources/pictures/usbCAdapter.jpg"));
+		products.add(new Product("Flash Drive", 15.99, 2, "Resources/pictures/thumbDrives.jpg"));
+		products.add(new Product("Power Cord", 23.99, 1, "Resources/pictures/usbCadapter.jpg"));
 
-	      // when ListView selection changes, show product ImageView
-		   purchaseListView.getSelectionModel().selectedItemProperty().
-	         addListener(
-					
-					  new ChangeListener<Product>() {
-					  
-					  @Override public void changed(ObservableValue<? extends Product> ov, Product
-					  oldValue, Product newValue) { itemColumn.setCellValueFactory( 
-							  (new PropertyValueFactory<Product, String>("item")));//new Image(newValue.getThumbImage())); 
-							  } }
-					 
-	         );  //productImageView.setImage
-	
+		purchaseListView.setItems(products); // bind purchseListView to products
+
+		// when ListView selection changes, show product ImageView
+		purchaseListView.getSelectionModel().selectedItemProperty().addListener(
+
+				new ChangeListener<Product>() {
+
+					@Override
+					public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
+						itemColumn.setCellValueFactory((new PropertyValueFactory<Product, String>("item")));
+						itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
+						quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
+						amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
+
+					}
+				}
+
+		);
+
 		// set custom ListView cell factory
-		      purchaseListView.setCellFactory(
-		         new Callback<ListView<Product>, ListCell<Product>>() {
-		            @Override
-		            public ListCell<Product> call(ListView<Product> listView) {
-		               return new ImageTextCell();
-		            }
-		         }
-		      );   
-	   }   
+		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
+			@Override
+			public ListCell<Product> call(ListView<Product> listView) {
+				return new ImageTextCell();
+			}
+		});
+	}
 
-		
-	
-		
 	/**
 	 * This method allows us to switch to the InventoryView FXML file
 	 */
@@ -220,14 +248,15 @@ public class ComputerRepairStoreController implements Initializable {
 	}
 
 	/**
-	 * This method allows user to double-click on the quantity column cell and edit it to update the purchase table
+	 * This method allows user to double-click on the quantity column cell and edit
+	 * it to update the purchase table
 	 */
-	
-	  @FXML public void changeQuantityColumnEvent(CellEditEvent<Product, Integer>
-	  editedCell) { Product quantitySelected =
-	  tableView.getSelectionModel().getSelectedItem();
-	  quantitySelected.setQuantity((int)editedCell.getNewValue()); }
-	 
+
+	@FXML
+	public void changeQuantityColumnEvent(CellEditEvent<Product, Integer> editedCell) {
+		Product quantitySelected = tableView.getSelectionModel().getSelectedItem();
+		quantitySelected.setQuantity((int) editedCell.getNewValue());
+	}
 
 	/**
 	 * this method will remove the selected row(s) from the table
@@ -240,15 +269,15 @@ public class ComputerRepairStoreController implements Initializable {
 		// this gives us the rows that were selected
 		selectedRows = tableView.getSelectionModel().getSelectedItems();
 
-		// loop over selected rows and remove the products from the list that are selected
+		// loop over selected rows and remove the products from the list that are
+		// selected
 		for (Product products : selectedRows) {
 			allProducts.remove(products);
 			Update.deleteProduct(products.toString());
 		}
 
 		updateTotalFields();
-		
-		
+
 	}
 
 	/**
@@ -264,60 +293,61 @@ public class ComputerRepairStoreController implements Initializable {
 		tableView.getItems().clear();
 		updateTotalFields();
 	}
-/**
- * This method prints a receipt view of purchase totals to the console. Does not show the products purchased.
- *
- */
+
+	/**
+	 * This method prints a receipt view of purchase totals to the console. Does not
+	 * show the products purchased.
+	 *
+	 */
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
-		
-		//BigDecimal pmtAmount = new BigDecimal(String.valueOf(pmtAmountField.getText().toString()));
-		
-		//String pmtAmount = pmtAmountField.getText();
+
+		// BigDecimal pmtAmount = new
+		// BigDecimal(String.valueOf(pmtAmountField.getText().toString()));
+
+		// String pmtAmount = pmtAmountField.getText();
 		Date date = new Date();
-		Employee e1 = new Employee("111111","Jane", "Green");
+		Employee e1 = new Employee("111111", "Jane", "Green");
 		System.out.println();
 		ObservableList<Product> purchase = tableView.getItems();
-		
-	
-			if (pmtChangeField.getText().isEmpty()) {
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setTitle("Invalid payment");
-				alert.setHeaderText("Please Press Pay Button!");
-				alert.showAndWait();
-			} else {
-				System.out.println("***********************************************");
-				System.out.println("					CRS						");
-				System.out.println("		  Computer Repair Store				");
-				System.out.println("***********************************************");
-				System.out.println();				
-				System.out.println(date.toString());
-				System.out.println();
-				//purchase.forEach(System.out::println);
-				System.out.println(purchase.toString());
-				System.out.println();
-				/*
-				 * for (Product purchase : allProducts) { System.out.printf("%s%t%d%t%.02f%n",
-				 * purchase.getItem(), purchase.getQuantity(), purchase.getAmount()); }
-				 */
-				
-				// String.valueOf(allProduct);
-				
-				System.out.printf(
-						"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02s%nChange: $%.02f%n",
-						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), pmtAmountField.getText(), getChange());
-				System.out.println();
-				System.out.printf("You were helped by %s.%n  Thank you for your purchase!", e1.toString());
-			}
+
+		if (pmtChangeField.getText().isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Invalid payment");
+			alert.setHeaderText("Please Press Pay Button!");
+			alert.showAndWait();
+		} else {
+			System.out.println("***********************************************");
+			System.out.println("					CRS						");
+			System.out.println("		  Computer Repair Store				");
+			System.out.println("***********************************************");
+			System.out.println();
+			System.out.println(date.toString());
+			System.out.println();
+			// purchase.forEach(System.out::println);
+			System.out.println(purchase.toString());
+			System.out.println();
+			/*
+			 * for (Product purchase : allProducts) { System.out.printf("%s%t%d%t%.02f%n",
+			 * purchase.getItem(), purchase.getQuantity(), purchase.getAmount()); }
+			 */
+
+			// String.valueOf(allProduct);
+
+			System.out.printf(
+					"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02s%nChange: $%.02f%n",
+					getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), pmtAmountField.getText(),
+					getChange());
+			System.out.println();
+			System.out.printf("You were helped by %s.%n  Thank you for your purchase!", e1.toString());
+		}
 
 	}
-			 
-	
 
-/**
- *This method exits the program when exit button is pressed
- * 
- */
+	/**
+	 * This method exits the program when exit button is pressed
+	 * 
+	 */
 	@FXML
 	private void exitButtonPressed(ActionEvent event) {
 		Main.exitButtonPressed(stage);
@@ -330,9 +360,9 @@ public class ComputerRepairStoreController implements Initializable {
 	public void periodButtonPressed(ActionEvent event) {
 
 		if (event.getSource() == buttonPeriod) {
-			if(count < 1) {
+			if (count < 1) {
 				pmtAmountField.setText(pmtAmountField.getText() + ".");
-				count ++;
+				count++;
 			}
 		}
 	}
@@ -381,8 +411,7 @@ public class ComputerRepairStoreController implements Initializable {
 
 	/**
 	 * This method calculates the total of all items added to purchase list,
-	 * calculates the tax and adds it to the subtotal, then calculates the total
-	 * due
+	 * calculates the tax and adds it to the subtotal, then calculates the total due
 	 */
 	@FXML //
 	private void totalBoxes(ActionEvent event) {
@@ -400,9 +429,9 @@ public class ComputerRepairStoreController implements Initializable {
 			currency.setRoundingMode(RoundingMode.HALF_UP);
 
 		} catch (NumberFormatException ex) {
-			 subTotalField.setText("Enter Item Cost ");
-			 subTotalField.selectAll();
-			 subTotalField.requestFocus();
+			subTotalField.setText("Enter Item Cost ");
+			subTotalField.selectAll();
+			subTotalField.requestFocus();
 		}
 	}
 
@@ -434,8 +463,6 @@ public class ComputerRepairStoreController implements Initializable {
 		}
 	}
 
-
-
 	/**
 	 * When called, this method updates the total, tax, and total due text fields
 	 */
@@ -460,16 +487,37 @@ public class ComputerRepairStoreController implements Initializable {
 	}
 
 	// Setters
-	public void setTotal(double total) { this.total = total; }
-	public void setTax(double tax) { this.tax = tax; }
-	public void setTotalDue(double totalDue) { this.totalDue = totalDue; }
-	public void setChange(double change) { this.change = Math.abs(change); }
+	public void setTotal(double total) {
+		this.total = total;
+	}
 
+	public void setTax(double tax) {
+		this.tax = tax;
+	}
+
+	public void setTotalDue(double totalDue) {
+		this.totalDue = totalDue;
+	}
+
+	public void setChange(double change) {
+		this.change = Math.abs(change);
+	}
 
 	// Getters
-	public double getTotal() { return this.total; }
-	public double getTax() { return this.tax; }
-	public double getTotalDue() { return this.totalDue; }
-	public double getChange() { return this.change; }
+	public double getTotal() {
+		return this.total;
+	}
+
+	public double getTax() {
+		return this.tax;
+	}
+
+	public double getTotalDue() {
+		return this.totalDue;
+	}
+
+	public double getChange() {
+		return this.change;
+	}
 
 }
