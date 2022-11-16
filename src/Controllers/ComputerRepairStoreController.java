@@ -12,6 +12,8 @@ import java.util.ResourceBundle;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,6 +25,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -45,9 +48,9 @@ public class ComputerRepairStoreController implements Initializable {
 	
 	@FXML 	private TextField searchBar;
 	
-	@FXML   private GridPane gridPane;
-	
 	@FXML 	private Button searchBtn;
+	
+	@FXML	private ListView<Product> purchaseListView;
 	
 	@FXML	private Button returnButton;
 	
@@ -106,7 +109,9 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML	private TextField taxField;
 
 	@FXML	private TextField totalDueField;
-
+	
+	 private final ObservableList<Product> products = 
+   	      FXCollections.observableArrayList();
 
 
 	public void initialize(URL location, ResourceBundle resources) {
@@ -152,7 +157,30 @@ public class ComputerRepairStoreController implements Initializable {
 
 		updateTotalFields();
 		
-	}
+		// populate the ObservableList<Product>
+		   products.add(new Product("CPU Cooler", 23.00 , 2, "/Resources.pictures/cpuCooler1.jpg"));
+		   products.add(new Product("CPU Cooler", 25.00 , 2, "/Resources.pictures/cpuCooler2.jpg"));
+		   products.add(new Product("DDR3 RAM", 54.00 , 2, "/Resources.pictures/ddr3RAM.jpg"));
+		   products.add(new Product("DDR4 RAM", 13.00 , 2, "/Resources.pictures/ddr4RAM.jpg"));
+		   products.add(new Product("I9Intel Core", 123.00 , 2, "/Resources.pictures/i9Intel.jpg"));
+		   
+		   purchaseListView.setItems(products); // bind booksListView to books
+
+	      // when ListView selection changes, show large cover in ImageView
+		   purchaseListView.getSelectionModel().selectedItemProperty().
+	         addListener(
+	            new ChangeListener<Product>() {                                   
+	               @Override                                                     
+	               public void changed(ObservableValue<? extends Product> ov,
+	                  Product oldValue, Product newValue) {                        
+	            	   //inventoryPic.setImage(
+	                     //new Image(newValue.getThumbImage()));
+	               }
+	            }
+	         );                                                                  
+	   }     
+		
+	//}
 		
 	/**
 	 * This method allows us to switch to the InventoryView FXML file
@@ -262,8 +290,8 @@ public class ComputerRepairStoreController implements Initializable {
 				// String.valueOf(allProduct);
 				
 				System.out.printf(
-						"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02f%nChange: $%.02f%n",
-						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), String.valueOf(pmtAmountField.getText().toString()), getChange());
+						"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02s%nChange: $%.02f%n",
+						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), pmtAmountField.getText(), getChange());
 				System.out.println();
 				System.out.printf("You were helped by %s.%n  Thank you for your purchase!", e1.toString());
 			}
