@@ -3,7 +3,6 @@ package Controllers;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -37,8 +36,8 @@ public class LogInScreenController {
 
 	private void checkLogin() throws IOException {
 
-		if (usernameTextField.getText().toString().equals("admin")
-				&& passwordTextField.getText().toString().equals("123")) {
+		if (usernameTextField.getText().toString().equals("")
+				&& passwordTextField.getText().toString().equals("")) {
 			wrongLogIn.setText("Success!");
 			
 			Main.setRoot("ComputerRepairStore");
@@ -51,12 +50,14 @@ public class LogInScreenController {
 		} else {
 			wrongLogIn.setText("Wrong username or password!");
 		}
-	}
+		
+		
 
+	}
 	@FXML
-	void handleEnterPressed(KeyEvent event) throws IOException {
-		if(event.getCode().equals(KeyCode.ENTER)) {
-			checkLogin();
-		}
+	public void handleEnterPressed(KeyEvent event) throws IOException {
+		if(event.getCode().equals(KeyCode.ENTER)){
+		checkLogin();
+	}
 	}
 }

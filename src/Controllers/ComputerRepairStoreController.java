@@ -1,5 +1,6 @@
 package Controllers;
 
+import java.util.Date;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -135,11 +137,11 @@ public class ComputerRepairStoreController implements Initializable {
 		}
 
 		// update the table to allow quantity to be changed
-		tableView.setEditable(true);
+		
+		 tableView.setEditable(true); 
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-
-		
-		
+		 
+			
 		// This will allow the user to select multiple rows for deletion
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -178,11 +180,12 @@ public class ComputerRepairStoreController implements Initializable {
 	/**
 	 * This method allows user to double-click on the quantity column cell and edit it to update the purchase table
 	 */
-	@FXML
-	public void changeQuantityColumnEvent(CellEditEvent<Product, Integer> editedCell) {
-		Product quantitySelected = tableView.getSelectionModel().getSelectedItem();
-		quantitySelected.setQuantity((int)editedCell.getNewValue());
-	}
+	
+	  @FXML public void changeQuantityColumnEvent(CellEditEvent<Product, Integer>
+	  editedCell) { Product quantitySelected =
+	  tableView.getSelectionModel().getSelectedItem();
+	  quantitySelected.setQuantity((int)editedCell.getNewValue()); }
+	 
 
 	/**
 	 * this method will remove the selected row(s) from the table
@@ -219,35 +222,55 @@ public class ComputerRepairStoreController implements Initializable {
 		tableView.getItems().clear();
 		updateTotalFields();
 	}
-
+/**
+ * This method prints a receipt view of purchase totals to the console. Does not show the products purchased.
+ *
+ */
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
-		//System.out.println("Pretend the program just printed a receipt :)");
-		/*
-		 * try { if (pmtAmountField < this.totalDue); { Alert alert = new
-		 * Alert(Alert.AlertType.ERROR); alert.setTitle("Not enough payment entered");
-		 * alert.
-		 * setHeaderText("Please enter payment greater than or equal to total due!");
-		 * alert.showAndWait(); } else { System.out.println("Thank You");; }
-		 * 
-		 * } catch (IllegalArgumentException e) { if
-		 * (pmtAmountField.getText().isEmpty()) { Alert alert = new
-		 * Alert(Alert.AlertType.ERROR); alert.setTitle("No payment entered");
-		 * alert.setHeaderText("Please enter a payment amount!"); alert.showAndWait(); }
-		 */
 		
-		System.out.println("***********************************************");
-		System.out.println("					CRS						");
-		System.out.println("		  Computer Repair Store				");
-		System.out.println("***********************************************");
+		//BigDecimal pmtAmount = new BigDecimal(String.valueOf(pmtAmountField.getText().toString()));
+		
+		//String pmtAmount = pmtAmountField.getText();
+		Date date = new Date();
+		Employee e1 = new Employee("111111","Jane", "Green");
 		System.out.println();
-		//System.out.println(allProducts);
-		//String.valueOf(allProduct);
-		//	pmtAmountField.getText(), pmtChangeField.getText());
-		System.out.printf("SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nChange: $%.02f%n", 
-				getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getChange());
-	//Payment Amount: $%.02f%n pmtAmountField.getValue(),}
+		ObservableList<Product> purchase = tableView.getItems();
+		
+	
+			if (pmtChangeField.getText().isEmpty()) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Invalid payment");
+				alert.setHeaderText("Please Press Pay Button!");
+				alert.showAndWait();
+			} else {
+				System.out.println("***********************************************");
+				System.out.println("					CRS						");
+				System.out.println("		  Computer Repair Store				");
+				System.out.println("***********************************************");
+				System.out.println();				
+				System.out.println(date.toString());
+				System.out.println();
+				//purchase.forEach(System.out::println);
+				System.out.println(purchase.toString());
+				System.out.println();
+				/*
+				 * for (Product purchase : allProducts) { System.out.printf("%s%t%d%t%.02f%n",
+				 * purchase.getItem(), purchase.getQuantity(), purchase.getAmount()); }
+				 */
+				
+				// String.valueOf(allProduct);
+				
+				System.out.printf(
+						"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02f%nChange: $%.02f%n",
+						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), String.valueOf(pmtAmountField.getText().toString()), getChange());
+				System.out.println();
+				System.out.printf("You were helped by %s.%n  Thank you for your purchase!", e1.toString());
+			}
+
 	}
+			 
+	
 
 /**
  *This method exits the program when exit button is pressed
