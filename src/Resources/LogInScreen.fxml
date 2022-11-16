@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="538.0" prefWidth="724.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.LogInScreenController">
+<BorderPane prefHeight="538.0" prefWidth="724.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.LogInScreenController">
    <left>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -40,7 +40,7 @@
                   <Font size="14.0" />
                </font>
             </TextField>
-            <PasswordField fx:id="passwordTextField" layoutX="202.0" layoutY="312.0" promptText="Password">
+            <PasswordField fx:id="passwordTextField" layoutX="202.0" layoutY="312.0" onKeyPressed="#handleEnterPressed" promptText="Password">
                <font>
                   <Font size="14.0" />
                </font>

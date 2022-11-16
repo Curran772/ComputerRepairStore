@@ -1,17 +1,9 @@
 package Controllers;
 
-import java.awt.print.Book;
 import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
-import DBStructure.DBMethods;
 import DBStructure.Update;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,12 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class InventoryViewController {
@@ -97,10 +85,6 @@ public class InventoryViewController {
 
 			MainView.setScene(inventory);
 			MainView.showAndWait();
-		
-		/*
-		 * Stage stage = (Stage) returnButton.getScene().getWindow(); stage.hide();
-		 */
 	}
 
 	// Pop Items for TableView
