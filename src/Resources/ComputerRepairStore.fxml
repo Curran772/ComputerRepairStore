@@ -226,7 +226,7 @@
          <children>
             <HBox layoutX="-2.0" layoutY="1.0" prefHeight="74.0" prefWidth="525.0">
                <children>
-                  <Button fx:id="searchBtn" mnemonicParsing="false" prefHeight="50.0" prefWidth="210.0" text="Search">
+                  <Button fx:id="searchBtn" mnemonicParsing="false" onAction="#searchBtnPressed" prefHeight="50.0" prefWidth="210.0" text="Search">
                      <HBox.margin>
                         <Insets bottom="8.0" left="8.0" right="8.0" />
                      </HBox.margin>
@@ -234,7 +234,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <TextField fx:id="searchBar" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="282.0">
+                  <TextField fx:id="searchBar" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="282.0" promptText="Enter Item Name">
                      <HBox.margin>
                         <Insets bottom="8.0" left="8.0" right="8.0" />
                      </HBox.margin>

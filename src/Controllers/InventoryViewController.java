@@ -68,6 +68,15 @@ public class InventoryViewController {
 		products.add(new Product("Charging Cord", 6.99, 2, "Resources/pictures/usbCAdapter.jpg"));
 		products.add(new Product("Flash Drive", 15.99, 2, "Resources/pictures/thumbDrives.jpg"));
 		products.add(new Product("Power Cord", 23.99, 1, "Resources/pictures/usbCadapter.jpg"));
+		products.add(new Product("USB RJ45", 25.99, 1, "Resources/pictures/usbRJ45.jpg"));
+		products.add(new Product("VGA Adapter", 7.59, 1, "Resources/pictures/vgaAdapter.jpg"));
+		products.add(new Product("RGB Keyboard", 103.99, 1, "Resources/pictures/rgbKeyBoard.jpg"));
+		products.add(new Product("Mini Display Adapter", 8.99, 1, "Resources/pictures/miniDisplayAdapter.jpg"));
+		products.add(new Product("I9 Intel", 423.99, 1, "Resources/pictures/i9Intel.jpg"));
+		products.add(new Product("ddr4 RAM", 60.99, 1, "Resources/pictures/ddr4RAM.jpg"));
+		products.add(new Product("ddr3 RAM", 16.99, 1, "Resources/pictures/ddr3RAM.jpg"));
+		products.add(new Product("cpuCooler", 59.99, 1, "Resources/pictures/cpuCooler2.jpg"));
+		products.add(new Product("cpuCooler", 50.99, 1, "Resources/pictures/cpuCooler1.jpg"));
 
 		searchInventoryListView.setItems(products.sorted()); // bind purchseListView to products
 
@@ -88,27 +97,12 @@ public class InventoryViewController {
 
 	public InventoryViewController() throws SQLException {
 
-		// when ListView selection changes, show large cover in ImageView
-//		searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Product>() {
-//			@Override
-//			public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
-//				// inventoryPic.setImage(new Image(newValue.getThumbImage()));
-//				// productNameTextField.setText(newValue.getItem());
-//				// inventoryCostTextField.setValue(new Double(amount));
-//				// quantityTextField.setValue(newValue.getQuantity());
-//			}
-//		});
+	
 	}
 
 	@FXML
 	void searchInventoryPressed(ActionEvent event) throws ClassNotFoundException, SQLException {
-		/*
-		 * try { String productName = productNameTextField.getText().toString(); Product
-		 * product = Update.searchProducts(productName); popProduct(product); } catch
-		 * (SQLException e) { System.out.
-		 * println("An error occurred while fetching item information from database!\n"
-		 * ); }
-		 */ }
+	}
 
 	@FXML
 	void updateInventoryPressed(ActionEvent event) {
@@ -120,14 +114,14 @@ public class InventoryViewController {
 		Stage MainView = new Stage();
 		MainView.initModality(Modality.APPLICATION_MODAL);
 		MainView.setTitle("Computer Repair Store");
-		Scene inventory = new Scene(Main.loadFXML("ComputerRepairStore"));
+		//Scene inventory = new Scene(Main.loadFXML("ComputerRepairStore"));
 
-		MainView.setScene(inventory);
-		MainView.showAndWait();
+		//MainView.setScene(inventory);
+		//MainView.showAndWait();
 
-		/*
-		 * Stage stage = (Stage) returnButton.getScene().getWindow(); stage.hide();
-		 */
+		
+		Stage stage = (Stage) returnButton.getScene().getWindow(); stage.hide();
+		 
 	}
 
 	// Pop Items for TableView

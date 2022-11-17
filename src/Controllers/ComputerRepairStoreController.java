@@ -25,6 +25,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.effect.Light.Point;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -195,8 +196,17 @@ public class ComputerRepairStoreController implements Initializable {
 		products.add(new Product("Charging Cord", 6.99, 2, "Resources/pictures/usbCAdapter.jpg"));
 		products.add(new Product("Flash Drive", 15.99, 2, "Resources/pictures/thumbDrives.jpg"));
 		products.add(new Product("Power Cord", 23.99, 1, "Resources/pictures/usbCadapter.jpg"));
+		products.add(new Product("USB RJ45", 25.99, 1, "Resources/pictures/usbRJ45.jpg"));
+		products.add(new Product("VGA Adapter", 7.59, 1, "Resources/pictures/vgaAdapter.jpg"));
+		products.add(new Product("RGB Keyboard", 103.99, 1, "Resources/pictures/rgbKeyBoard.jpg"));
+		products.add(new Product("Mini Display Adapter", 8.99, 1, "Resources/pictures/miniDisplayAdapter.jpg"));
+		products.add(new Product("I9 Intel", 423.99, 1, "Resources/pictures/i9Intel.jpg"));
+		products.add(new Product("ddr4 RAM", 60.99, 1, "Resources/pictures/ddr4RAM.jpg"));
+		products.add(new Product("ddr3 RAM", 16.99, 1, "Resources/pictures/ddr3RAM.jpg"));
+		products.add(new Product("cpuCooler", 59.99, 1, "Resources/pictures/cpuCooler2.jpg"));
+		products.add(new Product("cpuCooler", 50.99, 1, "Resources/pictures/cpuCooler1.jpg"));
 
-		purchaseListView.setItems(products); // bind purchseListView to products
+		purchaseListView.setItems(products.sorted()); // bind purchseListView to products
 
 		// when ListView selection changes, show product ImageView
 		purchaseListView.getSelectionModel().selectedItemProperty().addListener(
@@ -222,7 +232,12 @@ public class ComputerRepairStoreController implements Initializable {
 				return new ImageTextCell();
 			}
 		});
+		
+		//for search bar
+		//purchaseListView.getItems().addAll(products);
+				
 	}
+	
 
 	/**
 	 * This method allows us to switch to the InventoryView FXML file
@@ -236,6 +251,11 @@ public class ComputerRepairStoreController implements Initializable {
 
 		InvView.setScene(inventory);
 		InvView.showAndWait();
+	}
+	
+	@FXML
+	void searchBtnPressed(ActionEvent event) {
+	
 	}
 
 	/**
@@ -317,15 +337,15 @@ public class ComputerRepairStoreController implements Initializable {
 			alert.setHeaderText("Please Press Pay Button!");
 			alert.showAndWait();
 		} else {
-			System.out.println("***********************************************");
-			System.out.println("					CRS						");
-			System.out.println("		  Computer Repair Store				");
-			System.out.println("***********************************************");
+			System.out.println("**************************************************************************");
+			System.out.println("				      CRS						           				   ");
+			System.out.println("		             Computer Repair Store				         	     ");
+			System.out.println("**************************************************************************");
 			System.out.println();
 			System.out.println(date.toString());
 			System.out.println();
-			// purchase.forEach(System.out::println);
-			System.out.println(purchase.toString());
+			purchase.forEach(System.out::println);
+			//System.out.println(purchase.toString());
 			System.out.println();
 			/*
 			 * for (Product purchase : allProducts) { System.out.printf("%s%t%d%t%.02f%n",

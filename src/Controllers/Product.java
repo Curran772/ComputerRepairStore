@@ -96,7 +96,8 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return String.format("%s\t%30d\t%30.2f", getItem(), getQuantity(), getAmount());
+		return String.format("%s\t\t%d\t\t%.02f", getItem(), getQuantity(), getAmount());
 	}
-
+	
+	
 }
