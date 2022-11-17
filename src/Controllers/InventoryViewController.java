@@ -1,32 +1,20 @@
 package Controllers;
 
-
 import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 import DBStructure.DBMethods;
-import DBStructure.Update;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class InventoryViewController {
 
@@ -53,60 +41,43 @@ public class InventoryViewController {
 
 	@FXML
 	private Button updateInventory;
-	
+
 	@FXML
 	private TextField inventoryCostTextField;
+	private int quantity = 0;
+	private double cost = 0.00;
 
-	private static ObservableList<Product> prodData = FXCollections.observableArrayList();
+	public void initialize() throws SQLException {
 
-	public InventoryViewController() throws SQLException {
+		searchInventoryListView.setItems(DBMethods.getProducts("inventory")); // bind purchaseListView to products
 
-		// when ListView selection changes, show large cover in ImageView
-//		searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Product>() {
-//			@Override
-//			public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
-//				// inventoryPic.setImage(new Image(newValue.getThumbImage()));
-//				// productNameTextField.setText(newValue.getItem());
-//				// inventoryCostTextField.setValue(new Double(amount));
-//				// quantityTextField.setValue(newValue.getQuantity());
-//			}
-//		});
+		// when ListView selection changes, show product ImageView
+		searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(
+				new ChangeListener<Product>() {
+					@Override
+					public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
+						inventoryPic.setImage(new Image(newValue.getThumbImage()));
+						productNameTextField.setText(newValue.getItem());
+						quantityTextField.setText(String.valueOf(quantity));
+						inventoryCostTextField.setText(String.valueOf(cost));
+					}
+				});
 	}
-	/*
-	 * @FXML void searchInventoryPressed(ActionEvent event) throws
-	 * ClassNotFoundException, SQLException { try { String productName =
-	 * productNameTextField.getText().toString(); Product product =
-	 * Update.searchProducts(productName); popProduct(product); } catch
-	 * (SQLException e) { System.out.
-	 * println("An error occurred while fetching item information from database!\n"
-	 * ); } }
-	 */
+
+	public InventoryViewController() throws SQLException {}
+	@FXML
+	void searchInventoryPressed(ActionEvent event) {}
 
 	@FXML
-	void updateInventoryPressed(ActionEvent event) {
-		
-	}
+	void updateInventoryPressed(ActionEvent event) {}
 
 	@FXML
 	void switchToComputerRepairStoreView(ActionEvent event) throws IOException {
-			Stage MainView = new Stage();
-			MainView.initModality(Modality.APPLICATION_MODAL);
-			MainView.setTitle("Computer Repair Store");
-			Scene inventory = new Scene(Main.loadFXML("ComputerRepairStore"));
+		Stage MainView = new Stage();
+		MainView.initModality(Modality.APPLICATION_MODAL);
+		MainView.setTitle("Computer Repair Store");
 
-			MainView.setScene(inventory);
-			MainView.showAndWait();
-		
-		/*
-		 * Stage stage = (Stage) returnButton.getScene().getWindow(); stage.hide();
-		 */
+		Stage stage = (Stage) returnButton.getScene().getWindow();
+		stage.hide();
 	}
-
-	// Pop Items for TableView
-	/*
-	 * @FXML void popProduct(Product product) throws ClassNotFoundException {
-	 * ObservableList<Product> prodData = FXCollections.observableArrayList();
-	 * prodData.add(new Product(product.getItem(), product.getAmount(),
-	 * product.getQuantity())); searchInventoryListView.setItems(prodData); }
-	 */
 }
