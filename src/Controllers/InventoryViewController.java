@@ -15,6 +15,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Modality;
@@ -97,12 +98,22 @@ public class InventoryViewController {
 
 	public InventoryViewController() throws SQLException {
 
+<<<<<<< HEAD
 	
 	}
 
 	@FXML
 	void searchInventoryPressed(ActionEvent event) throws ClassNotFoundException, SQLException {
 	}
+=======
+	}
+	
+	@FXML 
+	void searchInventoryPressed(ActionEvent event) {
+
+	}
+	 
+>>>>>>> 64c6f93d2452b77fd857f38548d49e360b732ea7
 
 	@FXML
 	void updateInventoryPressed(ActionEvent event) {
@@ -110,6 +121,7 @@ public class InventoryViewController {
 	}
 
 	@FXML
+<<<<<<< HEAD
 	void switchToComputerRepairStoreView(ActionEvent event) throws IOException {
 		Stage MainView = new Stage();
 		MainView.initModality(Modality.APPLICATION_MODAL);
@@ -122,13 +134,9 @@ public class InventoryViewController {
 		
 		Stage stage = (Stage) returnButton.getScene().getWindow(); stage.hide();
 		 
+=======
+	void switchToComputerRepairStoreView(ActionEvent event) {
+		((Node)(event.getSource())).getScene().getWindow().hide();
+>>>>>>> 64c6f93d2452b77fd857f38548d49e360b732ea7
 	}
-
-	// Pop Items for TableView
-	/*
-	 * @FXML void popProduct(Product product) throws ClassNotFoundException {
-	 * ObservableList<Product> prodData = FXCollections.observableArrayList();
-	 * prodData.add(new Product(product.getItem(), product.getAmount(),
-	 * product.getQuantity())); searchInventoryListView.setItems(prodData); }
-	 */
 }
