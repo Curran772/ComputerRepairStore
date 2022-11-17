@@ -169,7 +169,9 @@ public class ComputerRepairStoreController implements Initializable {
 
 			System.out.println("Database connected and populated!");
 
-			tableView.setItems(DBMethods.getProducts());
+		//  Populate user selection table
+		tableView.setItems(DBMethods.getProducts("user_selection"));
+
 		} catch (SQLException e) {
 			System.out.println("DB Connection failed at table population!" + e);
 		} catch (Exception ex) {
@@ -191,28 +193,17 @@ public class ComputerRepairStoreController implements Initializable {
 
 		updateTotalFields();
 
-		// populate the ObservableList<Product>
-		products.add(new Product("Hard Drive", 56.99, 1, "Resources/pictures/ssd.jpg"));
-		products.add(new Product("Charging Cord", 6.99, 2, "Resources/pictures/usbCAdapter.jpg"));
-		products.add(new Product("Flash Drive", 15.99, 2, "Resources/pictures/thumbDrives.jpg"));
-		products.add(new Product("Power Cord", 23.99, 1, "Resources/pictures/usbCadapter.jpg"));
-		products.add(new Product("USB RJ45", 25.99, 1, "Resources/pictures/usbRJ45.jpg"));
-		products.add(new Product("VGA Adapter", 7.59, 1, "Resources/pictures/vgaAdapter.jpg"));
-		products.add(new Product("RGB Keyboard", 103.99, 1, "Resources/pictures/rgbKeyBoard.jpg"));
-		products.add(new Product("Mini Display Adapter", 8.99, 1, "Resources/pictures/miniDisplayAdapter.jpg"));
-		products.add(new Product("I9 Intel", 423.99, 1, "Resources/pictures/i9Intel.jpg"));
-		products.add(new Product("ddr4 RAM", 60.99, 1, "Resources/pictures/ddr4RAM.jpg"));
-		products.add(new Product("ddr3 RAM", 16.99, 1, "Resources/pictures/ddr3RAM.jpg"));
-		products.add(new Product("cpuCooler", 59.99, 1, "Resources/pictures/cpuCooler2.jpg"));
-		products.add(new Product("cpuCooler", 50.99, 1, "Resources/pictures/cpuCooler1.jpg"));
-
-		purchaseListView.setItems(products.sorted()); // bind purchseListView to products
+		// Populate the purchaseListView with the database values
+		try {
+			purchaseListView.setItems(DBMethods.getProducts("inventory")); // bind purchaseListView to products
+		} catch (SQLException e) {
+			System.out.println("Failed to populate purchaseListView table with SQL Products");
+			throw new RuntimeException(e);
+		}
 
 		// when ListView selection changes, show product ImageView
 		purchaseListView.getSelectionModel().selectedItemProperty().addListener(
-
 				new ChangeListener<Product>() {
-
 					@Override
 					public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
 						itemColumn.setCellValueFactory((new PropertyValueFactory<Product, String>("item")));

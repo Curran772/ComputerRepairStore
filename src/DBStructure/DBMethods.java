@@ -22,7 +22,7 @@ public class DBMethods {
 
         // Establish connection
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/", "root", "password");
         } catch (SQLException e) {
             System.out.println("Connection failed... SAD");
         }
@@ -90,12 +90,12 @@ public class DBMethods {
     /**
      * Method that returns an observable list of the items in the database table
      */
-    public static ObservableList<Product> getProducts() throws SQLException {
+    public static ObservableList<Product> getProducts(String table) throws SQLException {
         ObservableList<Product> products = FXCollections.observableArrayList();
 
         // Try to populate the table with data from the MySQL database
         try {
-            ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db.inventory");
+            ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db." + table);
 
             while (rs.next()) {
                 products.add(new Product(rs.getString("item_name"),
