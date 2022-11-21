@@ -1,6 +1,5 @@
 package Controllers;
 
-import java.awt.print.Book;
 import java.util.Date;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -9,17 +8,14 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -32,7 +28,6 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.effect.Light.Point;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -41,9 +36,6 @@ import javafx.util.Callback;
 public class ComputerRepairStoreController implements Initializable {
 
 	private static final NumberFormat currency = NumberFormat.getCurrencyInstance();
-
-	private ObservableList<Product> products = FXCollections.observableArrayList();
-
 
 	private BigDecimal taxPercentage = new BigDecimal(0.07);
 
@@ -155,6 +147,8 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private TextField totalDueField;
 
+	private final ObservableList<Product> products = FXCollections.observableArrayList();
+
 	public void initialize(URL location, ResourceBundle resources) {
 
 		// set up the columns in the table
@@ -207,6 +201,21 @@ public class ComputerRepairStoreController implements Initializable {
 			throw new RuntimeException(e);
 		}
 
+		// when ListView selection changes, show product ImageView
+		purchaseListView.getSelectionModel().selectedItemProperty().addListener(
+				new ChangeListener<Product>() {
+					@Override
+					public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
+						itemColumn.setCellValueFactory((new PropertyValueFactory<Product, String>("item")));
+						itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
+						quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
+						amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
+
+					}
+				}
+
+		);
+
 		// set custom ListView cell factory
 		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
 			@Override
@@ -214,6 +223,10 @@ public class ComputerRepairStoreController implements Initializable {
 				return new ImageTextCell();
 			}
 		});
+		
+		//for search bar
+		//purchaseListView.getItems().addAll(products);
+				
 	}
 	
 
@@ -230,14 +243,14 @@ public class ComputerRepairStoreController implements Initializable {
 		InvView.setScene(inventory);
 		InvView.showAndWait();
 	}
-
-
 	
 	//get selected item from list to added to the tableView
 	//purchaselistView.getSelectionModel.getSelectedIndex();
 	
 	@FXML
-	void searchBtnPressed(ActionEvent event) {}
+	void searchBtnPressed(ActionEvent event) {
+	
+	}
 
 	/**
 	 * This method gets the value from the choice box and sets it.
@@ -252,31 +265,11 @@ public class ComputerRepairStoreController implements Initializable {
 	 * This method allows user to double-click on the quantity column cell and edit
 	 * it to update the purchase table
 	 */
+
 	@FXML
 	public void changeQuantityColumnEvent(CellEditEvent<Product, Integer> editedCell) {
 		Product quantitySelected = tableView.getSelectionModel().getSelectedItem();
 		quantitySelected.setQuantity((int) editedCell.getNewValue());
-	}
-
-	/**
-	 * This method makes it so when the user clicks an item in the list,
-	 * the item is added to the users checkout list
-	 */
-	@FXML
-	void addItemToList(MouseEvent event) throws SQLException {
-		setProducts(purchaseListView.getSelectionModel().getSelectedItem());
-
-		String name = purchaseListView.getSelectionModel().getSelectedItem().getItem();
-		Double amount = 1.0;
-		int qty = purchaseListView.getSelectionModel().getSelectedItem().getQuantity();
-
-
-		Update.insertProductToUser(name, amount, Double.valueOf(qty));
-
-		tableView.setItems(products);
-
-
-		updateTotalFields();
 	}
 
 	/**
@@ -287,8 +280,6 @@ public class ComputerRepairStoreController implements Initializable {
 		ObservableList<Product> selectedRows, allProducts;
 		allProducts = tableView.getItems();
 
-		String name = tableView.getSelectionModel().getSelectedItem().getItem();
-
 		// this gives us the rows that were selected
 		selectedRows = tableView.getSelectionModel().getSelectedItems();
 
@@ -296,10 +287,11 @@ public class ComputerRepairStoreController implements Initializable {
 		// selected
 		for (Product products : selectedRows) {
 			allProducts.remove(products);
-			this.products.remove(products);
-			Update.deleteProduct(name, "user_selection");
+			Update.deleteProduct(products.toString());
 		}
+
 		updateTotalFields();
+
 	}
 
 	/**
@@ -307,8 +299,9 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void clearPurchaseButtonPressed(ActionEvent event) throws SQLException {
+
 		for (Product products : tableView.getItems()) {
-			Update.deleteProduct(products.toString(), "user_selection");
+			Update.deleteProduct(products.toString());
 		}
 
 		tableView.getItems().clear();
@@ -322,6 +315,11 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
+
+		// BigDecimal pmtAmount = new
+		// BigDecimal(String.valueOf(pmtAmountField.getText().toString()));
+
+		// String pmtAmount = pmtAmountField.getText();
 		Date date = new Date();
 		Employee e1 = new Employee("111111", "Jane", "Green");
 		System.out.println();
@@ -338,17 +336,24 @@ public class ComputerRepairStoreController implements Initializable {
 			System.out.println("		             Computer Repair Store				         	     ");
 			System.out.println("**************************************************************************");
 			System.out.println();
-			System.out.println(date);
+			System.out.println(date.toString());
 			System.out.println();
 			purchase.forEach(System.out::println);
+			//System.out.println(purchase.toString());
 			System.out.println();
+			/*
+			 * for (Product purchase : allProducts) { System.out.printf("%s%t%d%t%.02f%n",
+			 * purchase.getItem(), purchase.getQuantity(), purchase.getAmount()); }
+			 */
+
+			// String.valueOf(allProduct);
 
 			System.out.printf(
 					"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02s%nChange: $%.02f%n",
 					getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), pmtAmountField.getText(),
 					getChange());
 			System.out.println();
-			System.out.printf("You were helped by %s.%n  Thank you for your purchase!", e1);
+			System.out.printf("You were helped by %s.%n  Thank you for your purchase!", e1.toString());
 		}
 
 	}
@@ -476,6 +481,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * When called, this method updates the total, tax, and total due text fields
 	 */
 	public void updateTotalFields() {
+
 		setTotal(0);
 		setTax(0);
 		setTotalDue(0);
@@ -498,29 +504,34 @@ public class ComputerRepairStoreController implements Initializable {
 	public void setTotal(double total) {
 		this.total = total;
 	}
+
 	public void setTax(double tax) {
 		this.tax = tax;
 	}
+
 	public void setTotalDue(double totalDue) {
 		this.totalDue = totalDue;
 	}
+
 	public void setChange(double change) {
 		this.change = Math.abs(change);
 	}
-	public void setProducts(Product products) { this.products.add(products); }
 
 	// Getters
 	public double getTotal() {
 		return this.total;
 	}
+
 	public double getTax() {
 		return this.tax;
 	}
+
 	public double getTotalDue() {
 		return this.totalDue;
 	}
+
 	public double getChange() {
 		return this.change;
 	}
-	public ObservableList<Product> getProducts() { return this.products; }
+
 }
