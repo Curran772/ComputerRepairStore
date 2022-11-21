@@ -47,7 +47,7 @@ public class DBMethods {
         try {
             // Connect to the database
             connect();
-            System.out.println("Select statement: " + queryStmt + "\n");
+
 
             stmt = conn.createStatement();
             rs = stmt.executeQuery(queryStmt);
@@ -97,6 +97,7 @@ public class DBMethods {
         try {
             ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db." + table);
 
+            // Loop through each item in the table
             while (rs.next()) {
                 products.add(new Product(rs.getString("item_name"),
                         rs.getDouble("item_amount"), rs.getInt("item_qty"), rs.getString("item_image")));
