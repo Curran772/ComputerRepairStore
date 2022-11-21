@@ -22,7 +22,7 @@ public class DBMethods {
 
         // Establish connection
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/", "root", "password");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
         } catch (SQLException e) {
             System.out.println("Connection failed... SAD");
         }

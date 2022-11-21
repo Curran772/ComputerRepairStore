@@ -244,6 +244,9 @@ public class ComputerRepairStoreController implements Initializable {
 		InvView.showAndWait();
 	}
 	
+	//get selected item from list to added to the tableView
+	//purchaselistView.getSelectionModel.getSelectedIndex();
+	
 	@FXML
 	void searchBtnPressed(ActionEvent event) {
 	
