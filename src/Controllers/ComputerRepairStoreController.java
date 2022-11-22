@@ -1,7 +1,10 @@
 package Controllers;
 
 import java.util.Date;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
@@ -111,8 +114,8 @@ public class ComputerRepairStoreController implements Initializable {
 
 	@FXML
 	private ChoiceBox<String> pmtMethodField;
-
-	private String[] pmtType = { "Cash", "Check", "Card" };
+	ObservableList<String>pmtType = FXCollections.observableArrayList("Cash", "Check", "Card");
+	//private String[] pmtType = { "Cash", "Check", "Card" };
 
 	@FXML
 	private Button printReceiptButton;
@@ -147,7 +150,7 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private TextField totalDueField;
 
-	private final ObservableList<Product> products = FXCollections.observableArrayList();
+	//private final ObservableList<Product> products = FXCollections.observableArrayList();
 
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -188,8 +191,10 @@ public class ComputerRepairStoreController implements Initializable {
 
 		// These items are for the choiceBox
 		// initializing choice box
+		pmtMethodField.setValue("Cash");
 		pmtMethodField.getItems().addAll(pmtType);
 		pmtMethodField.setOnAction(this::choiceBoxField);
+		
 
 		updateTotalFields();
 
@@ -259,6 +264,7 @@ public class ComputerRepairStoreController implements Initializable {
 	public void choiceBoxField(ActionEvent event) {
 		String pmtChoice = pmtMethodField.getValue();
 		pmtMethodField.setAccessibleText(pmtChoice);
+		
 	}
 
 	/**
@@ -309,53 +315,82 @@ public class ComputerRepairStoreController implements Initializable {
 	}
 
 	/**
-	 * This method prints a receipt view of purchase totals to the console. Does not
-	 * show the products purchased.
+	 * This method prints a receipt view of purchase totals to a text file. 
 	 *
 	 */
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
 
-		// BigDecimal pmtAmount = new
-		// BigDecimal(String.valueOf(pmtAmountField.getText().toString()));
-
-		// String pmtAmount = pmtAmountField.getText();
 		Date date = new Date();
 		Employee e1 = new Employee("111111", "Jane", "Green");
 		System.out.println();
 		ObservableList<Product> purchase = tableView.getItems();
-
-		if (pmtChangeField.getText().isEmpty()) {
+		try {
+			File file = new File("invoice.txt");
+			FileWriter fw = new FileWriter(file, false);
+			if(!file.exists()) {
+				file.createNewFile()	;
+			}
+			PrintWriter pw = new PrintWriter(fw);
+		
+		if (pmtChangeField.getText().isEmpty()){
+					
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setTitle("Invalid payment");
 			alert.setHeaderText("Please Press Pay Button!");
 			alert.showAndWait();
+			
 		} else {
-			System.out.println("**************************************************************************");
-			System.out.println("				      CRS						           				   ");
-			System.out.println("		             Computer Repair Store				         	     ");
-			System.out.println("**************************************************************************");
-			System.out.println();
-			System.out.println(date.toString());
-			System.out.println();
-			purchase.forEach(System.out::println);
-			//System.out.println(purchase.toString());
-			System.out.println();
-			/*
-			 * for (Product purchase : allProducts) { System.out.printf("%s%t%d%t%.02f%n",
-			 * purchase.getItem(), purchase.getQuantity(), purchase.getAmount()); }
-			 */
-
-			// String.valueOf(allProduct);
-
-			System.out.printf(
-					"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02s%nChange: $%.02f%n",
+			pw.println();
+			pw.println("**************************************************************************");
+			pw.println("				      CRS						           				   ");
+			pw.println("		             Computer Repair Store				         	     ");
+			pw.println("**************************************************************************");
+			pw.println();
+			pw.println(date.toString());
+			pw.println();
+			purchase.forEach(pw::println);
+			pw.println();
+			pw.printf(
+					"SubTotal: $%.2f%nTax: $%.2f%nTotal Due: $%.2f%n%nPayment Method: %s%nPayment Amount: $%.2s%nChange: $%.2f%n",
 					getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), pmtAmountField.getText(),
 					getChange());
-			System.out.println();
-			System.out.printf("You were helped by %s.%n  Thank you for your purchase!", e1.toString());
+			pw.println();
+			pw.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", e1.toString());
+			pw.close();
+			pw.println();
 		}
-
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			
+		}
+		
+		System.out.println("Reciept saved to file");
+	
+	}
+	
+	/**
+	 * This method will take two strings and a boolean. The first will represent the file name
+	 * and the second string will represent what is to be written to the file. The boolean indicates
+	 * if the files should be overwritten.
+	 * 
+	 * @param String file
+	 * @param String text
+	 * @param boolean append
+	 * 
+	 */
+	public static void saveToFile(String file, String text, boolean append) {
+		try {
+			File f = new File(file);
+			FileWriter fw = new FileWriter(f, append);
+			PrintWriter pw = new PrintWriter(fw);
+			
+			pw.println();
+			pw.close();
+		}catch (IOException e) {
+			System.out.println("Error: saveToFile");
+		}
 	}
 
 	/**

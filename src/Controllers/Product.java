@@ -93,10 +93,11 @@ public class Product {
 	public void setProdAmount(Double amount) {
 		this.item_amount.set(amount);
 	}
+	
 
 	@Override
 	public String toString() {
-		return String.format("%s\t\t%d\t\t%.02f", getItem(), getQuantity(), getAmount());
+		return String.format("%-35s%-20d%10.2f", getItem(), getQuantity(), getAmount());
 	}
 	
 	
