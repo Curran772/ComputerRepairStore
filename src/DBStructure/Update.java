@@ -1,6 +1,7 @@
 package DBStructure;
 
 import Controllers.Product;
+import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class Update extends DBMethods {
         // Execute SELECT statement
         try {
             // ResultSet from dataExecuteQuery method
-            ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db. " + table +
+            ResultSet rs = dataExecuteQuery("SELECT * FROM item_db." + table +
                     "WHERE item_name=" + searchProducts);
             Product product = getProdFromResultSet(rs);
 
@@ -37,32 +38,29 @@ public class Update extends DBMethods {
         }
     }
 
-    // Delete item with name
-    public static void deleteProduct(String productName, String table) throws SQLException {
-        // Delete statement
-        String updateStatement = "   DELETE FROM item_db." + table + "\n" +
-                "         WHERE item_name ='" + productName + "';";
-
-        try {
-            dataExecuteUpdate(updateStatement);
-        } catch (SQLException e) {
-            System.out.println("Error occurred while trying to DELETE from item");
-            throw e;
-        }
-    }
 
     // Insert an item into the item table
-    public static void insertProductToUser(String name, Double amount, Double qty) throws SQLException {
+    public static void insertProductToUser(ObservableList<Product> products) {
         // Insert statement
-        String updateStatement = "INSERT INTO item_db.user_selection(item_name, item_amount, item_qty)\n" +
-                "VALUES('" + name + "','" + amount + "','" + qty + "');\n";
         try {
-            dataExecuteUpdate(updateStatement);
-        } catch (SQLException e) {
-            String updateItemAmount = "UPDATE item_db.user_selection\n" + " SET item_amount = item_amount + 1" +
-                    " WHERE item_name = '" + name + "';";
+            for (Product product : products) {
+                String name = product.getItem();
+                Double amount = product.getAmount();
+                int qty = product.getQuantity();
 
-            dataExecuteUpdate(updateItemAmount);
+                String update = "INSERT INTO item_db.user_selection (item_name, item_amount, item_qty) " +
+                        "VALUES('" + name + "','" + amount + "','" + qty + "');";
+
+                ResultSet rs = dataExecuteQuery("SELECT * FROM item_db.user_selection" +
+                        "WHERE item_name='" + name + "';");
+
+                if (rs.next()) {
+                    dataExecuteUpdate(update);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Failed at insertProductToUser :(");
         }
     }
 

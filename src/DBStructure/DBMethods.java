@@ -15,11 +15,9 @@ import java.sql.*;
 public class DBMethods {
 
     // Class variables
-    private static Connection conn = null;
+    private static Connection conn;
 
-    // Connect to the database
-    public static void connect() throws SQLException {
-
+    public DBMethods() {
         // Establish connection
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
@@ -28,8 +26,18 @@ public class DBMethods {
         }
     }
 
+    // Connect to the database
+    public static void connect() {
+        // Establish connection
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/", "root", "password");
+        } catch (SQLException e) {
+            System.out.println("Connection failed... SAD");
+        }
+    }
+
     // Disconnect from the database
-    public static void disconnect() throws SQLException {
+    public static void disconnect() {
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
@@ -47,7 +55,6 @@ public class DBMethods {
         try {
             // Connect to the database
             connect();
-
 
             stmt = conn.createStatement();
             rs = stmt.executeQuery(queryStmt);
@@ -98,10 +105,20 @@ public class DBMethods {
             ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db." + table);
 
             // Loop through each item in the table
-            while (rs.next()) {
-                products.add(new Product(rs.getString("item_name"),
-                        rs.getDouble("item_amount"), rs.getInt("item_qty"), rs.getString("item_image")));
+            if (table.equals("inventory")) {
+                while (rs.next()) {
+                    products.add(new Product(rs.getString("item_name"),
+                            rs.getDouble("item_amount"), rs.getInt("item_qty"), rs.getString("item_image")));
+                }
             }
+
+            if (table.equals("user_selection")) {
+                while (rs.next()) {
+                    products.add(new Product(rs.getString("item_name"),
+                            rs.getDouble("item_amount"), rs.getInt("item_qty")));
+                }
+            }
+
             return products;
         } catch (SQLException e) {
             System.out.println("DB Connection failed at table population!");
@@ -120,4 +137,6 @@ public class DBMethods {
 
         sr.runScript(reader);
     }
+
+    public Connection getConn() { return this.conn; }
 }
