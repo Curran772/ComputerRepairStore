@@ -28,9 +28,8 @@ public class Update extends DBMethods {
             // ResultSet from dataExecuteQuery method
             ResultSet rs = dataExecuteQuery("SELECT * FROM item_db." + table +
                     "WHERE item_name=" + searchProducts);
-            Product product = getProdFromResultSet(rs);
 
-            return product;
+            return getProdFromResultSet(rs);
 
         } catch (SQLException e) {
             System.out.println("SQL select operation failed: " + e);
@@ -43,20 +42,20 @@ public class Update extends DBMethods {
     public static void insertProductToUser(ObservableList<Product> products) {
         // Insert statement
         try {
+            // Clear table of prior data
+            String delete = "DELETE FROM item_db.user_selection;";
+            dataExecuteUpdate(delete);
+
             for (Product product : products) {
                 String name = product.getItem();
-                Double amount = product.getAmount();
+                double amount = product.getAmount();
                 int qty = product.getQuantity();
 
                 String update = "INSERT INTO item_db.user_selection (item_name, item_amount, item_qty) " +
                         "VALUES('" + name + "','" + amount + "','" + qty + "');";
 
-                ResultSet rs = dataExecuteQuery("SELECT * FROM item_db.user_selection" +
-                        "WHERE item_name='" + name + "';");
-
-                if (rs.next()) {
-                    dataExecuteUpdate(update);
-                }
+                // Insert new table data
+                dataExecuteUpdate(update);
             }
 
         } catch (SQLException e) {
