@@ -22,7 +22,20 @@ public class Product {
 		}
 	}
 
-	// Product variable setters
+	public Product(String item, double amount, int quantity) {
+		super();
+		this.item = item;
+		this.quantity = quantity;
+		this.amount = amount;
+
+		if (quantity <= 0) {
+			System.out.println("Quantity must be greater than 0");
+		} else {
+			this.quantity = quantity;
+		}
+	}
+
+    // Product variable setters
 	public void setItem(String item) {
 		this.item = item;
 	}

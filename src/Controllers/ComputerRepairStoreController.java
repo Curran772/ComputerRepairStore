@@ -1,6 +1,5 @@
 package Controllers;
 
-import java.awt.print.Book;
 import java.util.Date;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -9,41 +8,32 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.effect.Light.Point;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
+import static Controllers.Main.stage;
 
 public class ComputerRepairStoreController implements Initializable {
 
 	private static final NumberFormat currency = NumberFormat.getCurrencyInstance();
 
 	private ObservableList<Product> products = FXCollections.observableArrayList();
-
 
 	private BigDecimal taxPercentage = new BigDecimal(0.07);
 
@@ -52,10 +42,7 @@ public class ComputerRepairStoreController implements Initializable {
 	private double tax = 0;
 	private double totalDue = 0;
 	private double change = 0;
-
-	private Stage stage;
-	private Scene scene;
-	private Parent root;
+	private double totalPaymentAmount = 0;
 
 	@FXML
 	private TextField searchBar;
@@ -165,7 +152,7 @@ public class ComputerRepairStoreController implements Initializable {
 		// load database
 		try {
 			Update.runSqlScript("schema");
-			ResultSet rs = DBMethods.dataExecuteQuery("SELECT item_name FROM item_db.inventory LIMIT 1");
+			ResultSet rs = DBMethods.dataExecuteQuery("SELECT item_name FROM item_db.inventory");
 
 			// Only populates table with first time data if table is empty
 			if (!rs.next()) {
@@ -175,9 +162,9 @@ public class ComputerRepairStoreController implements Initializable {
 
 			System.out.println("Database connected and populated!");
 
-		//  Populate user selection table
-		tableView.setItems(DBMethods.getProducts("user_selection"));
-
+			//  Populate user selection table
+			setProducts(DBMethods.getProducts("user_selection"));
+			tableView.setItems(getProducts());
 		} catch (SQLException e) {
 			System.out.println("DB Connection failed at table population!" + e);
 		} catch (Exception ex) {
@@ -252,7 +239,7 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	public void changeQuantityColumnEvent(CellEditEvent<Product, Integer> editedCell) {
 		Product quantitySelected = tableView.getSelectionModel().getSelectedItem();
-		quantitySelected.setQuantity((int) editedCell.getNewValue());
+		quantitySelected.setQuantity(editedCell.getNewValue());
 	}
 
 	/**
@@ -261,18 +248,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	void addItemToList(MouseEvent event) throws SQLException {
-		setProducts(purchaseListView.getSelectionModel().getSelectedItem());
-
-		String name = purchaseListView.getSelectionModel().getSelectedItem().getItem();
-		Double amount = 1.0;
-		int qty = purchaseListView.getSelectionModel().getSelectedItem().getQuantity();
-
-
-		Update.insertProductToUser(name, amount, Double.valueOf(qty));
-
-		tableView.setItems(products);
-
-
+		tableView.getItems().add(purchaseListView.getSelectionModel().getSelectedItem());
 		updateTotalFields();
 	}
 
@@ -280,11 +256,9 @@ public class ComputerRepairStoreController implements Initializable {
 	 * this method will remove the selected row(s) from the table
 	 */
 	@FXML
-	private void removeItemButtonPressed() throws SQLException {
+	private void removeItemButtonPressed() {
 		ObservableList<Product> selectedRows, allProducts;
 		allProducts = tableView.getItems();
-
-		String name = tableView.getSelectionModel().getSelectedItem().getItem();
 
 		// this gives us the rows that were selected
 		selectedRows = tableView.getSelectionModel().getSelectedItems();
@@ -293,8 +267,6 @@ public class ComputerRepairStoreController implements Initializable {
 		// selected
 		for (Product products : selectedRows) {
 			allProducts.remove(products);
-			this.products.remove(products);
-			Update.deleteProduct(name, "user_selection");
 		}
 		updateTotalFields();
 	}
@@ -304,10 +276,6 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void clearPurchaseButtonPressed(ActionEvent event) throws SQLException {
-		for (Product products : tableView.getItems()) {
-			Update.deleteProduct(products.toString(), "user_selection");
-		}
-
 		tableView.getItems().clear();
 		updateTotalFields();
 	}
@@ -341,8 +309,8 @@ public class ComputerRepairStoreController implements Initializable {
 			System.out.println();
 
 			System.out.printf(
-					"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02s%nChange: $%.02f%n",
-					getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), pmtAmountField.getText(),
+					"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02f%nChange: $%.02f%n",
+					getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(),getTotalPaymentAmount(),
 					getChange());
 			System.out.println();
 			System.out.printf("You were helped by %s.%n  Thank you for your purchase!", e1);
@@ -356,6 +324,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void exitButtonPressed(ActionEvent event) {
+		pushUserTable();
 		Main.exitButtonPressed(stage);
 	}
 
@@ -392,9 +361,10 @@ public class ComputerRepairStoreController implements Initializable {
 	private void payButtonPressed(ActionEvent event) {
 		try {
 			BigDecimal pmtAmount = new BigDecimal(String.valueOf(pmtAmountField.getText()));
+			setTotalPaymentAmount(pmtAmount.doubleValue());
 			BigDecimal total = new BigDecimal(getTotalDue());
 			BigDecimal change = total.subtract(pmtAmount);
-			setChange(getTotalDue() - pmtAmount.doubleValue());
+			setChange(getTotalDue() - getTotalPaymentAmount());
 
 			if (pmtAmount.doubleValue() < getTotalDue()) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -491,6 +461,12 @@ public class ComputerRepairStoreController implements Initializable {
 		totalDueField.setText(String.format("$%.2f", getTotalDue()));
 	}
 
+	// Push table items to user mysql table to save for next session
+	public void pushUserTable() {
+		setProducts(tableView.getItems());
+		Update.insertProductToUser(getProducts());
+	}
+
 	// Setters
 	public void setTotal(double total) {
 		this.total = total;
@@ -504,7 +480,8 @@ public class ComputerRepairStoreController implements Initializable {
 	public void setChange(double change) {
 		this.change = Math.abs(change);
 	}
-	public void setProducts(Product products) { this.products.add(products); }
+	public void setTotalPaymentAmount(double totalPaymentAmount) { this.totalPaymentAmount = totalPaymentAmount; }
+	public void setProducts(ObservableList<Product> products) { this.products = products; }
 
 	// Getters
 	public double getTotal() {
@@ -519,5 +496,6 @@ public class ComputerRepairStoreController implements Initializable {
 	public double getChange() {
 		return this.change;
 	}
+	public double getTotalPaymentAmount() { return this.totalPaymentAmount; }
 	public ObservableList<Product> getProducts() { return this.products; }
 }
