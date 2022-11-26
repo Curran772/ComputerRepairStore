@@ -15,7 +15,7 @@ import java.sql.*;
 public class DBMethods {
 
     // Class variables
-<<<<<<< HEAD
+
     private static Connection conn;
 
     public DBMethods() {
@@ -26,20 +26,18 @@ public class DBMethods {
             System.out.println("Connection failed... SAD");
         }
     }
-=======
-    private static Connection conn = null;
->>>>>>> parent of 1884071 (Merge branch 'main' into Amber)
 
+   
     // Connect to the database
     public static void connect() throws SQLException {
 
         // Establish connection
         try {
-<<<<<<< HEAD
+
         	conn = DriverManager.getConnection("jdbc:mysql://174.103.213.228:3306/", "root", "password");
-=======
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "password");
->>>>>>> parent of 1884071 (Merge branch 'main' into Amber)
+
+        	conn = DriverManager.getConnection("jdbc:mysql://174.103.213.228:3306/", "root", "password");
+           
         } catch (SQLException e) {
             System.out.println("Connection failed... SAD");
         }
