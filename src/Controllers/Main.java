@@ -3,6 +3,7 @@ package Controllers;
 // test
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -48,7 +49,7 @@ public class Main extends Application {
 				
 		if(alert.showAndWait().get() == ButtonType.OK) {		
 		System.out.println("You successfully logged out!");
-		System.exit(0);
+		Platform.exit();
 		}
 	}
 

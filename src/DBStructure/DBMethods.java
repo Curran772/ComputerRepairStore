@@ -15,7 +15,6 @@ import java.sql.*;
 public class DBMethods {
 
     // Class variables
-
     private static Connection conn;
 
     public DBMethods() {
@@ -27,24 +26,18 @@ public class DBMethods {
         }
     }
 
-   
     // Connect to the database
-    public static void connect() throws SQLException {
-
+    public static void connect() {
         // Establish connection
         try {
-
         	conn = DriverManager.getConnection("jdbc:mysql://174.103.213.228:3306/", "root", "password");
-
-        	conn = DriverManager.getConnection("jdbc:mysql://174.103.213.228:3306/", "root", "password");
-           
         } catch (SQLException e) {
             System.out.println("Connection failed... SAD");
         }
     }
 
     // Disconnect from the database
-    public static void disconnect() throws SQLException {
+    public static void disconnect() {
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
@@ -62,7 +55,6 @@ public class DBMethods {
         try {
             // Connect to the database
             connect();
-            System.out.println("Select statement: " + queryStmt + "\n");
 
             stmt = conn.createStatement();
             rs = stmt.executeQuery(queryStmt);
@@ -99,27 +91,6 @@ public class DBMethods {
                 stmt.close();
             }
             disconnect();
-        }
-    }
-
-    /**
-     * Method that returns an observable list of the items in the database table
-     */
-    public static ObservableList<Product> getProducts(String table) throws SQLException {
-        ObservableList<Product> products = FXCollections.observableArrayList();
-
-        // Try to populate the table with data from the MySQL database
-        try {
-            ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db." + table);
-
-            while (rs.next()) {
-                products.add(new Product(rs.getString("item_name"),
-                        rs.getDouble("item_amount"), rs.getInt("item_qty"), rs.getString("item_image")));
-            }
-            return products;
-        } catch (SQLException e) {
-            System.out.println("DB Connection failed at table population!");
-            throw e;
         }
     }
 
