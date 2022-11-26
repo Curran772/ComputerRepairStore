@@ -27,7 +27,7 @@ public class SequentialFile {
 				// loop until end-of-file indicator
 				try {
 					// create new record
-					Employee record = new Employee(input.next(), input.next(), input.next());
+					Employee record = new Employee(input.next(), input.next(), input.next(), input.next());
 
 					// add to EmployeeList
 					employees.getEmployees().add(record);
