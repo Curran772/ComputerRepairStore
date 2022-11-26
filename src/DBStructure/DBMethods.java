@@ -36,8 +36,7 @@ public class DBMethods {
 
         	conn = DriverManager.getConnection("jdbc:mysql://174.103.213.228:3306/", "root", "password");
 
-        	conn = DriverManager.getConnection("jdbc:mysql://174.103.213.228:3306/", "root", "password");
-           
+        	           
         } catch (SQLException e) {
             System.out.println("Connection failed... SAD");
         }
