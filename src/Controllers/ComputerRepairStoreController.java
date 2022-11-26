@@ -47,6 +47,7 @@ public class ComputerRepairStoreController implements Initializable {
 	private double tax = 0;
 	private double totalDue = 0;
 	private double change = 0;
+	private double totalPaymentAmount = 0;
 
 	private Stage stage;
 	private Scene scene;
@@ -115,8 +116,7 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private ChoiceBox<String> pmtMethodField;
 	ObservableList<String>pmtType = FXCollections.observableArrayList("Cash", "Check", "Card");
-	//private String[] pmtType = { "Cash", "Check", "Card" };
-
+	
 	@FXML
 	private Button printReceiptButton;
 
@@ -150,10 +150,9 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private TextField totalDueField;
 
-	//private final ObservableList<Product> products = FXCollections.observableArrayList();
-
 	public void initialize(URL location, ResourceBundle resources) {
-
+		saveToFile("Employees.txt"," ", true);
+		
 		// set up the columns in the table
 		itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
@@ -249,8 +248,6 @@ public class ComputerRepairStoreController implements Initializable {
 		InvView.showAndWait();
 	}
 	
-	//get selected item from list to added to the tableView
-	//purchaselistView.getSelectionModel.getSelectedIndex();
 	
 	@FXML
 	void searchBtnPressed(ActionEvent event) {
@@ -327,7 +324,7 @@ public class ComputerRepairStoreController implements Initializable {
 		ObservableList<Product> purchase = tableView.getItems();
 		try {
 			File file = new File("invoice.txt");
-			FileWriter fw = new FileWriter(file, false);
+			FileWriter fw = new FileWriter(file, true);
 			if(!file.exists()) {
 				file.createNewFile()	;
 			}
@@ -352,8 +349,8 @@ public class ComputerRepairStoreController implements Initializable {
 			purchase.forEach(pw::println);
 			pw.println();
 			pw.printf(
-					"SubTotal: $%.2f%nTax: $%.2f%nTotal Due: $%.2f%n%nPayment Method: %s%nPayment Amount: $%.2s%nChange: $%.2f%n",
-					getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), pmtAmountField.getText(),
+					"SubTotal: $%.2f%nTax: $%.2f%nTotal Due: $%.2f%n%nPayment Method: %s%nPayment Amount: $%.2f%nChange: $%.2f%n",
+					getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(),
 					getChange());
 			pw.println();
 			pw.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", e1.toString());
@@ -435,9 +432,10 @@ public class ComputerRepairStoreController implements Initializable {
 	private void payButtonPressed(ActionEvent event) {
 		try {
 			BigDecimal pmtAmount = new BigDecimal(String.valueOf(pmtAmountField.getText()));
+			setTotalPaymentAmount(pmtAmount.doubleValue());
 			BigDecimal total = new BigDecimal(getTotalDue());
 			BigDecimal change = total.subtract(pmtAmount);
-			setChange(getTotalDue() - pmtAmount.doubleValue());
+			setChange(getTotalDue() - getTotalPaymentAmount());
 
 			if (pmtAmount.doubleValue() < getTotalDue()) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -551,10 +549,18 @@ public class ComputerRepairStoreController implements Initializable {
 	public void setChange(double change) {
 		this.change = Math.abs(change);
 	}
+	
+	public void setTotalPaymentAmount(double pmtAmount) {
+		this.totalPaymentAmount= pmtAmount;
+	}
 
 	// Getters
 	public double getTotal() {
 		return this.total;
+	}
+	
+	public double getTotalPaymentAmount() {
+		return this.totalPaymentAmount;
 	}
 
 	public double getTax() {
@@ -568,5 +574,5 @@ public class ComputerRepairStoreController implements Initializable {
 	public double getChange() {
 		return this.change;
 	}
-
 }
+

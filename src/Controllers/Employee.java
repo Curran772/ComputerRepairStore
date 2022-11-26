@@ -6,7 +6,9 @@ public class Employee {
 	private String fName;
 	private String lName;
 	
-
+	// initializes an Employee with default values
+	public Employee() {this("", "", "");} 
+	   
 	public Employee(String employeeID, String fName, String lName) {
 				
 		this.employeeID = employeeID;
