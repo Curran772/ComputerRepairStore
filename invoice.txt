@@ -86,3 +86,27 @@ You were helped by Jane Green
 
   Thank you for your purchase!
 
+
+**************************************************************************
+				      CRS						           				   
+		             Computer Repair Store				         	     
+**************************************************************************
+
+Sat Nov 26 11:36:07 CST 2022
+
+Charging Cord		3		27.96
+Coolermaster CPU AIO Cooler		2		101.98
+
+SubTotal: $129.94
+Tax: $6.50
+Total Due: $136.44
+
+Payment Method: null
+Payment Amount: $200.00
+Change: $63.56
+
+You were helped by Jane Green
+	Employee #111111.
+
+  Thank you for your purchase!
+
