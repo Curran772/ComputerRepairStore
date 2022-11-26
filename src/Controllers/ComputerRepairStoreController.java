@@ -288,7 +288,7 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
 		Date date = new Date();
-		Employee e1 = new Employee("111111", "Jane", "Green");
+		Employee e1 = new Employee("111111", "Jane", "Green", "password");
 		System.out.println();
 		ObservableList<Product> purchase = tableView.getItems();
 
