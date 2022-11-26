@@ -1,5 +1,8 @@
 package Controllers;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.io.IOException;
@@ -292,30 +295,45 @@ public class ComputerRepairStoreController implements Initializable {
 		System.out.println();
 		ObservableList<Product> purchase = tableView.getItems();
 
-		if (pmtChangeField.getText().isEmpty()) {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Invalid payment");
-			alert.setHeaderText("Please Press Pay Button!");
-			alert.showAndWait();
-		} else {
-			System.out.println("**************************************************************************");
-			System.out.println("				      CRS						           				   ");
-			System.out.println("		             Computer Repair Store				         	     ");
-			System.out.println("**************************************************************************");
-			System.out.println();
-			System.out.println(date);
-			System.out.println();
-			purchase.forEach(System.out::println);
-			System.out.println();
+		try {
+			File file = new File("invoice.txt");
+			FileWriter fw = new FileWriter(file, true);
+			if(!file.exists()) {
+				file.createNewFile()	;
+			}
+			PrintWriter pw = new PrintWriter(fw);
 
-			System.out.printf(
-					"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02f%nChange: $%.02f%n",
-					getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(),getTotalPaymentAmount(),
-					getChange());
-			System.out.println();
-			System.out.printf("You were helped by %s.%n  Thank you for your purchase!", e1);
+			if (pmtChangeField.getText().isEmpty()){
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Invalid payment");
+				alert.setHeaderText("Please Press Pay Button!");
+				alert.showAndWait();
+			} else {
+				pw.println();
+				pw.println("**************************************************************************");
+				pw.println("				      CRS						           				   ");
+				pw.println("		             Computer Repair Store				         	     ");
+				pw.println("**************************************************************************");
+				pw.println();
+				pw.println(date.toString());
+				pw.println();
+				purchase.forEach(pw::println);
+				pw.println();
+				pw.printf(
+						"SubTotal: $%.2f%nTax: $%.2f%nTotal Due: $%.2f%n%nPayment Method: %s%nPayment Amount: $%.2f%nChange: $%.2f%n",
+						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(), getChange());
+				pw.println();
+				pw.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", e1.toString());
+				pw.close();
+				pw.println();
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+
 		}
 
+		System.out.println("Reciept saved to file");
 	}
 
 	/**
