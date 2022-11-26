@@ -1,6 +1,7 @@
 package DBStructure;
 
 import Controllers.Product;
+import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,10 +13,8 @@ public class Update extends DBMethods {
     private static Product getProdFromResultSet(ResultSet rs) throws SQLException {
         Product prod;
         if (rs.next()) {
-            prod = new Product();
-            prod.setProdName(rs.getString("item_name"));
-            prod.setProdAmount(rs.getDouble("item_amount"));
-            prod.setProdQty(rs.getDouble("item_qty"));
+            prod = new Product(rs.getString("item_name"), rs.getDouble("item_amount"),
+                    rs.getInt("item_qty"), rs.getString("item_image"));
             return prod;
         } else {
             return null;
@@ -23,15 +22,14 @@ public class Update extends DBMethods {
     }
 
     // Search the products
-    public static Product searchProducts(String searchProducts) throws SQLException, ClassNotFoundException {
+    public static Product searchProducts(String searchProducts, String table) throws SQLException, ClassNotFoundException {
         // Execute SELECT statement
         try {
             // ResultSet from dataExecuteQuery method
-            ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db.inventory " +
+            ResultSet rs = dataExecuteQuery("SELECT * FROM item_db." + table +
                     "WHERE item_name=" + searchProducts);
-            Product product = getProdFromResultSet(rs);
 
-            return product;
+            return getProdFromResultSet(rs);
 
         } catch (SQLException e) {
             System.out.println("SQL select operation failed: " + e);
@@ -39,30 +37,29 @@ public class Update extends DBMethods {
         }
     }
 
-    // Delete item with name
-    public static void deleteProduct(String productName) throws SQLException {
-        // Delete statement
-        String updateStatement = "   DELETE FROM item_db.inventory\n" +
-                "         WHERE item_name ='" + productName + "';";
-
-        try {
-            dataExecuteUpdate(updateStatement);
-        } catch (SQLException e) {
-            System.out.println("Error occurred while trying to DELETE from item");
-            throw e;
-        }
-    }
 
     // Insert an item into the item table
-    public static void insertProduct(String name, Double amount, Double qty) throws SQLException {
+    public static void insertProductToUser(ObservableList<Product> products) {
         // Insert statement
-        String updateStatement = "INSERT INTO item_db.inventory(item_name, item_amount, item_qty)\n" +
-                "VALUES('" + name + "','" + amount + "','" + qty + "');\n";
         try {
-            dataExecuteUpdate(updateStatement);
+            // Clear table of prior data
+            String delete = "DELETE FROM item_db.user_selection;";
+            dataExecuteUpdate(delete);
+
+            for (Product product : products) {
+                String name = product.getItem();
+                double amount = product.getAmount();
+                int qty = product.getQuantity();
+
+                String update = "INSERT INTO item_db.user_selection (item_name, item_amount, item_qty) " +
+                        "VALUES('" + name + "','" + amount + "','" + qty + "');";
+
+                // Insert new table data
+                dataExecuteUpdate(update);
+            }
+
         } catch (SQLException e) {
-            System.out.println("SAD, failed to insert item :( ");
-            throw e;
+            System.out.println("Failed at insertProductToUser :(");
         }
     }
 
