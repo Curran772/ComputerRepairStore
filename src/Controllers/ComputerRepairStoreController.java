@@ -1,42 +1,44 @@
 package Controllers;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.effect.Light.Point;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import static Controllers.Main.stage;
-
 public class ComputerRepairStoreController implements Initializable {
 
 	private static final NumberFormat currency = NumberFormat.getCurrencyInstance();
-
-	private ObservableList<Product> prodObsList = FXCollections.observableArrayList();
-	private List userTable = new ArrayList();
 
 	private BigDecimal taxPercentage = new BigDecimal(0.07);
 
@@ -46,6 +48,10 @@ public class ComputerRepairStoreController implements Initializable {
 	private double totalDue = 0;
 	private double change = 0;
 	private double totalPaymentAmount = 0;
+
+	private Stage stage;
+	private Scene scene;
+	private Parent root;
 
 	@FXML
 	private TextField searchBar;
@@ -109,9 +115,8 @@ public class ComputerRepairStoreController implements Initializable {
 
 	@FXML
 	private ChoiceBox<String> pmtMethodField;
-
-	private String[] pmtType = { "Cash", "Check", "Card" };
-
+	ObservableList<String>pmtType = FXCollections.observableArrayList("Cash", "Check", "Card");
+	
 	@FXML
 	private Button printReceiptButton;
 
@@ -119,13 +124,13 @@ public class ComputerRepairStoreController implements Initializable {
 	private TableView<Product> tableView;
 
 	@FXML
-	private TableColumn<Product, String> itemColumn;
+	private TableColumn<Product, Double> amountColumn;
 
 	@FXML
 	private TableColumn<Product, Integer> quantityColumn;
 
 	@FXML
-	private TableColumn<Product, Double> amountColumn;
+	private TableColumn<Product, String> itemColumn;
 
 	@FXML
 	private Button removeItemButton;
@@ -145,8 +150,9 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private TextField totalDueField;
 
-	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		saveToFile("Employees.txt"," ", true);
+		
 		// set up the columns in the table
 		itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
@@ -155,20 +161,18 @@ public class ComputerRepairStoreController implements Initializable {
 		// load database
 		try {
 			Update.runSqlScript("schema");
-			ResultSet rs = DBMethods.dataExecuteQuery("SELECT item_name FROM item_db.inventory");
+			ResultSet rs = DBMethods.dataExecuteQuery("SELECT item_name FROM item_db.inventory LIMIT 1");
 
 			// Only populates table with first time data if table is empty
 			if (!rs.next()) {
 				Update.runSqlScript("seed");
 				System.out.println("Database table is empty... planting seed data!");
 			}
+
 			System.out.println("Database connected and populated!");
 
-			setProdObsList(Update.getProducts("user_selection"));
-
-			tableView.setItems(getProdObsList());
-			purchaseListView.setItems(Update.getProducts("inventory"));
-
+		//  Populate user selection table
+		tableView.setItems(DBMethods.getProducts("user_selection"));
 
 		} catch (SQLException e) {
 			System.out.println("DB Connection failed at table population!" + e);
@@ -176,15 +180,45 @@ public class ComputerRepairStoreController implements Initializable {
 			System.out.println("DB Connection failed at runSqlScript!" + ex);
 		}
 
+		// update the table to allow quantity to be changed
+
+		tableView.setEditable(true);
+		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
 		// This will allow the user to select multiple rows for deletion
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-		// These items are for initializing choice box
+		// These items are for the choiceBox
+		// initializing choice box
+		pmtMethodField.setValue("Cash");
 		pmtMethodField.getItems().addAll(pmtType);
 		pmtMethodField.setOnAction(this::choiceBoxField);
+		
 
 		updateTotalFields();
 
+		// Populate the purchaseListView with the database values
+		try {
+			purchaseListView.setItems(DBMethods.getProducts("inventory")); // bind purchaseListView to products
+		} catch (SQLException e) {
+			System.out.println("Failed to populate purchaseListView table with SQL Products");
+			throw new RuntimeException(e);
+		}
+
+		// when ListView selection changes, show product ImageView
+		purchaseListView.getSelectionModel().selectedItemProperty().addListener(
+				new ChangeListener<Product>() {
+					@Override
+					public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
+						itemColumn.setCellValueFactory((new PropertyValueFactory<Product, String>("item")));
+						itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
+						quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
+						amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
+
+					}
+				}
+
+		);
 
 		// set custom ListView cell factory
 		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
@@ -193,7 +227,12 @@ public class ComputerRepairStoreController implements Initializable {
 				return new ImageTextCell();
 			}
 		});
+		
+		//for search bar
+		//purchaseListView.getItems().addAll(products);
+				
 	}
+	
 
 	/**
 	 * This method allows us to switch to the InventoryView FXML file
@@ -209,8 +248,11 @@ public class ComputerRepairStoreController implements Initializable {
 		InvView.showAndWait();
 	}
 	
+	
 	@FXML
-	void searchBtnPressed(ActionEvent event) {}
+	void searchBtnPressed(ActionEvent event) {
+	
+	}
 
 	/**
 	 * This method gets the value from the choice box and sets it.
@@ -219,55 +261,40 @@ public class ComputerRepairStoreController implements Initializable {
 	public void choiceBoxField(ActionEvent event) {
 		String pmtChoice = pmtMethodField.getValue();
 		pmtMethodField.setAccessibleText(pmtChoice);
+		
 	}
 
 	/**
 	 * This method allows user to double-click on the quantity column cell and edit
 	 * it to update the purchase table
 	 */
+
 	@FXML
 	public void changeQuantityColumnEvent(CellEditEvent<Product, Integer> editedCell) {
 		Product quantitySelected = tableView.getSelectionModel().getSelectedItem();
-		quantitySelected.setQuantity(editedCell.getNewValue());
-	}
-
-	/**
-	 * This method makes it so when the user clicks an item in the list,
-	 * the item is added to the users checkout list
-	 */
-	@FXML
-	void addItemToList(MouseEvent event) {
-		// Check if the item is already in the table or not
-		if (tableView.getItems().contains(purchaseListView.getSelectionModel().getSelectedItem())) {
-			int index = tableView.getItems().indexOf(purchaseListView.getSelectionModel().getSelectedItem());
-			double amount = prodObsList.get(index).getAmount() +
-					purchaseListView.getSelectionModel().getSelectedItem().getAmount();
-
-			prodObsList.get(index).setAmount(amount);
-			prodObsList.get(index).setQuantity(purchaseListView.getSelectionModel().getSelectedItem().getQuantity() + 1);
-			prodObsList.set(index, prodObsList.get(index));
-			tableView.setItems(prodObsList);
-		} else if (!tableView.getItems().contains(purchaseListView.getSelectionModel().getSelectedItem())){
-			prodObsList.add(purchaseListView.getSelectionModel().getSelectedItem());
-			tableView.setItems(prodObsList);
-		}
-
-		// Sets the table equal to the Observable List and refreshes it
-		tableView.refresh();
-		updateTotalFields();
+		quantitySelected.setQuantity((int) editedCell.getNewValue());
 	}
 
 	/**
 	 * this method will remove the selected row(s) from the table
 	 */
 	@FXML
-	private void removeItemButtonPressed() {
-		List items =  new ArrayList(tableView.getSelectionModel().getSelectedItems());
+	private void removeItemButtonPressed() throws SQLException {
+		ObservableList<Product> selectedRows, allProducts;
+		allProducts = tableView.getItems();
 
-		prodObsList.removeAll(items);
-		tableView.getSelectionModel().clearSelection();
+		// this gives us the rows that were selected
+		selectedRows = tableView.getSelectionModel().getSelectedItems();
+
+		// loop over selected rows and remove the products from the list that are
+		// selected
+		for (Product products : selectedRows) {
+			allProducts.remove(products);
+			Update.deleteProduct(products.toString());
+		}
 
 		updateTotalFields();
+
 	}
 
 	/**
@@ -275,47 +302,92 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void clearPurchaseButtonPressed(ActionEvent event) throws SQLException {
+
+		for (Product products : tableView.getItems()) {
+			Update.deleteProduct(products.toString());
+		}
+
 		tableView.getItems().clear();
 		updateTotalFields();
-		prodObsList.clear();
 	}
 
 	/**
-	 * This method prints a receipt view of purchase totals to the console. Does not
-	 * show the products purchased.
+	 * This method prints a receipt view of purchase totals to a text file. 
 	 *
 	 */
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
+
 		Date date = new Date();
-		Employee e1 = new Employee("111111", "Jane", "Green", "password");
+		Employee e1 = new Employee("111111", "Jane", "Green", "123");
 		System.out.println();
 		ObservableList<Product> purchase = tableView.getItems();
-
-		if (pmtChangeField.getText().isEmpty()) {
+		try {
+			File file = new File("invoice.txt");
+			FileWriter fw = new FileWriter(file, true);
+			if(!file.exists()) {
+				file.createNewFile()	;
+			}
+			PrintWriter pw = new PrintWriter(fw);
+		
+		if (pmtChangeField.getText().isEmpty()){
+					
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setTitle("Invalid payment");
 			alert.setHeaderText("Please Press Pay Button!");
 			alert.showAndWait();
+			
 		} else {
-			System.out.println("**************************************************************************");
-			System.out.println("				      CRS						           				   ");
-			System.out.println("		             Computer Repair Store				         	     ");
-			System.out.println("**************************************************************************");
-			System.out.println();
-			System.out.println(date);
-			System.out.println();
-			purchase.forEach(System.out::println);
-			System.out.println();
-
-			System.out.printf(
-					"SubTotal: $%.02f%nTax: $%.02f%nTotal Due: $%.02f%n%nPayment Method: %s%nPayment Amount: $%.02f%nChange: $%.02f%n",
-					getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(),getTotalPaymentAmount(),
+			pw.println();
+			pw.println("**************************************************************************");
+			pw.println("				      CRS						           				   ");
+			pw.println("		             Computer Repair Store				         	     ");
+			pw.println("**************************************************************************");
+			pw.println();
+			pw.println(date.toString());
+			pw.println();
+			purchase.forEach(pw::println);
+			pw.println();
+			pw.printf(
+					"SubTotal: $%.2f%nTax: $%.2f%nTotal Due: $%.2f%n%nPayment Method: %s%nPayment Amount: $%.2f%nChange: $%.2f%n",
+					getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(),
 					getChange());
-			System.out.println();
-			System.out.printf("You were helped by %s.%n  Thank you for your purchase!", e1);
+			pw.println();
+			pw.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", e1.toString());
+			pw.close();
+			pw.println();
 		}
-
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			
+		}
+		
+		System.out.println("Reciept saved to file");
+	
+	}
+	
+	/**
+	 * This method will take two strings and a boolean. The first will represent the file name
+	 * and the second string will represent what is to be written to the file. The boolean indicates
+	 * if the files should be overwritten.
+	 * 
+	 * @param String file
+	 * @param String text
+	 * @param boolean append
+	 * 
+	 */
+	public static void saveToFile(String file, String text, boolean append) {
+		try {
+			File f = new File(file);
+			FileWriter fw = new FileWriter(f, append);
+			PrintWriter pw = new PrintWriter(fw);
+			
+			pw.println();
+			pw.close();
+		}catch (IOException e) {
+			System.out.println("Error: saveToFile");
+		}
 	}
 
 	/**
@@ -323,19 +395,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * 
 	 */
 	@FXML
-	private void exitButtonPressed(ActionEvent event) throws SQLException {
-		DBMethods.dataExecuteUpdate("DELETE FROM item_db.user_selection;");
-
-		for (Product product : prodObsList) {
-			String item_name = product.getItem();
-			double item_amount = product.getAmount();
-			int item_qty = product.getQuantity();
-
-			DBMethods.dataExecuteUpdate("INSERT INTO item_db.user_selection " +
-					"(item_name, item_amount, item_qty) VALUES\n " +
-					"('" + item_name + "', " + item_amount + ", " + item_qty + ");");
-		}
-
+	private void exitButtonPressed(ActionEvent event) {
 		Main.exitButtonPressed(stage);
 	}
 
@@ -454,15 +514,14 @@ public class ComputerRepairStoreController implements Initializable {
 	 * When called, this method updates the total, tax, and total due text fields
 	 */
 	public void updateTotalFields() {
+
 		setTotal(0);
 		setTax(0);
 		setTotalDue(0);
 
 		// Add all the item prices together
-		if (tableView.getItems() != null) {
-			for (Product product : tableView.getItems()) {
-				setTotal(total += product.getAmount());
-			}
+		for (Product product : tableView.getItems()) {
+			setTotal(total += product.getAmount());
 		}
 
 		setTax(getTotal() * 0.05);
@@ -478,31 +537,42 @@ public class ComputerRepairStoreController implements Initializable {
 	public void setTotal(double total) {
 		this.total = total;
 	}
+
 	public void setTax(double tax) {
 		this.tax = tax;
 	}
+
 	public void setTotalDue(double totalDue) {
 		this.totalDue = totalDue;
 	}
+
 	public void setChange(double change) {
 		this.change = Math.abs(change);
 	}
-	public void setTotalPaymentAmount(double totalPaymentAmount) { this.totalPaymentAmount = totalPaymentAmount; }
-	public void setProdObsList(ObservableList<Product> products) { this.prodObsList = products; }
+	
+	public void setTotalPaymentAmount(double pmtAmount) {
+		this.totalPaymentAmount= pmtAmount;
+	}
 
 	// Getters
 	public double getTotal() {
 		return this.total;
 	}
+	
+	public double getTotalPaymentAmount() {
+		return this.totalPaymentAmount;
+	}
+
 	public double getTax() {
 		return this.tax;
 	}
+
 	public double getTotalDue() {
 		return this.totalDue;
 	}
+
 	public double getChange() {
 		return this.change;
 	}
-	public double getTotalPaymentAmount() { return this.totalPaymentAmount; }
-	public ObservableList<Product> getProdObsList() { return this.prodObsList; }
 }
+
