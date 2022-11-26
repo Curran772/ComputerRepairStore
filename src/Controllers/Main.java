@@ -1,5 +1,7 @@
 package Controllers;
 
+// test
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,8 +13,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
-import Controllers.ComputerRepairStoreController;
 
 public class Main extends Application {
 
@@ -29,12 +29,10 @@ public class Main extends Application {
 			stage.show(); // display the stage
 			stage.setResizable(false);
 			stage.getIcons().add(new Image(Main.class.getResourceAsStream("/Resources/ComputerIcon.png")));
-
-			// when the x button in the top corner is pressed
-			// alert box confirming exit will show before closing
-			stage.setOnCloseRequest(event -> {
-				event.consume();
-				exitButtonPressed(stage);
+			
+			stage.setOnCloseRequest(event -> {// alert box confirming exit will show before closing
+				event.consume();				// when the x button in the top corner is pressed
+			    exitButtonPressed(stage);
 			});
 			
 		} catch (Exception e) {
@@ -47,6 +45,7 @@ public class Main extends Application {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Exit");
 		alert.setHeaderText("You are about to Exit!");
+				
 		if(alert.showAndWait().get() == ButtonType.OK) {		
 		System.out.println("You successfully logged out!");
 		System.exit(0);
