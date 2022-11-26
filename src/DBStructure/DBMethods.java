@@ -94,38 +94,6 @@ public class DBMethods {
         }
     }
 
-    /**
-     * Method that returns an observable list of the items in the database table
-     */
-    public static ObservableList<Product> getProducts(String table) throws SQLException {
-        ObservableList<Product> products = FXCollections.observableArrayList();
-
-        // Try to populate the table with data from the MySQL database
-        try {
-            ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db." + table);
-
-            // Loop through each item in the table
-            if (table.equals("inventory")) {
-                while (rs.next()) {
-                    products.add(new Product(rs.getString("item_name"),
-                            rs.getDouble("item_amount"), rs.getInt("item_qty"), rs.getString("item_image")));
-                }
-            }
-
-            if (table.equals("user_selection")) {
-                while (rs.next()) {
-                    products.add(new Product(rs.getString("item_name"),
-                            rs.getDouble("item_amount"), rs.getInt("item_qty")));
-                }
-            }
-
-            return products;
-        } catch (SQLException e) {
-            System.out.println("DB Connection failed at table population!");
-            throw e;
-        }
-    }
-
     // Run passed in sql scripts
     public static void runSqlScript(String script) throws Exception {
 

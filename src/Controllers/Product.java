@@ -55,19 +55,10 @@ public class Product {
 	}
 
 	// Product variable getters
-	public String getItem() {
-		return item;
-	}
-	public int getQuantity() {
-		return quantity;
-	}
-	public double getAmount() {
-		return amount;
-	}
-	public String getThumbImage() {
-		return thumbImage;
-	}
-
+	public String getItem() { return item; }
+	public int getQuantity() { return quantity; }
+	public double getAmount() { return amount; }
+	public String getThumbImage() { return thumbImage; }
 
 	@Override
 	public String toString() {

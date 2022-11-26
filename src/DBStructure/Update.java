@@ -1,12 +1,44 @@
 package DBStructure;
 
 import Controllers.Product;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Update extends DBMethods {
+    /**
+     * Method that returns an observable list of the items in the database table
+     */
+    public static ObservableList<Product> getProducts(String table) throws SQLException {
+        ObservableList<Product> products = FXCollections.observableArrayList();
+
+        // Try to populate the table with data from the MySQL database
+        try {
+            ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db." + table);
+
+            // Loop through each item in the table
+            if (table.equals("inventory")) {
+                while (rs.next()) {
+                    products.add(new Product(rs.getString("item_name"),
+                            rs.getDouble("item_amount"), 1, rs.getString("item_image")));
+                }
+            }
+
+            if (table.equals("user_selection")) {
+                while (rs.next()) {
+                    products.add(new Product(rs.getString("item_name"),
+                            rs.getDouble("item_amount"), rs.getInt("item_qty")));
+                }
+            }
+
+            return products;
+        } catch (SQLException e) {
+            System.out.println("DB Connection failed at table population!");
+            throw e;
+        }
+    }
 
     // Use ResultSet from DB as parameter and set Employee Object's attributes and
     // return employee object.
@@ -34,32 +66,6 @@ public class Update extends DBMethods {
         } catch (SQLException e) {
             System.out.println("SQL select operation failed: " + e);
             throw e;
-        }
-    }
-
-
-    // Insert an item into the item table
-    public static void insertProductToUser(ObservableList<Product> products) {
-        // Insert statement
-        try {
-            // Clear table of prior data
-            String delete = "DELETE FROM item_db.user_selection;";
-            dataExecuteUpdate(delete);
-
-            for (Product product : products) {
-                String name = product.getItem();
-                double amount = product.getAmount();
-                int qty = product.getQuantity();
-
-                String update = "INSERT INTO item_db.user_selection (item_name, item_amount, item_qty) " +
-                        "VALUES('" + name + "','" + amount + "','" + qty + "');";
-
-                // Insert new table data
-                dataExecuteUpdate(update);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Failed at insertProductToUser :(");
         }
     }
 

@@ -1,5 +1,6 @@
 package Controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -8,6 +9,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import DBStructure.DBMethods;
@@ -33,7 +35,8 @@ public class ComputerRepairStoreController implements Initializable {
 
 	private static final NumberFormat currency = NumberFormat.getCurrencyInstance();
 
-	private ObservableList<Product> products = FXCollections.observableArrayList();
+	private ObservableList<Product> prodObsList = FXCollections.observableArrayList();
+	private List userTable = new ArrayList();
 
 	private BigDecimal taxPercentage = new BigDecimal(0.07);
 
@@ -116,13 +119,13 @@ public class ComputerRepairStoreController implements Initializable {
 	private TableView<Product> tableView;
 
 	@FXML
-	private TableColumn<Product, Double> amountColumn;
+	private TableColumn<Product, String> itemColumn;
 
 	@FXML
 	private TableColumn<Product, Integer> quantityColumn;
 
 	@FXML
-	private TableColumn<Product, String> itemColumn;
+	private TableColumn<Product, Double> amountColumn;
 
 	@FXML
 	private Button removeItemButton;
@@ -142,8 +145,8 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private TextField totalDueField;
 
+	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
 		// set up the columns in the table
 		itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
@@ -159,40 +162,29 @@ public class ComputerRepairStoreController implements Initializable {
 				Update.runSqlScript("seed");
 				System.out.println("Database table is empty... planting seed data!");
 			}
-
 			System.out.println("Database connected and populated!");
 
-			//  Populate user selection table
-			setProducts(DBMethods.getProducts("user_selection"));
-			tableView.setItems(getProducts());
+			setProdObsList(Update.getProducts("user_selection"));
+
+			tableView.setItems(getProdObsList());
+			purchaseListView.setItems(Update.getProducts("inventory"));
+
+
 		} catch (SQLException e) {
 			System.out.println("DB Connection failed at table population!" + e);
 		} catch (Exception ex) {
 			System.out.println("DB Connection failed at runSqlScript!" + ex);
 		}
 
-		// update the table to allow quantity to be changed
-
-		tableView.setEditable(true);
-		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-
 		// This will allow the user to select multiple rows for deletion
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-		// These items are for the choiceBox
-		// initializing choice box
+		// These items are for initializing choice box
 		pmtMethodField.getItems().addAll(pmtType);
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
 		updateTotalFields();
 
-		// Populate the purchaseListView with the database values
-		try {
-			purchaseListView.setItems(DBMethods.getProducts("inventory")); // bind purchaseListView to products
-		} catch (SQLException e) {
-			System.out.println("Failed to populate purchaseListView table with SQL Products");
-			throw new RuntimeException(e);
-		}
 
 		// set custom ListView cell factory
 		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
@@ -202,7 +194,6 @@ public class ComputerRepairStoreController implements Initializable {
 			}
 		});
 	}
-	
 
 	/**
 	 * This method allows us to switch to the InventoryView FXML file
@@ -217,8 +208,6 @@ public class ComputerRepairStoreController implements Initializable {
 		InvView.setScene(inventory);
 		InvView.showAndWait();
 	}
-
-
 	
 	@FXML
 	void searchBtnPressed(ActionEvent event) {}
@@ -247,8 +236,24 @@ public class ComputerRepairStoreController implements Initializable {
 	 * the item is added to the users checkout list
 	 */
 	@FXML
-	void addItemToList(MouseEvent event) throws SQLException {
-		tableView.getItems().add(purchaseListView.getSelectionModel().getSelectedItem());
+	void addItemToList(MouseEvent event) {
+		// Check if the item is already in the table or not
+		if (tableView.getItems().contains(purchaseListView.getSelectionModel().getSelectedItem())) {
+			int index = tableView.getItems().indexOf(purchaseListView.getSelectionModel().getSelectedItem());
+			double amount = prodObsList.get(index).getAmount() +
+					purchaseListView.getSelectionModel().getSelectedItem().getAmount();
+
+			prodObsList.get(index).setAmount(amount);
+			prodObsList.get(index).setQuantity(purchaseListView.getSelectionModel().getSelectedItem().getQuantity() + 1);
+			prodObsList.set(index, prodObsList.get(index));
+			tableView.setItems(prodObsList);
+		} else if (!tableView.getItems().contains(purchaseListView.getSelectionModel().getSelectedItem())){
+			prodObsList.add(purchaseListView.getSelectionModel().getSelectedItem());
+			tableView.setItems(prodObsList);
+		}
+
+		// Sets the table equal to the Observable List and refreshes it
+		tableView.refresh();
 		updateTotalFields();
 	}
 
@@ -257,17 +262,11 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void removeItemButtonPressed() {
-		ObservableList<Product> selectedRows, allProducts;
-		allProducts = tableView.getItems();
+		List items =  new ArrayList(tableView.getSelectionModel().getSelectedItems());
 
-		// this gives us the rows that were selected
-		selectedRows = tableView.getSelectionModel().getSelectedItems();
+		prodObsList.removeAll(items);
+		tableView.getSelectionModel().clearSelection();
 
-		// loop over selected rows and remove the products from the list that are
-		// selected
-		for (Product products : selectedRows) {
-			allProducts.remove(products);
-		}
 		updateTotalFields();
 	}
 
@@ -278,6 +277,7 @@ public class ComputerRepairStoreController implements Initializable {
 	private void clearPurchaseButtonPressed(ActionEvent event) throws SQLException {
 		tableView.getItems().clear();
 		updateTotalFields();
+		prodObsList.clear();
 	}
 
 	/**
@@ -323,8 +323,19 @@ public class ComputerRepairStoreController implements Initializable {
 	 * 
 	 */
 	@FXML
-	private void exitButtonPressed(ActionEvent event) {
-		pushUserTable();
+	private void exitButtonPressed(ActionEvent event) throws SQLException {
+		DBMethods.dataExecuteUpdate("DELETE FROM item_db.user_selection;");
+
+		for (Product product : prodObsList) {
+			String item_name = product.getItem();
+			double item_amount = product.getAmount();
+			int item_qty = product.getQuantity();
+
+			DBMethods.dataExecuteUpdate("INSERT INTO item_db.user_selection " +
+					"(item_name, item_amount, item_qty) VALUES\n " +
+					"('" + item_name + "', " + item_amount + ", " + item_qty + ");");
+		}
+
 		Main.exitButtonPressed(stage);
 	}
 
@@ -448,8 +459,10 @@ public class ComputerRepairStoreController implements Initializable {
 		setTotalDue(0);
 
 		// Add all the item prices together
-		for (Product product : tableView.getItems()) {
-			setTotal(total += product.getAmount());
+		if (tableView.getItems() != null) {
+			for (Product product : tableView.getItems()) {
+				setTotal(total += product.getAmount());
+			}
 		}
 
 		setTax(getTotal() * 0.05);
@@ -459,12 +472,6 @@ public class ComputerRepairStoreController implements Initializable {
 		subTotalField.setText(String.format("$%.2f", getTotal()));
 		taxField.setText(String.format("$%.2f", getTax()));
 		totalDueField.setText(String.format("$%.2f", getTotalDue()));
-	}
-
-	// Push table items to user mysql table to save for next session
-	public void pushUserTable() {
-		setProducts(tableView.getItems());
-		Update.insertProductToUser(getProducts());
 	}
 
 	// Setters
@@ -481,7 +488,7 @@ public class ComputerRepairStoreController implements Initializable {
 		this.change = Math.abs(change);
 	}
 	public void setTotalPaymentAmount(double totalPaymentAmount) { this.totalPaymentAmount = totalPaymentAmount; }
-	public void setProducts(ObservableList<Product> products) { this.products = products; }
+	public void setProdObsList(ObservableList<Product> products) { this.prodObsList = products; }
 
 	// Getters
 	public double getTotal() {
@@ -497,5 +504,5 @@ public class ComputerRepairStoreController implements Initializable {
 		return this.change;
 	}
 	public double getTotalPaymentAmount() { return this.totalPaymentAmount; }
-	public ObservableList<Product> getProducts() { return this.products; }
+	public ObservableList<Product> getProdObsList() { return this.prodObsList; }
 }
