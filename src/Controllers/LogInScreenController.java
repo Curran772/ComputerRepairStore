@@ -42,12 +42,19 @@ public class LogInScreenController {
 	Employee e5 = new Employee("555555", "Amy", "Smith", "123");
 	Employee e6 = new Employee("666666", "Stacy", "Anderson", "123");
 	
-	private HashMap getLoginInfo() {
+	protected HashMap getLoginInfo() {
+		loginInfo.put(e1.getEmployeeID(),e1.getEmployeePassword());
+		loginInfo.put(e2.getEmployeeID(),e2.getEmployeePassword());
+		loginInfo.put(e3.getEmployeeID(),e3.getEmployeePassword());
+		loginInfo.put(e4.getEmployeeID(),e4.getEmployeePassword());
+		loginInfo.put(e5.getEmployeeID(),e5.getEmployeePassword());
+		loginInfo.put(e6.getEmployeeID(),e6.getEmployeePassword());
+		
 		return loginInfo;
 	}
 	
 	private void userIDAndPassword() {		
-		
+	
 		}
 	
 	public void userLogIn(ActionEvent event) throws IOException {
@@ -56,27 +63,23 @@ public class LogInScreenController {
 	}
 
 	private void checkLogin() throws IOException {
-		loginInfo.put(e1.getEmployeeID(),e1.getEmployeePassword());
-		loginInfo.put(e2.getEmployeeID(),e2.getEmployeePassword());
-		loginInfo.put(e3.getEmployeeID(),e3.getEmployeePassword());
-		loginInfo.put(e4.getEmployeeID(),e4.getEmployeePassword());
-		loginInfo.put(e5.getEmployeeID(),e5.getEmployeePassword());
-		loginInfo.put(e6.getEmployeeID(),e6.getEmployeePassword());
+		getLoginInfo();
 		
-		if (usernameTextField.getText().toString().equals("")
-				&& passwordTextField.getText().toString().equals("")) {
-			wrongLogIn.setText("Success!");
-			
-			Main.setRoot("ComputerRepairStore");
-			Main.changeStageTitle("Computer Repair Store");
-		
-
-		} else if (usernameTextField.getText().isEmpty() && passwordTextField.getText().isEmpty()) {
-			wrongLogIn.setText("Please enter your username and password.");
-
-		} else {
-			wrongLogIn.setText("Wrong username or password!");
-		}
+		/*
+		 * if (){//usernameTextField.getText().toString().equals("") //&&
+		 * passwordTextField.getText().toString().equals("")) {
+		 * wrongLogIn.setText("Success!");
+		 * 
+		 * Main.setRoot("ComputerRepairStore");
+		 * Main.changeStageTitle("Computer Repair Store");
+		 * 
+		 * 
+		 * } else if (usernameTextField.getText().isEmpty() &&
+		 * passwordTextField.getText().isEmpty()) {
+		 * wrongLogIn.setText("Please enter your username and password.");
+		 * 
+		 * } else { wrongLogIn.setText("Wrong username or password!"); }
+		 */
 		
 		
 
