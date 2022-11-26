@@ -5,15 +5,17 @@ public class Employee {
 	private String employeeID;
 	private String fName;
 	private String lName;
+	private String employeePassword;
 	
 	// initializes an Employee with default values
-	public Employee() {this("", "", "");} 
+	public Employee() {this("", "", "", "");} 
 	   
-	public Employee(String employeeID, String fName, String lName) {
+	public Employee(String employeeID, String fName, String lName, String employeePassword) {
 				
 		this.employeeID = employeeID;
 		this.fName = fName;
 		this.lName = lName;
+		this.employeePassword = employeePassword;
 		
 	}
 	//getter methods
@@ -23,6 +25,10 @@ public class Employee {
 	
 	public String getFirstName() {
 		return fName;
+	}
+	
+	public String getEmployeePassword() {
+		return employeePassword;
 	}
 	
 	public String getLastName() {
@@ -38,6 +44,10 @@ public class Employee {
 			this.employeeID = employeeID;
 		}
 				
+	}
+	
+	public void setEmployeePassword(String employeePassword) {
+		this.employeePassword = employeePassword;
 	}
 		
 	public String toString() {
