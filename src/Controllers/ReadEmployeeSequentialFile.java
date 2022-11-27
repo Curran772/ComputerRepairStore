@@ -21,7 +21,7 @@ public class ReadEmployeeSequentialFile {
          for (Employee employee : employees.getEmployees()) {
             System.out.printf("%-10d%-12s%-12s%10.2f%n",  
                employee.getEmployeeID(), employee.getFirstName(), 
-               employee.getLastName());
+               employee.getLastName(), employee.getEmployeePassword());
          }
       } 
       catch (IOException ioException) {

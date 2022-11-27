@@ -81,7 +81,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <children>
-            <ListView fx:id="purchaseListView" prefHeight="478.0" prefWidth="517.0">
+            <ListView fx:id="purchaseListView" onMouseClicked="#addItemToList" prefHeight="478.0" prefWidth="517.0">
                <padding>
                   <Insets top="8.0" />
                </padding>

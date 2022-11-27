@@ -20,7 +20,7 @@ public class SequentialFile {
 			// stores the employee before XML serialization
 			Employees employees = new Employees();
 
-			System.out.printf("%s%n%s%n? ", "Enter employee ID number, first name and last name.",
+			System.out.printf("%s%n%s%n? ", "Enter employee ID number, first name, last name and password.",
 					"Enter end-of-file indicator to end input.");
 
 			while (input.hasNext()) {

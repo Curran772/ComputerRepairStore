@@ -39,7 +39,14 @@ public class ComputerRepairStoreController implements Initializable {
 	private static final NumberFormat currency = NumberFormat.getCurrencyInstance();
 
 	private ObservableList<Product> prodObsList = FXCollections.observableArrayList();
-	private List userTable = new ArrayList();
+		
+	
+	Employee e1 = new Employee("111111", "Jane", "Green", "111111", "123");
+	Employee e2 = new Employee("222222", "Max", "Brown", "222222", "123");
+	Employee e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
+	Employee e4 = new Employee("444444", "Dweight", "Howard", "444444", "123");
+	Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
+	Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
 
 	private BigDecimal taxPercentage = new BigDecimal(0.07);
 
@@ -113,7 +120,7 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private ChoiceBox<String> pmtMethodField;
 
-	private String[] pmtType = { "Cash", "Check", "Card" };
+	ObservableList<String>pmtType = FXCollections.observableArrayList("Cash", "Check", "Card");
 
 	@FXML
 	private Button printReceiptButton;
@@ -147,9 +154,12 @@ public class ComputerRepairStoreController implements Initializable {
 
 	@FXML
 	private TextField totalDueField;
+	
+	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
 		// set up the columns in the table
 		itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
@@ -185,6 +195,7 @@ public class ComputerRepairStoreController implements Initializable {
 		// These items are for initializing choice box
 		pmtMethodField.getItems().addAll(pmtType);
 		pmtMethodField.setOnAction(this::choiceBoxField);
+		pmtMethodField.setValue("Cash");
 
 		updateTotalFields();
 
@@ -291,7 +302,28 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
 		Date date = new Date();
-		Employee e1 = new Employee("111111", "Jane", "Green", "password");
+		Employee user = new Employee();
+		e1 = new Employee("111111", "Jane", "Green", "111111", "123");
+		e2 = new Employee("222222", "Max", "Brown", "222222", "123");
+		e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
+		e4 = new Employee("444444", "Dweight", "Howard", "444444", "123");
+		e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
+		e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
+		
+		if(user.equals(e1)) {
+			System.out.printf("%s %s", e1.getFirstName(), e1.getLastName());
+		}else if(user.equals(e2)) {
+			System.out.printf("%s %s", e2.getFirstName(), e2.getLastName());
+		}else if(user.equals(e3)) {
+			System.out.printf("%s %s", e3.getFirstName(), e3.getLastName());
+		}else if(user.equals(e4)) {
+			System.out.printf("%s %s", e4.getFirstName(), e4.getLastName());
+		}else if(user.equals(e5)) {
+			System.out.printf("%s %s", e5.getFirstName(), e5.getLastName());
+		}else {
+			System.out.printf("%s %s", e1.getFirstName(), e1.getLastName());//= new Employee("111111", "Jane", "Green", "password");
+		}		
+		
 		System.out.println();
 		ObservableList<Product> purchase = tableView.getItems();
 
@@ -323,7 +355,7 @@ public class ComputerRepairStoreController implements Initializable {
 						"SubTotal: $%.2f%nTax: $%.2f%nTotal Due: $%.2f%n%nPayment Method: %s%nPayment Amount: $%.2f%nChange: $%.2f%n",
 						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(), getChange());
 				pw.println();
-				pw.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", e1.toString());
+				pw.printf("You were helped by %s %s.%n%n  Thank you for your purchase!%n%n", user.getFirstName(), user.getLastName());
 				pw.close();
 				pw.println();
 			}

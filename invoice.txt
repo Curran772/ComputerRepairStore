@@ -110,3 +110,110 @@ You were helped by Jane Green
 
   Thank you for your purchase!
 
+
+**************************************************************************
+				      CRS						           				   
+		             Computer Repair Store				         	     
+**************************************************************************
+
+Sat Nov 26 11:51:14 CST 2022
+
+
+SubTotal: $0.00
+Tax: $0.00
+Total Due: $0.00
+
+Payment Method: Cash
+Payment Amount: $20.00
+Change: $20.00
+
+You were helped by Jane Green
+	Employee #111111.
+
+  Thank you for your purchase!
+
+
+**************************************************************************
+				      CRS						           				   
+		             Computer Repair Store				         	     
+**************************************************************************
+
+Sat Nov 26 22:22:32 CST 2022
+
+
+SubTotal: $0.00
+Tax: $0.00
+Total Due: $0.00
+
+Payment Method: Cash
+Payment Amount: $20.00
+Change: $20.00
+
+You were helped by Jane Green
+	Employee #111111.
+
+  Thank you for your purchase!
+
+
+**************************************************************************
+				      CRS						           				   
+		             Computer Repair Store				         	     
+**************************************************************************
+
+Sat Nov 26 22:24:59 CST 2022
+
+
+SubTotal: $0.00
+Tax: $0.00
+Total Due: $0.00
+
+Payment Method: Cash
+Payment Amount: $32.12
+Change: $32.12
+
+You were helped by  .
+
+  Thank you for your purchase!
+
+
+**************************************************************************
+				      CRS						           				   
+		             Computer Repair Store				         	     
+**************************************************************************
+
+Sat Nov 26 22:26:27 CST 2022
+
+
+SubTotal: $0.00
+Tax: $0.00
+Total Due: $0.00
+
+Payment Method: Cash
+Payment Amount: $54.23
+Change: $54.23
+
+You were helped by  .
+
+  Thank you for your purchase!
+
+
+**************************************************************************
+				      CRS						           				   
+		             Computer Repair Store				         	     
+**************************************************************************
+
+Sat Nov 26 22:36:30 CST 2022
+
+
+SubTotal: $0.00
+Tax: $0.00
+Total Due: $0.00
+
+Payment Method: Cash
+Payment Amount: $32.10
+Change: $32.10
+
+You were helped by  .
+
+  Thank you for your purchase!
+
