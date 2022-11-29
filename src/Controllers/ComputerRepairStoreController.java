@@ -39,7 +39,6 @@ public class ComputerRepairStoreController implements Initializable {
 	private static final NumberFormat currency = NumberFormat.getCurrencyInstance();
 
 	private ObservableList<Product> prodObsList = FXCollections.observableArrayList();
-	private List userTable = new ArrayList();
 
 	private BigDecimal taxPercentage = new BigDecimal(0.07);
 
@@ -155,6 +154,14 @@ public class ComputerRepairStoreController implements Initializable {
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
 		amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
 
+		// set custom ListView cell factory
+		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
+			@Override
+			public ListCell<Product> call(ListView<Product> listView) {
+				return new ImageTextCell();
+			}
+		});
+
 		// load database
 		try {
 			Update.runSqlScript("schema");
@@ -167,11 +174,11 @@ public class ComputerRepairStoreController implements Initializable {
 			}
 			System.out.println("Database connected and populated!");
 
-			setProdObsList(Update.getProducts("user_selection"));
-
-			tableView.setItems(getProdObsList());
 			purchaseListView.setItems(Update.getProducts("inventory"));
+			prodObsList.addAll(Update.getProducts("user_selection"));
 
+			tableView.setItems(prodObsList);
+			tableView.refresh();
 
 		} catch (SQLException e) {
 			System.out.println("DB Connection failed at table population!" + e);
@@ -187,15 +194,6 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
 		updateTotalFields();
-
-
-		// set custom ListView cell factory
-		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
-			@Override
-			public ListCell<Product> call(ListView<Product> listView) {
-				return new ImageTextCell();
-			}
-		});
 	}
 
 	/**
@@ -240,22 +238,26 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	void addItemToList(MouseEvent event) {
+		int index = tableView.getItems().indexOf(purchaseListView.getSelectionModel().getSelectedItem());
+
+		Product product = prodObsList.get(index);
+
 		// Check if the item is already in the table or not
-		if (tableView.getItems().contains(purchaseListView.getSelectionModel().getSelectedItem())) {
-			int index = tableView.getItems().indexOf(purchaseListView.getSelectionModel().getSelectedItem());
+		if (!tableView.getItems().contains(product)) {
+			prodObsList.addAll(purchaseListView.getSelectionModel().getSelectedItem());
+		}
+		if (tableView.getItems().contains(product)) {
 			double amount = prodObsList.get(index).getAmount() +
 					purchaseListView.getSelectionModel().getSelectedItem().getAmount();
+			int quantity = prodObsList.get(index).getQuantity();
 
 			prodObsList.get(index).setAmount(amount);
-			prodObsList.get(index).setQuantity(purchaseListView.getSelectionModel().getSelectedItem().getQuantity() + 1);
+			prodObsList.get(index).setQuantity(quantity + 1);
 			prodObsList.set(index, prodObsList.get(index));
-			tableView.setItems(prodObsList);
-		} else if (!tableView.getItems().contains(purchaseListView.getSelectionModel().getSelectedItem())){
-			prodObsList.add(purchaseListView.getSelectionModel().getSelectedItem());
-			tableView.setItems(prodObsList);
 		}
 
 		// Sets the table equal to the Observable List and refreshes it
+		tableView.setItems(prodObsList);
 		tableView.refresh();
 		updateTotalFields();
 	}
@@ -315,7 +317,7 @@ public class ComputerRepairStoreController implements Initializable {
 				pw.println("		             Computer Repair Store				         	     ");
 				pw.println("**************************************************************************");
 				pw.println();
-				pw.println(date.toString());
+				pw.println(date);
 				pw.println();
 				purchase.forEach(pw::println);
 				pw.println();
@@ -506,7 +508,6 @@ public class ComputerRepairStoreController implements Initializable {
 		this.change = Math.abs(change);
 	}
 	public void setTotalPaymentAmount(double totalPaymentAmount) { this.totalPaymentAmount = totalPaymentAmount; }
-	public void setProdObsList(ObservableList<Product> products) { this.prodObsList = products; }
 
 	// Getters
 	public double getTotal() {
@@ -522,5 +523,4 @@ public class ComputerRepairStoreController implements Initializable {
 		return this.change;
 	}
 	public double getTotalPaymentAmount() { return this.totalPaymentAmount; }
-	public ObservableList<Product> getProdObsList() { return this.prodObsList; }
 }

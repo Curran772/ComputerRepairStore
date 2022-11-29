@@ -1,8 +1,5 @@
 package DBStructure;
 
-import Controllers.Product;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 import javax.sql.rowset.CachedRowSet;
@@ -16,15 +13,6 @@ public class DBMethods {
 
     // Class variables
     private static Connection conn;
-
-    public DBMethods() {
-        // Establish connection
-        try {
-        	conn = DriverManager.getConnection("jdbc:mysql://174.103.213.228:3306/", "root", "password");
-        } catch (SQLException e) {
-            System.out.println("Connection failed... SAD");
-        }
-    }
 
     // Connect to the database
     public static void connect() {
