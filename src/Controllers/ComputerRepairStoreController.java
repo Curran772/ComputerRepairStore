@@ -301,7 +301,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
-		Date date = new Date();
+		Date date = new Date();		
 		Employee user = new Employee();
 		e1 = new Employee("111111", "Jane", "Green", "111111", "123");
 		e2 = new Employee("222222", "Max", "Brown", "222222", "123");

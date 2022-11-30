@@ -36,7 +36,6 @@ public class LogInScreenController {
 	@FXML
 	private Label wrongLogIn;
 
-		
 	/*
 	 * private ObservableList<Employee> employeeList =
 	 * FXCollections.observableArrayList(); public void
@@ -44,90 +43,85 @@ public class LogInScreenController {
 	 * employees; } public ObservableList<Employee> getEmployeeList() { return
 	 * this.employeeList; }
 	 */
-	 
-		Employee e1 = new Employee("111111", "Jane", "Green", "111111", "123");
-		Employee e2 = new Employee("222222", "Max", "Brown", "222222", "123");
-		Employee e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
-		Employee e4 = new Employee("444444", "Dweight", "Howard", "444444", "123");
-		Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
-		Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
-		
-	
-		
-	public void initialize(){
-		
+
+	Employee e1 = new Employee("111111", "Jane", "Green", "111111", "123");
+	Employee e2 = new Employee("222222", "Max", "Brown", "222222", "123");
+	Employee e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
+	Employee e4 = new Employee("444444", "Dweight", "Howard", "444444", "123");
+	Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
+	Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
+
+	public void initialize() {
+
 	}
 
-			  
-	  public void userLogIn(ActionEvent event) throws IOException { 
-		 		  checkLogin();
-	  
-	  }
-	 
+	public void userLogIn(ActionEvent event) throws IOException {
+		checkLogin();
+
+	}
 
 	protected void checkLogin() throws IOException {
-				
-		  if (usernameTextField.getText().equals(e1.getUsername()) &&
-		  passwordTextField.getText().contains(e1.getPassword())) {
-		  wrongLogIn.setText("Success!");
-		  
-		  Main.setRoot("ComputerRepairStore");
-		  Main.changeStageTitle("Computer Repair Store");
-		  
-		  }else if (usernameTextField.getText().equals(e1.getUsername()) &&
-				  passwordTextField.getText().contains(e1.getPassword())) {
-			  wrongLogIn.setText("Success!");
-			  
-			  Main.setRoot("ComputerRepairStore");
-			  Main.changeStageTitle("Computer Repair Store");
-		  }else if(usernameTextField.getText().equals(e2.getUsername()) &&
-				  passwordTextField.getText().contains(e2.getPassword())) {
-			  wrongLogIn.setText("Success!");
-			  
-			  Main.setRoot("ComputerRepairStore");
-			  Main.changeStageTitle("Computer Repair Store");
-			  
-		  }else if(usernameTextField.getText().equals(e3.getUsername()) &&
-				  passwordTextField.getText().contains(e3.getPassword())) {
-			  wrongLogIn.setText("Success!");
-			  
-			  Main.setRoot("ComputerRepairStore");
-			  Main.changeStageTitle("Computer Repair Store");
-			  
-		  }else if(usernameTextField.getText().equals(e4.getUsername()) &&
-				  passwordTextField.getText().contains(e4.getPassword())) {
-			  wrongLogIn.setText("Success!");
-			  
-			  Main.setRoot("ComputerRepairStore");
-			  Main.changeStageTitle("Computer Repair Store");
-			  
-		  }else if(usernameTextField.getText().equals(e5.getUsername()) &&
-				  passwordTextField.getText().contains(e5.getPassword())) {
-			  wrongLogIn.setText("Success!");
-			  
-			  Main.setRoot("ComputerRepairStore");
-			  Main.changeStageTitle("Computer Repair Store");
-			  
-		  }else if(usernameTextField.getText().equals(e6.getUsername()) &&
-				  passwordTextField.getText().contains(e6.getPassword())) {
-			  wrongLogIn.setText("Success!");
-			  
-			  Main.setRoot("ComputerRepairStore");
-			  Main.changeStageTitle("Computer Repair Store");
-			  
-		  }else if(usernameTextField.getText().equals("") &&
-				  passwordTextField.getText().contains("")) {
-			  wrongLogIn.setText("Success!");
-			  
-			  Main.setRoot("ComputerRepairStore");
-			  Main.changeStageTitle("Computer Repair Store");
-		  
-		  } else if (usernameTextField.getText().isEmpty() &&
-		  passwordTextField.getText().isEmpty()) {
-		  wrongLogIn.setText("Please enter your username and password.");
-		  
-		  } else { wrongLogIn.setText("Wrong username or password!"); }
-		 
+
+		if (usernameTextField.getText().equals(e1.getUsername())
+				&& passwordTextField.getText().contains(e1.getPassword())) {
+			wrongLogIn.setText("Success!");
+
+			Main.setRoot("ComputerRepairStore");
+			Main.changeStageTitle("Computer Repair Store");
+
+		} else if (usernameTextField.getText().equals(e1.getUsername())
+				&& passwordTextField.getText().contains(e1.getPassword())) {
+			wrongLogIn.setText("Success!");
+
+			Main.setRoot("ComputerRepairStore");
+			Main.changeStageTitle("Computer Repair Store");
+		} else if (usernameTextField.getText().equals(e2.getUsername())
+				&& passwordTextField.getText().contains(e2.getPassword())) {
+			wrongLogIn.setText("Success!");
+
+			Main.setRoot("ComputerRepairStore");
+			Main.changeStageTitle("Computer Repair Store");
+
+		} else if (usernameTextField.getText().equals(e3.getUsername())
+				&& passwordTextField.getText().contains(e3.getPassword())) {
+			wrongLogIn.setText("Success!");
+
+			Main.setRoot("ComputerRepairStore");
+			Main.changeStageTitle("Computer Repair Store");
+
+		} else if (usernameTextField.getText().equals(e4.getUsername())
+				&& passwordTextField.getText().contains(e4.getPassword())) {
+			wrongLogIn.setText("Success!");
+
+			Main.setRoot("ComputerRepairStore");
+			Main.changeStageTitle("Computer Repair Store");
+
+		} else if (usernameTextField.getText().equals(e5.getUsername())
+				&& passwordTextField.getText().contains(e5.getPassword())) {
+			wrongLogIn.setText("Success!");
+
+			Main.setRoot("ComputerRepairStore");
+			Main.changeStageTitle("Computer Repair Store");
+
+		} else if (usernameTextField.getText().equals(e6.getUsername())
+				&& passwordTextField.getText().contains(e6.getPassword())) {
+			wrongLogIn.setText("Success!");
+
+			Main.setRoot("ComputerRepairStore");
+			Main.changeStageTitle("Computer Repair Store");
+
+		} else if (usernameTextField.getText().equals("") && passwordTextField.getText().contains("")) {
+			wrongLogIn.setText("Success!");
+
+			Main.setRoot("ComputerRepairStore");
+			Main.changeStageTitle("Computer Repair Store");
+
+		} else if (usernameTextField.getText().isEmpty() && passwordTextField.getText().isEmpty()) {
+			wrongLogIn.setText("Please enter your username and password.");
+
+		} else {
+			wrongLogIn.setText("Wrong username or password!");
+		}
 
 	}
 

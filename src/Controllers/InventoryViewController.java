@@ -2,6 +2,8 @@ package Controllers;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import DBStructure.DBMethods;
 import javafx.beans.value.ChangeListener;
@@ -48,7 +50,8 @@ public class InventoryViewController {
 	private double cost = 0.00;
 
 	public void initialize() throws SQLException {
-
+		// get items from database
+		//searchInventoryListView.getItems().addAll(DBMethods.getProducts("inventory"));
 		searchInventoryListView.setItems(DBMethods.getProducts("inventory")); // bind purchaseListView to products
 
 		// when ListView selection changes, show product ImageView
@@ -64,9 +67,25 @@ public class InventoryViewController {
 				});
 	}
 
-	public InventoryViewController() throws SQLException {}
+	
 	@FXML
-	void searchInventoryPressed(ActionEvent event) {}
+	void searchInventoryPressed(ActionEvent event) {
+		searchInventoryListView.getItems().clear();
+		//searchInventoryListView.getItems().addAll(searchList(inventorySearchBar.getText(),DBMethods.getProducts("inventory")));
+		
+		//Pattern expression = Pattern.compile("\\d*\\w*\\s*\\D*\\S*");
+		//String search = inventorySearchBar.getText();
+		
+		//Matcher matcher = expression.matcher(search);
+		
+		//while (matcher.find()	) {
+			//System.out.println(matcher.group());
+		//}
+		
+	}
+	public void searchList() {
+		
+	}
 
 	@FXML
 	void updateInventoryPressed(ActionEvent event) {}
