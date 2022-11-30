@@ -1,5 +1,8 @@
 package DBStructure;
 
+import Controllers.Product;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 import javax.sql.rowset.CachedRowSet;
@@ -15,7 +18,6 @@ public class DBMethods {
 
     private static Connection conn;
 
-<<<<<<< HEAD
     public DBMethods() {
         // Establish connection
         try {
@@ -26,8 +28,6 @@ public class DBMethods {
     }
 
    
-=======
->>>>>>> Curran
     // Connect to the database
     public static void connect() throws SQLException {
 
