@@ -38,7 +38,7 @@ public class ComputerRepairStoreController implements Initializable {
 
 	private static final NumberFormat currency = NumberFormat.getCurrencyInstance();
 
-	private ObservableList<Product> prodObsList = FXCollections.observableArrayList();
+	private ObservableList<Product> inventoryList = FXCollections.observableArrayList();
 
 	private BigDecimal taxPercentage = new BigDecimal(0.07);
 
@@ -174,17 +174,19 @@ public class ComputerRepairStoreController implements Initializable {
 			}
 			System.out.println("Database connected and populated!");
 
-			purchaseListView.setItems(Update.getProducts("inventory"));
-			prodObsList.addAll(Update.getProducts("user_selection"));
-
-			tableView.setItems(prodObsList);
-			tableView.refresh();
+			purchaseListView.setItems(Update.getProducts());
 
 		} catch (SQLException e) {
 			System.out.println("DB Connection failed at table population!" + e);
 		} catch (Exception ex) {
 			System.out.println("DB Connection failed at runSqlScript!" + ex);
 		}
+
+		// Populate inventory list and tableView
+		inventoryList.addAll();
+
+		tableView.setItems(inventoryList);
+		tableView.refresh();
 
 		// This will allow the user to select multiple rows for deletion
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -194,6 +196,13 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
 		updateTotalFields();
+
+		ArrayList<Product> products = new ArrayList<>(inventoryList);
+
+		for(int i = 0; i < products.size(); i++) {
+			System.out.println(products.get(i));
+		}
+
 	}
 
 	/**
@@ -239,26 +248,21 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	void addItemToList(MouseEvent event) {
 		int index = tableView.getItems().indexOf(purchaseListView.getSelectionModel().getSelectedItem());
+		Product product = new Product(purchaseListView.getSelectionModel().getSelectedItem().getItem(),
+				purchaseListView.getSelectionModel().getSelectedItem().getAmount(),
+				inventoryList.get(index).getQuantity() + 1);
 
-		Product product = prodObsList.get(index);
 
-		// Check if the item is already in the table or not
-		if (!tableView.getItems().contains(product)) {
-			prodObsList.addAll(purchaseListView.getSelectionModel().getSelectedItem());
-		}
 		if (tableView.getItems().contains(product)) {
-			double amount = prodObsList.get(index).getAmount() +
-					purchaseListView.getSelectionModel().getSelectedItem().getAmount();
-			int quantity = prodObsList.get(index).getQuantity();
+			product.setQuantity(product.getQuantity() + 1);
+			inventoryList.set(index, product);
 
-			prodObsList.get(index).setAmount(amount);
-			prodObsList.get(index).setQuantity(quantity + 1);
-			prodObsList.set(index, prodObsList.get(index));
+		} else {
+			inventoryList.add(purchaseListView.getSelectionModel().getSelectedItem());
 		}
-
-		// Sets the table equal to the Observable List and refreshes it
-		tableView.setItems(prodObsList);
+		tableView.setItems(inventoryList);
 		tableView.refresh();
+
 		updateTotalFields();
 	}
 
@@ -267,10 +271,10 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void removeItemButtonPressed() {
-		List items =  new ArrayList(tableView.getSelectionModel().getSelectedItems());
-
-		prodObsList.removeAll(items);
+		inventoryList.removeAll(tableView.getSelectionModel().getSelectedItems());
 		tableView.getSelectionModel().clearSelection();
+		tableView.setItems(inventoryList);
+		tableView.refresh();
 
 		updateTotalFields();
 	}
@@ -282,7 +286,7 @@ public class ComputerRepairStoreController implements Initializable {
 	private void clearPurchaseButtonPressed(ActionEvent event) throws SQLException {
 		tableView.getItems().clear();
 		updateTotalFields();
-		prodObsList.clear();
+		inventoryList.clear();
 	}
 
 	/**
@@ -343,19 +347,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * 
 	 */
 	@FXML
-	private void exitButtonPressed(ActionEvent event) throws SQLException {
-		DBMethods.dataExecuteUpdate("DELETE FROM item_db.user_selection;");
-
-		for (Product product : prodObsList) {
-			String item_name = product.getItem();
-			double item_amount = product.getAmount();
-			int item_qty = product.getQuantity();
-
-			DBMethods.dataExecuteUpdate("INSERT INTO item_db.user_selection " +
-					"(item_name, item_amount, item_qty) VALUES\n " +
-					"('" + item_name + "', " + item_amount + ", " + item_qty + ");");
-		}
-
+	private void exitButtonPressed(ActionEvent event) {
 		Main.exitButtonPressed(stage);
 	}
 

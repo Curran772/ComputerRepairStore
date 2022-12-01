@@ -2,8 +2,9 @@ package Controllers;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-import DBStructure.*;
+
 import DBStructure.Update;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -50,7 +51,7 @@ public class InventoryViewController {
 
 	public void initialize() throws SQLException {
 
-		searchInventoryListView.setItems(Update.getProducts("inventory")); // bind purchaseListView to products
+		searchInventoryListView.setItems(Update.getProducts()); // bind purchaseListView to products
 
 		// when ListView selection changes, show product ImageView
 		searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(

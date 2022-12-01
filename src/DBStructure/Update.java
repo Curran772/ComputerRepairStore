@@ -11,26 +11,16 @@ public class Update extends DBMethods {
     /**
      * Method that returns an observable list of the items in the database table
      */
-    public static ObservableList<Product> getProducts(String table) throws SQLException {
+    public static ObservableList<Product> getProducts() throws SQLException {
         ObservableList<Product> products = FXCollections.observableArrayList();
 
         // Try to populate the table with data from the MySQL database
         try {
-            ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db." + table);
+            ResultSet rs = DBMethods.dataExecuteQuery("SELECT * FROM item_db.inventory");
 
-            // Loop through each item in the table
-            if (table.equals("inventory")) {
-                while (rs.next()) {
-                    products.add(new Product(rs.getString("item_name"),
-                            rs.getDouble("item_amount"), 1, rs.getString("item_image")));
-                }
-            }
-
-            if (table.equals("user_selection")) {
-                while (rs.next()) {
-                    products.add(new Product(rs.getString("item_name"),
-                            rs.getDouble("item_amount"), rs.getInt("item_qty")));
-                }
+            while (rs.next()) {
+                products.add(new Product(rs.getString("item_name"),
+                        rs.getDouble("item_amount"), 1, rs.getString("item_image")));
             }
 
             return products;
@@ -54,11 +44,11 @@ public class Update extends DBMethods {
     }
 
     // Search the products
-    public static Product searchProducts(String searchProducts, String table) throws SQLException, ClassNotFoundException {
+    public static Product searchProducts(String searchProducts) throws SQLException, ClassNotFoundException {
         // Execute SELECT statement
         try {
             // ResultSet from dataExecuteQuery method
-            ResultSet rs = dataExecuteQuery("SELECT * FROM item_db." + table +
+            ResultSet rs = dataExecuteQuery("SELECT * FROM item_db.inventory" +
                     "WHERE item_name=" + searchProducts);
 
             return getProdFromResultSet(rs);
