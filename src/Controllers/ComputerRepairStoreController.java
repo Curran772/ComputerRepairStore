@@ -3,6 +3,7 @@ package Controllers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.io.IOException;
@@ -182,9 +183,6 @@ public class ComputerRepairStoreController implements Initializable {
 			System.out.println("DB Connection failed at runSqlScript!" + ex);
 		}
 
-		// Populate inventory list and tableView
-		inventoryList.addAll();
-
 		tableView.setItems(inventoryList);
 		tableView.refresh();
 
@@ -196,13 +194,6 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
 		updateTotalFields();
-
-		ArrayList<Product> products = new ArrayList<>(inventoryList);
-
-		for(int i = 0; i < products.size(); i++) {
-			System.out.println(products.get(i));
-		}
-
 	}
 
 	/**
@@ -247,22 +238,40 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	void addItemToList(MouseEvent event) {
-		int index = tableView.getItems().indexOf(purchaseListView.getSelectionModel().getSelectedItem());
-		Product product = new Product(purchaseListView.getSelectionModel().getSelectedItem().getItem(),
+		// Create the temporary object to be added to the list
+		Product prod = new Product(purchaseListView.getSelectionModel().getSelectedItem().getItem(),
 				purchaseListView.getSelectionModel().getSelectedItem().getAmount(),
-				inventoryList.get(index).getQuantity() + 1);
+				purchaseListView.getSelectionModel().getSelectedItem().getQuantity());
 
-
-		if (tableView.getItems().contains(product)) {
-			product.setQuantity(product.getQuantity() + 1);
-			inventoryList.set(index, product);
-
+		// If list is empty check
+		if (inventoryList.size() == 0) {
+			inventoryList.add(prod);
 		} else {
-			inventoryList.add(purchaseListView.getSelectionModel().getSelectedItem());
+			/**
+			 * Here you NEED two separate for loops, if you try to combine them...
+			 * You get a duplication bug where the table duplicates the rows being added
+			 */
+			for (int i = 0; i < inventoryList.size(); i++) {
+				if (tableView.getItems().get(i).getItem().equals(prod.getItem())) {
+					int qty = tableView.getItems().get(i).getQuantity();
+					prod.setQuantity(qty + 1);
+					double amt = inventoryList.get(i).getAmount();
+					prod.setAmount(amt + purchaseListView.getSelectionModel().getSelectedItem().getAmount());
+					inventoryList.set(i, prod);
+				}
+			}
+			for (int i = 0; i < inventoryList.size(); i++) {
+				if (!inventoryList.contains(prod)) {
+					inventoryList.add(prod);
+				}
+			}
 		}
+
+		// Set the table equal to the inventory list
 		tableView.setItems(inventoryList);
 		tableView.refresh();
 
+		// Updates the total amount due
 		updateTotalFields();
 	}
 
@@ -292,7 +301,6 @@ public class ComputerRepairStoreController implements Initializable {
 	/**
 	 * This method prints a receipt view of purchase totals to the console. Does not
 	 * show the products purchased.
-	 *
 	 */
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
@@ -344,7 +352,6 @@ public class ComputerRepairStoreController implements Initializable {
 
 	/**
 	 * This method exits the program when exit button is pressed
-	 * 
 	 */
 	@FXML
 	private void exitButtonPressed(ActionEvent event) {
@@ -378,7 +385,6 @@ public class ComputerRepairStoreController implements Initializable {
 	/**
 	 * This method calculates the amount of money due back, if there is any, when
 	 * the pay button is pressed
-	 * 
 	 */
 	@FXML
 	private void payButtonPressed(ActionEvent event) {
