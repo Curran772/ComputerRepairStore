@@ -21,7 +21,7 @@ public class DBMethods {
     public DBMethods() {
         // Establish connection
         try {
-        	conn = DriverManager.getConnection("jdbc:mysql://174.103.213.228:3306/", "root", "password");
+        	conn = DriverManager.getConnection("jdbc:mysql://174.103.213.228:3306/", "root", "EJhIlw9^S738bO7C$G9dI6y$gZhaczX");
         } catch (SQLException e) {
             System.out.println("Connection failed... SAD");
         }
@@ -34,7 +34,7 @@ public class DBMethods {
         // Establish connection
         try {
 
-        	conn = DriverManager.getConnection("jdbc:mysql://174.103.213.228:3306/", "root", "password");
+        	conn = DriverManager.getConnection("jdbc:mysql://174.103.213.228:3306/", "root", "EJhIlw9^S738bO7C$G9dI6y$gZhaczX");
 
         	           
         } catch (SQLException e) {

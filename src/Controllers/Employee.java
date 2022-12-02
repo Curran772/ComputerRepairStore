@@ -1,9 +1,5 @@
 package Controllers;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 public class Employee {
 	
 	private String employeeID;
