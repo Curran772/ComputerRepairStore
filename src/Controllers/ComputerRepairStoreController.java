@@ -1,24 +1,20 @@
 package Controllers;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import javax.xml.bind.JAXB;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
@@ -44,15 +40,6 @@ public class ComputerRepairStoreController implements Initializable {
 	private static final NumberFormat currency = NumberFormat.getCurrencyInstance();
 
 	private ObservableList<Product> inventoryList = FXCollections.observableArrayList();
-
-	Employees employees = new Employees();
-
-	Employee e1 = new Employee("111111", "Jane", "Green", "111111", "123");
-	Employee e2 = new Employee("222222", "Max", "Brown", "222222", "123");
-	Employee e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
-	Employee e4 = new Employee("444444", "Dweight", "Howard", "444444", "123");
-	Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
-	Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
 
 	private BigDecimal taxPercentage = new BigDecimal(0.07);
 
@@ -126,7 +113,7 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private ChoiceBox<String> pmtMethodField;
 
-	ObservableList<String> pmtType = FXCollections.observableArrayList("Cash", "Check", "Card");
+	private String[] pmtType = { "Cash", "Check", "Card" };
 
 	@FXML
 	private Button printReceiptButton;
@@ -163,11 +150,18 @@ public class ComputerRepairStoreController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
 		// set up the columns in the table
 		itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
 		amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
+
+		// set custom ListView cell factory
+		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
+			@Override
+			public ListCell<Product> call(ListView<Product> listView) {
+				return new ImageTextCell();
+			}
+		});
 
 		// load database
 		try {
@@ -181,10 +175,7 @@ public class ComputerRepairStoreController implements Initializable {
 			}
 			System.out.println("Database connected and populated!");
 
-			setInventoryList(Update.getProducts("user_selection"));
-
-			tableView.setItems(getInventoryList());
-			purchaseListView.setItems(Update.getProducts("inventory"));
+			purchaseListView.setItems(Update.getProducts());
 
 		} catch (SQLException e) {
 			System.out.println("DB Connection failed at table population!" + e);
@@ -192,23 +183,17 @@ public class ComputerRepairStoreController implements Initializable {
 			System.out.println("DB Connection failed at runSqlScript!" + ex);
 		}
 
+		tableView.setItems(inventoryList);
+		tableView.refresh();
+
 		// This will allow the user to select multiple rows for deletion
 		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 		// These items are for initializing choice box
 		pmtMethodField.getItems().addAll(pmtType);
 		pmtMethodField.setOnAction(this::choiceBoxField);
-		pmtMethodField.setValue("Cash");
 
 		updateTotalFields();
-
-		// set custom ListView cell factory
-		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
-			@Override
-			public ListCell<Product> call(ListView<Product> listView) {
-				return new ImageTextCell();
-			}
-		});
 	}
 
 	/**
@@ -224,10 +209,9 @@ public class ComputerRepairStoreController implements Initializable {
 		InvView.setScene(inventory);
 		InvView.showAndWait();
 	}
-
+	
 	@FXML
-	void searchBtnPressed(ActionEvent event) {
-	}
+	void searchBtnPressed(ActionEvent event) {}
 
 	/**
 	 * This method gets the value from the choice box and sets it.
@@ -249,29 +233,45 @@ public class ComputerRepairStoreController implements Initializable {
 	}
 
 	/**
-	 * This method makes it so when the user clicks an item in the list, the item is
-	 * added to the users checkout list
+	 * This method makes it so when the user clicks an item in the list,
+	 * the item is added to the users checkout list
 	 */
 	@FXML
 	void addItemToList(MouseEvent event) {
-		// Check if the item is already in the table or not
-		if (tableView.getItems().contains(purchaseListView.getSelectionModel().getSelectedItem())) {
-			int index = tableView.getItems().indexOf(purchaseListView.getSelectionModel().getSelectedItem());
-			double amount = inventoryList.get(index).getAmount()
-					+ purchaseListView.getSelectionModel().getSelectedItem().getAmount();
+		// Create the temporary object to be added to the list
+		Product prod = new Product(purchaseListView.getSelectionModel().getSelectedItem().getItem(),
+				purchaseListView.getSelectionModel().getSelectedItem().getAmount(),
+				purchaseListView.getSelectionModel().getSelectedItem().getQuantity());
 
-			inventoryList.get(index).setAmount(amount);
-			inventoryList.get(index)
-					.setQuantity(purchaseListView.getSelectionModel().getSelectedItem().getQuantity() + 1);
-			inventoryList.set(index, inventoryList.get(index));
-			tableView.setItems(inventoryList);
-		} else if (!tableView.getItems().contains(purchaseListView.getSelectionModel().getSelectedItem())) {
-			inventoryList.add(purchaseListView.getSelectionModel().getSelectedItem());
-			tableView.setItems(inventoryList);
+		// If list is empty check
+		if (inventoryList.size() == 0) {
+			inventoryList.add(prod);
+		} else {
+			/**
+			 * Here you NEED two separate for loops, if you try to combine them...
+			 * You get a duplication bug where the table duplicates the rows being added
+			 */
+			for (int i = 0; i < inventoryList.size(); i++) {
+				if (tableView.getItems().get(i).getItem().equals(prod.getItem())) {
+					int qty = tableView.getItems().get(i).getQuantity();
+					prod.setQuantity(qty + 1);
+					double amt = inventoryList.get(i).getAmount();
+					prod.setAmount(amt + purchaseListView.getSelectionModel().getSelectedItem().getAmount());
+					inventoryList.set(i, prod);
+				}
+			}
+			for (int i = 0; i < inventoryList.size(); i++) {
+				if (!inventoryList.contains(prod)) {
+					inventoryList.add(prod);
+				}
+			}
 		}
 
-		// Sets the table equal to the Observable List and refreshes it
+		// Set the table equal to the inventory list
+		tableView.setItems(inventoryList);
 		tableView.refresh();
+
+		// Updates the total amount due
 		updateTotalFields();
 	}
 
@@ -280,10 +280,10 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void removeItemButtonPressed() {
-		List items = new ArrayList(tableView.getSelectionModel().getSelectedItems());
-
-		inventoryList.removeAll(items);
+		inventoryList.removeAll(tableView.getSelectionModel().getSelectedItems());
 		tableView.getSelectionModel().clearSelection();
+		tableView.setItems(inventoryList);
+		tableView.refresh();
 
 		updateTotalFields();
 	}
@@ -301,55 +301,23 @@ public class ComputerRepairStoreController implements Initializable {
 	/**
 	 * This method prints a receipt view of purchase totals to the console. Does not
 	 * show the products purchased.
-	 *
 	 */
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
 		Date date = new Date();
-
-		// read currentUser.xml file
-		
-		  try (BufferedReader input =
-		  Files.newBufferedReader(Paths.get("currentUser.xml"))) { 
-			  // unmarshal the file's contents
-		  
-		  // unmarshal the file's contents 
-			  employees = JAXB.unmarshal(input,
-		  Employees.class); String line = input.readLine(); String user = " "; if
-		  (line.equals(e1.toString())) { user = e1.getFirstName() + " " +
-		  e1.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } else if (line.equals(e2.toString())) { user = e2.getFirstName() + " " +
-		  e2.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } else if (line.equals(e3.toString())) { user = e3.getFirstName() + " " +
-		  e3.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } else if (line.equals(e4.toString())) { user = e4.getFirstName() + " " +
-		  e4.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } else if (line.equals(e5.toString())) { user = e5.getFirstName() + " " +
-		  e5.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } else if (line.equals(e6.toString())) { user = e6.getFirstName() + " " +
-		  e6.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } for (Employee account : employees.getEmployees()) ; System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } catch (IOException ioException) {
-		  System.err.println("Error opening file."); }
-		 
+		Employee e1 = new Employee("111111", "Jane", "Green", "password");
+		System.out.println();
+		ObservableList<Product> purchase = tableView.getItems();
 
 		try {
-			ObservableList<Product> purchase = tableView.getItems();
 			File file = new File("invoice.txt");
-			FileWriter fw = new FileWriter(file, false);
-			if (!file.exists()) {
-				file.createNewFile();
+			FileWriter fw = new FileWriter(file, true);
+			if(!file.exists()) {
+				file.createNewFile()	;
 			}
 			PrintWriter pw = new PrintWriter(fw);
 
-			if (pmtChangeField.getText().isEmpty()) {
+			if (pmtChangeField.getText().isEmpty()){
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Invalid payment");
 				alert.setHeaderText("Please Press Pay Button!");
@@ -357,24 +325,24 @@ public class ComputerRepairStoreController implements Initializable {
 			} else {
 				pw.println();
 				pw.println("**************************************************************************");
-				pw.println("				               CRS						           		  ");
+				pw.println("				      CRS						           				   ");
 				pw.println("		             Computer Repair Store				         	     ");
 				pw.println("**************************************************************************");
 				pw.println();
-				pw.println(date.toString());
+				pw.println(date);
 				pw.println();
 				purchase.forEach(pw::println);
 				pw.println();
 				pw.printf(
 						"SubTotal: $%.2f%nTax: $%.2f%nTotal Due: $%.2f%n%nPayment Method: %s%nPayment Amount: $%.2f%nChange: $%.2f%n",
-						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(),
-						getChange());
+						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(), getChange());
 				pw.println();
-				//pw.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
+				pw.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", e1.toString());
 				pw.close();
 				pw.println();
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 
 		}
@@ -384,22 +352,9 @@ public class ComputerRepairStoreController implements Initializable {
 
 	/**
 	 * This method exits the program when exit button is pressed
-	 * 
 	 */
 	@FXML
-	private void exitButtonPressed(ActionEvent event) throws SQLException {
-		DBMethods.dataExecuteUpdate("DELETE FROM item_db.user_selection;");
-
-		for (Product product : inventoryList) {
-			String item_name = product.getItem();
-			double item_amount = product.getAmount();
-			int item_qty = product.getQuantity();
-
-			DBMethods.dataExecuteUpdate(
-					"INSERT INTO item_db.user_selection " + "(item_name, item_amount, item_qty) VALUES\n " + "('"
-							+ item_name + "', " + item_amount + ", " + item_qty + ");");
-		}
-
+	private void exitButtonPressed(ActionEvent event) {
 		Main.exitButtonPressed(stage);
 	}
 
@@ -430,7 +385,6 @@ public class ComputerRepairStoreController implements Initializable {
 	/**
 	 * This method calculates the amount of money due back, if there is any, when
 	 * the pay button is pressed
-	 * 
 	 */
 	@FXML
 	private void payButtonPressed(ActionEvent event) {
@@ -542,49 +496,29 @@ public class ComputerRepairStoreController implements Initializable {
 	public void setTotal(double total) {
 		this.total = total;
 	}
-
 	public void setTax(double tax) {
 		this.tax = tax;
 	}
-
 	public void setTotalDue(double totalDue) {
 		this.totalDue = totalDue;
 	}
-
 	public void setChange(double change) {
 		this.change = Math.abs(change);
 	}
-
-	public void setTotalPaymentAmount(double totalPaymentAmount) {
-		this.totalPaymentAmount = totalPaymentAmount;
-	}
-
-	public void setInventoryList(ObservableList<Product> products) {
-		this.inventoryList = products;
-	}
+	public void setTotalPaymentAmount(double totalPaymentAmount) { this.totalPaymentAmount = totalPaymentAmount; }
 
 	// Getters
 	public double getTotal() {
 		return this.total;
 	}
-
 	public double getTax() {
 		return this.tax;
 	}
-
 	public double getTotalDue() {
 		return this.totalDue;
 	}
-
 	public double getChange() {
 		return this.change;
 	}
-
-	public double getTotalPaymentAmount() {
-		return this.totalPaymentAmount;
-	}
-
-	public ObservableList<Product> getInventoryList() {
-		return this.inventoryList;
-	}
+	public double getTotalPaymentAmount() { return this.totalPaymentAmount; }
 }
