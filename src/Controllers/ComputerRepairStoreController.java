@@ -1,5 +1,6 @@
 package Controllers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -10,6 +11,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -113,7 +116,7 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private ChoiceBox<String> pmtMethodField;
 
-	private String[] pmtType = { "Cash", "Check", "Card" };
+	ObservableList<String> pmtType = FXCollections.observableArrayList("Cash", "Check", "Card");
 
 	@FXML
 	private Button printReceiptButton;
@@ -147,6 +150,13 @@ public class ComputerRepairStoreController implements Initializable {
 
 	@FXML
 	private TextField totalDueField;
+	
+	Employee e1 = new Employee("111111", "Jane", "Green", "111111", "123");
+	Employee e2 = new Employee("222222", "Max", "Brown", "222222", "123");
+	Employee e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
+	Employee e4 = new Employee("444444", "Dweight", "Howard", "444444", "123");
+	Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
+	Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -194,6 +204,15 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
 		updateTotalFields();
+		
+		// set custom ListView cell factory
+				purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
+					@Override
+					public ListCell<Product> call(ListView<Product> listView) {
+						return new ImageTextCell();
+					}
+				});
+			
 	}
 
 	/**
@@ -220,6 +239,7 @@ public class ComputerRepairStoreController implements Initializable {
 	public void choiceBoxField(ActionEvent event) {
 		String pmtChoice = pmtMethodField.getValue();
 		pmtMethodField.setAccessibleText(pmtChoice);
+		pmtMethodField.setValue("Cash");
 	}
 
 	/**
@@ -297,6 +317,38 @@ public class ComputerRepairStoreController implements Initializable {
 		updateTotalFields();
 		inventoryList.clear();
 	}
+	
+	private void readCurrentUser() {
+		// read currentUser.xml file
+		Employees employees = new Employees();
+		  try (BufferedReader input =  Files.newBufferedReader(Paths.get("currentUser.xml"))) { 
+			  // unmarshal the file's contents
+		  
+		  // unmarshal the file's contents 
+			  employees = JAXB.unmarshal(input, Employees.class); String line = input.readLine(); String user = " "; if
+		  (line.equals(e1.toString())) { user = e1.getFirstName() + " " +
+		  e1.getLastName(); System.out.
+		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
+		  } else if (line.equals(e2.toString())) { user = e2.getFirstName() + " " +
+		  e2.getLastName(); System.out.
+		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
+		  } else if (line.equals(e3.toString())) { user = e3.getFirstName() + " " +
+		  e3.getLastName(); System.out.
+		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
+		  } else if (line.equals(e4.toString())) { user = e4.getFirstName() + " " +
+		  e4.getLastName(); System.out.
+		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
+		  } else if (line.equals(e5.toString())) { user = e5.getFirstName() + " " +
+		  e5.getLastName(); System.out.
+		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
+		  } else if (line.equals(e6.toString())) { user = e6.getFirstName() + " " +
+		  e6.getLastName(); System.out.
+		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
+		  } for (Employee account : employees.getEmployees()) ; System.out.
+		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
+		  } catch (IOException ioException) {
+		  System.err.println("Error opening file."); }
+	}
 
 	/**
 	 * This method prints a receipt view of purchase totals to the console. Does not
@@ -305,7 +357,6 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
 		Date date = new Date();
-		Employee e1 = new Employee("111111", "Jane", "Green", "password");
 		System.out.println();
 		ObservableList<Product> purchase = tableView.getItems();
 

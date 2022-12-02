@@ -15,3 +15,26 @@ Payment Method: Cash
 Payment Amount: $20.00
 Change: $20.00
 
+
+**************************************************************************
+				      CRS						           				   
+		             Computer Repair Store				         	     
+**************************************************************************
+
+Thu Dec 01 21:59:14 CST 2022
+
+Charging Cord		1		6.99
+
+SubTotal: $6.99
+Tax: $0.35
+Total Due: $7.34
+
+Payment Method: Cash
+Payment Amount: $10.00
+Change: $2.66
+
+You were helped by Jane Green
+	Employee #111111.
+
+  Thank you for your purchase!
+
