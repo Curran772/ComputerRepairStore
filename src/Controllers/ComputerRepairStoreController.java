@@ -3,8 +3,9 @@ package Controllers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.sql.Array;
-import java.util.ArrayList;
+import java.text.DecimalFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
 import java.util.Date;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -13,7 +14,6 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import DBStructure.DBMethods;
@@ -247,16 +247,22 @@ public class ComputerRepairStoreController implements Initializable {
 		if (inventoryList.size() == 0) {
 			inventoryList.add(prod);
 		} else {
-			/**
+			/*
 			 * Here you NEED two separate for loops, if you try to combine them...
 			 * You get a duplication bug where the table duplicates the rows being added
 			 */
 			for (int i = 0; i < inventoryList.size(); i++) {
 				if (tableView.getItems().get(i).getItem().equals(prod.getItem())) {
 					int qty = tableView.getItems().get(i).getQuantity();
+					double amt = inventoryList.get(i).getAmount() + purchaseListView.getSelectionModel()
+							.getSelectedItem().getAmount();
+
+					// Using DecimalFormat here to prevent repeating digits bug in Table View
+					DecimalFormat df = new DecimalFormat();
+					df.setMaximumFractionDigits(2);
+
 					prod.setQuantity(qty + 1);
-					double amt = inventoryList.get(i).getAmount();
-					prod.setAmount(amt + purchaseListView.getSelectionModel().getSelectedItem().getAmount());
+					prod.setAmount(Double.parseDouble(df.format(amt)));
 					inventoryList.set(i, prod);
 				}
 			}
