@@ -317,7 +317,10 @@ public class ComputerRepairStoreController implements Initializable {
 
 			updateTotalFields();
 		} catch (NullPointerException e) {
-			System.out.println("User didn't make deletion selection!");
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("No item to delete selected!");
+			alert.setHeaderText("Please select item!");
+			alert.showAndWait();
 		}
 	}
 
@@ -377,9 +380,7 @@ public class ComputerRepairStoreController implements Initializable {
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-
 		}
-
 		System.out.println("Reciept saved to file");
 	}
 
@@ -396,7 +397,6 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	public void periodButtonPressed(ActionEvent event) {
-
 		if (event.getSource() == buttonPeriod) {
 			if (count < 1) {
 				pmtAmountField.setText(pmtAmountField.getText() + ".");
