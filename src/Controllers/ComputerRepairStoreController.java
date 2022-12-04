@@ -31,6 +31,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.apache.ibatis.jdbc.Null;
 
 import static Controllers.Main.stage;
 
@@ -285,35 +286,39 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void removeItemButtonPressed() {
-		Product prod = new Product(tableView.getSelectionModel().getSelectedItem().getItem(),
-				tableView.getSelectionModel().getSelectedItem().getAmount(),
-				tableView.getSelectionModel().getSelectedItem().getQuantity());
+		try {
+			Product prod = new Product(tableView.getSelectionModel().getSelectedItem().getItem(),
+					tableView.getSelectionModel().getSelectedItem().getAmount(),
+					tableView.getSelectionModel().getSelectedItem().getQuantity());
 
-		int tableIndex = tableView.getSelectionModel().getSelectedIndex();
-		int qty = tableView.getSelectionModel().getSelectedItem().getQuantity() - 1;
+			int tableIndex = tableView.getSelectionModel().getSelectedIndex();
+			int qty = tableView.getSelectionModel().getSelectedItem().getQuantity() - 1;
 
-		double amt = tableView.getSelectionModel().getSelectedItem().getAmount() -
-				(tableView.getSelectionModel().getSelectedItem().getAmount()
-				/ tableView.getSelectionModel().getSelectedItem().getQuantity());
+			double amt = tableView.getSelectionModel().getSelectedItem().getAmount() -
+					(tableView.getSelectionModel().getSelectedItem().getAmount()
+							/ tableView.getSelectionModel().getSelectedItem().getQuantity());
 
-		// Using Formatter here to prevent repeating digits bug in Table View
-		Formatter fmt = new Formatter();
-		fmt.format("%.2f", amt);
+			// Using Formatter here to prevent repeating digits bug in Table View
+			Formatter fmt = new Formatter();
+			fmt.format("%.2f", amt);
 
-		if (prod.getQuantity() == 1) {
-			inventoryList.remove(tableView.getSelectionModel().getSelectedItem());
+			if (prod.getQuantity() == 1) {
+				inventoryList.remove(tableView.getSelectionModel().getSelectedItem());
+			}
+
+			if (prod.getQuantity() > 1) {
+				prod.setQuantity(qty);
+				prod.setAmount(Double.parseDouble(fmt.toString()));
+				inventoryList.set(tableIndex, prod);
+			}
+
+			tableView.setItems(inventoryList);
+			tableView.refresh();
+
+			updateTotalFields();
+		} catch (NullPointerException e) {
+			System.out.println("User didn't make deletion selection!");
 		}
-
-		if (prod.getQuantity() > 1) {
-			prod.setQuantity(qty);
-			prod.setAmount(Double.parseDouble(fmt.toString()));
-			inventoryList.set(tableIndex, prod);
-		}
-
-		tableView.setItems(inventoryList);
-		tableView.refresh();
-
-		updateTotalFields();
 	}
 
 	/**
