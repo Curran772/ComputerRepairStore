@@ -19,10 +19,13 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.xml.bind.JAXB;
+
 import DBStructure.DBMethods;
 import DBStructure.Update;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -125,13 +128,13 @@ public class ComputerRepairStoreController implements Initializable {
 	private TableView<Product> tableView;
 
 	@FXML
-	private TableColumn<Product, String> itemColumn;
+	protected TableColumn<Product, String> itemColumn;
 
 	@FXML
-	private TableColumn<Product, Integer> quantityColumn;
+	protected TableColumn<Product, Integer> quantityColumn;
 
 	@FXML
-	private TableColumn<Product, Double> amountColumn;
+	protected TableColumn<Product, Double> amountColumn;
 
 	@FXML
 	private Button removeItemButton;
@@ -150,13 +153,27 @@ public class ComputerRepairStoreController implements Initializable {
 
 	@FXML
 	private TextField totalDueField;
-	
+
 	Employee e1 = new Employee("111111", "Jane", "Green", "111111", "123");
 	Employee e2 = new Employee("222222", "Max", "Brown", "222222", "123");
 	Employee e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
 	Employee e4 = new Employee("444444", "Dweight", "Howard", "444444", "123");
 	Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
 	Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
+	
+	 Product p1 = new Product("Hard Drive", 56.99, 1, "Resources/pictures/ssd.jpg"); 
+	  Product p2 = new Product("Charging Cord", 6.99, 2, "Resources/pictures/usbCAdapter.jpg"); 
+	  Product p3 = new Product("Flash Drive", 15.99, 2,"Resources/pictures/thumbDrives.jpg"); 
+	  Product p4 = new Product("Power Cord", 23.99, 1, "Resources/pictures/usbCadapter.jpg"); 
+	  Product p5 = new Product("USB RJ45", 25.99, 1, "Resources/pictures/usbRJ45.jpg" ); 
+	  Product p6 = new Product("VGA Adapter", 7.59, 1, "Resources/pictures/vgaAdapter.jpg"); 
+	  Product p7 = new Product("RGB Keyboard", 103.99, 1, "Resources/pictures/rgbKeyBoard.jpg"); 
+	  Product p8 = new Product("Mini Display Adapter", 8.99, 1, "Resources/pictures/miniDisplayAdapter.jpg"); 
+	  Product p9 = new Product("I9 Intel", 423.99, 1, "Resources/pictures/i9Intel.jpg"); 
+	  Product p10 = new Product("ddr4 RAM", 60.99, 1, "Resources/pictures/ddr4RAM.jpg"); 
+	  Product p11 = new Product("ddr3 RAM", 16.99, 1, "Resources/pictures/ddr3RAM.jpg"); 
+	  Product p12 = new Product("MSI Coreliquid CPU AIO Cooler", 59.99, 1, "Resources/pictures/cpuCooler2.jpg");
+	  Product p13 = new Product("Coolermaster CPU AIO Cooler", 50.99, 1, "Resources/pictures/cpuCooler1.jpg");
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -164,15 +181,16 @@ public class ComputerRepairStoreController implements Initializable {
 		itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
 		amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
-
+		
 		// set custom ListView cell factory
-		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
-			@Override
-			public ListCell<Product> call(ListView<Product> listView) {
-				return new ImageTextCell();
-			}
-		});
-
+				purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
+					@Override
+					public ListCell<Product> call(ListView<Product> listView) {
+						return new ImageTextCell();
+					}
+				});
+				
+						
 		// load database
 		try {
 			Update.runSqlScript("schema");
@@ -204,15 +222,30 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
 		updateTotalFields();
+
+ObservableList<Product> purchaseSearch = FXCollections.observableArrayList();
 		
-		// set custom ListView cell factory
-				purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
-					@Override
-					public ListCell<Product> call(ListView<Product> listView) {
-						return new ImageTextCell();
-					}
-				});
-			
+		purchaseSearch.addAll(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13);;
+		
+		FilteredList<Product> filteredList = new FilteredList<>(purchaseSearch, list -> true);
+		purchaseListView.setItems(filteredList);
+		searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+			filteredList.setPredicate(list -> {
+				if (newValue == null || newValue.isEmpty()) {
+					return true;
+				}
+				String lowerCaseSearch = newValue.toLowerCase();
+				
+				if (list.getItem().toLowerCase().indexOf(lowerCaseSearch) != -1 ) {
+					return true; // Filter matches item
+				
+				}else { 
+					return false; // does not match
+				}
+			});
+		});
+		
+
 	}
 
 	/**
@@ -228,18 +261,20 @@ public class ComputerRepairStoreController implements Initializable {
 		InvView.setScene(inventory);
 		InvView.showAndWait();
 	}
-	
+
 	@FXML
-	void searchBtnPressed(ActionEvent event) {}
+	void searchBtnPressed(ActionEvent event) {
+	}
 
 	/**
 	 * This method gets the value from the choice box and sets it.
 	 */
 	@FXML
 	public void choiceBoxField(ActionEvent event) {
+		pmtMethodField.setValue("Cash");
 		String pmtChoice = pmtMethodField.getValue();
 		pmtMethodField.setAccessibleText(pmtChoice);
-		pmtMethodField.setValue("Cash");
+		
 	}
 
 	/**
@@ -253,8 +288,8 @@ public class ComputerRepairStoreController implements Initializable {
 	}
 
 	/**
-	 * This method makes it so when the user clicks an item in the list,
-	 * the item is added to the users checkout list
+	 * This method makes it so when the user clicks an item in the list, the item is
+	 * added to the users checkout list
 	 */
 	@FXML
 	void addItemToList(MouseEvent event) {
@@ -268,8 +303,8 @@ public class ComputerRepairStoreController implements Initializable {
 			inventoryList.add(prod);
 		} else {
 			/**
-			 * Here you NEED two separate for loops, if you try to combine them...
-			 * You get a duplication bug where the table duplicates the rows being added
+			 * Here you NEED two separate for loops, if you try to combine them... You get a
+			 * duplication bug where the table duplicates the rows being added
 			 */
 			for (int i = 0; i < inventoryList.size(); i++) {
 				if (tableView.getItems().get(i).getItem().equals(prod.getItem())) {
@@ -318,36 +353,45 @@ public class ComputerRepairStoreController implements Initializable {
 		inventoryList.clear();
 	}
 	
-	private void readCurrentUser() {
-		// read currentUser.xml file
-		Employees employees = new Employees();
-		  try (BufferedReader input =  Files.newBufferedReader(Paths.get("currentUser.xml"))) { 
-			  // unmarshal the file's contents
-		  
-		  // unmarshal the file's contents 
-			  employees = JAXB.unmarshal(input, Employees.class); String line = input.readLine(); String user = " "; if
-		  (line.equals(e1.toString())) { user = e1.getFirstName() + " " +
-		  e1.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } else if (line.equals(e2.toString())) { user = e2.getFirstName() + " " +
-		  e2.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } else if (line.equals(e3.toString())) { user = e3.getFirstName() + " " +
-		  e3.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } else if (line.equals(e4.toString())) { user = e4.getFirstName() + " " +
-		  e4.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } else if (line.equals(e5.toString())) { user = e5.getFirstName() + " " +
-		  e5.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } else if (line.equals(e6.toString())) { user = e6.getFirstName() + " " +
-		  e6.getLastName(); System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } for (Employee account : employees.getEmployees()) ; System.out.
-		  printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", user);
-		  } catch (IOException ioException) {
-		  System.err.println("Error opening file."); }
+public static void readCurrentUser() {
+	// read currentUser.xml file
+	try (BufferedReader input = Files.newBufferedReader(Paths.get("currentUser.xml"))) {
+		// unmarshal the file's contents
+		Employees employees = JAXB.unmarshal(input, Employees.class);
+
+		System.out.printf("Thank you for your purchase!%n%n");
+		
+		for (Employee employee : employees.getEmployees()) {
+			String line = input.readLine();
+			//String user = " ";
+			if (line.equals(employee.toString())) {
+				//user = employee.getFirstName() + " " + employee.getLastName();
+				System.out.printf("You were helped by %s %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+			} else if (line.equals(employee.toString())) {
+				//user = employee.getFirstName() + " " + employee.getLastName();
+				System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+			} else if (line.equals(employee.toString())) {
+				//user = employee.getFirstName() + " " + employee.getLastName();
+				System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+			} else if (line.equals(employee.toString())) {
+				//user = employee.getFirstName() + " " + employee.getLastName();
+				System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+			} else if (line.equals(employee.toString())) {
+				//user = employee.getFirstName() + " " + employee.getLastName();
+				System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+			} else if (line.equals(employee.toString())) {
+				//user = employee.getFirstName() + " " + employee.getLastName();
+				System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+			}
+			
+			System.out.printf("You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+		}
+		
+		
+		 
+	} catch (IOException ioException) {
+		System.err.println("Error opening file.");
+	}
 	}
 
 	/**
@@ -362,13 +406,13 @@ public class ComputerRepairStoreController implements Initializable {
 
 		try {
 			File file = new File("invoice.txt");
-			FileWriter fw = new FileWriter(file, true);
-			if(!file.exists()) {
-				file.createNewFile()	;
+			FileWriter fw = new FileWriter(file, false);
+			if (!file.exists()) {
+				file.createNewFile();
 			}
 			PrintWriter pw = new PrintWriter(fw);
 
-			if (pmtChangeField.getText().isEmpty()){
+			if (pmtChangeField.getText().isEmpty()) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Invalid payment");
 				alert.setHeaderText("Please Press Pay Button!");
@@ -376,7 +420,7 @@ public class ComputerRepairStoreController implements Initializable {
 			} else {
 				pw.println();
 				pw.println("**************************************************************************");
-				pw.println("				      CRS						           				   ");
+				pw.println("				              CRS 			           				   ");
 				pw.println("		             Computer Repair Store				         	     ");
 				pw.println("**************************************************************************");
 				pw.println();
@@ -386,14 +430,15 @@ public class ComputerRepairStoreController implements Initializable {
 				pw.println();
 				pw.printf(
 						"SubTotal: $%.2f%nTax: $%.2f%nTotal Due: $%.2f%n%nPayment Method: %s%nPayment Amount: $%.2f%nChange: $%.2f%n",
-						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(), getChange());
+						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(),
+						getChange());
 				pw.println();
-				pw.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", e1.toString());
+				readCurrentUser();
+				pw.printf("Thank you for your purchase!");//"You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.toString());
 				pw.close();
 				pw.println();
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 
 		}
@@ -547,29 +592,41 @@ public class ComputerRepairStoreController implements Initializable {
 	public void setTotal(double total) {
 		this.total = total;
 	}
+
 	public void setTax(double tax) {
 		this.tax = tax;
 	}
+
 	public void setTotalDue(double totalDue) {
 		this.totalDue = totalDue;
 	}
+
 	public void setChange(double change) {
 		this.change = Math.abs(change);
 	}
-	public void setTotalPaymentAmount(double totalPaymentAmount) { this.totalPaymentAmount = totalPaymentAmount; }
+
+	public void setTotalPaymentAmount(double totalPaymentAmount) {
+		this.totalPaymentAmount = totalPaymentAmount;
+	}
 
 	// Getters
 	public double getTotal() {
 		return this.total;
 	}
+
 	public double getTax() {
 		return this.tax;
 	}
+
 	public double getTotalDue() {
 		return this.totalDue;
 	}
+
 	public double getChange() {
 		return this.change;
 	}
-	public double getTotalPaymentAmount() { return this.totalPaymentAmount; }
+
+	public double getTotalPaymentAmount() {
+		return this.totalPaymentAmount;
+	}
 }

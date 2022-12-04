@@ -1,40 +1,19 @@
 
 **************************************************************************
-				               CRS						           		  
+				              CRS 			           				   
 		             Computer Repair Store				         	     
 **************************************************************************
 
-Thu Dec 01 12:02:23 CST 2022
+Fri Dec 02 17:35:24 CST 2022
 
+ddr4 RAM		1		60.99
 
-SubTotal: $0.00
-Tax: $0.00
-Total Due: $0.00
-
-Payment Method: Cash
-Payment Amount: $20.00
-Change: $20.00
-
-
-**************************************************************************
-				      CRS						           				   
-		             Computer Repair Store				         	     
-**************************************************************************
-
-Thu Dec 01 21:59:14 CST 2022
-
-Charging Cord		1		6.99
-
-SubTotal: $6.99
-Tax: $0.35
-Total Due: $7.34
+SubTotal: $60.99
+Tax: $3.05
+Total Due: $64.04
 
 Payment Method: Cash
-Payment Amount: $10.00
-Change: $2.66
+Payment Amount: $65.00
+Change: $0.96
 
-You were helped by Jane Green
-	Employee #111111.
-
-  Thank you for your purchase!
-
+Thank you for your purchase!
