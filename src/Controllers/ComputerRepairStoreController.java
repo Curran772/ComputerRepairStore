@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
 import java.util.Date;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -14,6 +12,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.util.Formatter;
 import java.util.ResourceBundle;
 
 import DBStructure.DBMethods;
@@ -257,12 +256,12 @@ public class ComputerRepairStoreController implements Initializable {
 					double amt = inventoryList.get(i).getAmount() + purchaseListView.getSelectionModel()
 							.getSelectedItem().getAmount();
 
-					// Using DecimalFormat here to prevent repeating digits bug in Table View
-					DecimalFormat df = new DecimalFormat();
-					df.setMaximumFractionDigits(2);
+					// Using Formatter here to prevent repeating digits bug in Table View
+					Formatter fmt = new Formatter();
+					fmt.format("%.2f", amt);
 
 					prod.setQuantity(qty + 1);
-					prod.setAmount(Double.parseDouble(df.format(amt)));
+					prod.setAmount(Double.parseDouble(fmt.toString()));
 					inventoryList.set(i, prod);
 				}
 			}
@@ -286,8 +285,31 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void removeItemButtonPressed() {
-		inventoryList.removeAll(tableView.getSelectionModel().getSelectedItems());
-		tableView.getSelectionModel().clearSelection();
+		Product prod = new Product(tableView.getSelectionModel().getSelectedItem().getItem(),
+				tableView.getSelectionModel().getSelectedItem().getAmount(),
+				tableView.getSelectionModel().getSelectedItem().getQuantity());
+
+		int tableIndex = tableView.getSelectionModel().getSelectedIndex();
+		int qty = tableView.getSelectionModel().getSelectedItem().getQuantity() - 1;
+
+		double amt = tableView.getSelectionModel().getSelectedItem().getAmount() -
+				(tableView.getSelectionModel().getSelectedItem().getAmount()
+				/ tableView.getSelectionModel().getSelectedItem().getQuantity());
+
+		// Using Formatter here to prevent repeating digits bug in Table View
+		Formatter fmt = new Formatter();
+		fmt.format("%.2f", amt);
+
+		if (prod.getQuantity() == 1) {
+			inventoryList.remove(tableView.getSelectionModel().getSelectedItem());
+		}
+
+		if (prod.getQuantity() > 1) {
+			prod.setQuantity(qty);
+			prod.setAmount(Double.parseDouble(fmt.toString()));
+			inventoryList.set(tableIndex, prod);
+		}
+
 		tableView.setItems(inventoryList);
 		tableView.refresh();
 
