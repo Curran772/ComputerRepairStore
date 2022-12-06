@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -241,36 +242,50 @@ public class ComputerRepairStoreController implements Initializable {
 		// Create the temporary object to be added to the list
 		Product prod = new Product(purchaseListView.getSelectionModel().getSelectedItem().getItem(),
 				purchaseListView.getSelectionModel().getSelectedItem().getAmount(),
-				purchaseListView.getSelectionModel().getSelectedItem().getQuantity());
+				1);
 
-		// If list is empty check
-		if (inventoryList.size() == 0) {
-			inventoryList.add(prod);
+		if (purchaseListView.getSelectionModel().getSelectedItem().getQuantity() >= 1) {
+
+			// If list is empty check
+			if (inventoryList.size() == 0) {
+				inventoryList.add(prod);
+			} else {
+				/*
+				 * Here you NEED two separate for loops, if you try to combine them...
+				 * You get a duplication bug where the table duplicates the rows being added
+				 */
+				for (int i = 0; i < inventoryList.size(); i++) {
+					if (tableView.getItems().get(i).getItem().equals(prod.getItem())) {
+						int qty = tableView.getItems().get(i).getQuantity();
+						double amt = inventoryList.get(i).getAmount() + purchaseListView.getSelectionModel()
+								.getSelectedItem().getAmount();
+
+						// Using Formatter here to prevent repeating digits bug in Table View
+						Formatter fmt = new Formatter();
+						fmt.format("%.2f", amt);
+
+						prod.setQuantity(qty + 1);
+						prod.setAmount(Double.parseDouble(fmt.toString()));
+						inventoryList.set(i, prod);
+					}
+				}
+				for (int i = 0; i < inventoryList.size(); i++) {
+					if (!inventoryList.contains(prod)) {
+						inventoryList.add(prod);
+					}
+				}
+			}
+
+			// Decreases the total value by 1 each time an item is added to the list.
+			purchaseListView.getSelectionModel().getSelectedItem().setQuantity(
+					purchaseListView.getSelectionModel().getSelectedItem().getQuantity() - 1);
+
 		} else {
-			/*
-			 * Here you NEED two separate for loops, if you try to combine them...
-			 * You get a duplication bug where the table duplicates the rows being added
-			 */
-			for (int i = 0; i < inventoryList.size(); i++) {
-				if (tableView.getItems().get(i).getItem().equals(prod.getItem())) {
-					int qty = tableView.getItems().get(i).getQuantity();
-					double amt = inventoryList.get(i).getAmount() + purchaseListView.getSelectionModel()
-							.getSelectedItem().getAmount();
-
-					// Using Formatter here to prevent repeating digits bug in Table View
-					Formatter fmt = new Formatter();
-					fmt.format("%.2f", amt);
-
-					prod.setQuantity(qty + 1);
-					prod.setAmount(Double.parseDouble(fmt.toString()));
-					inventoryList.set(i, prod);
-				}
-			}
-			for (int i = 0; i < inventoryList.size(); i++) {
-				if (!inventoryList.contains(prod)) {
-					inventoryList.add(prod);
-				}
-			}
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("No stock left!");
+			alert.setHeaderText("No stock left!" +
+					"\nPlease select a different item...");
+			alert.showAndWait();
 		}
 
 		// Set the table equal to the inventory list
@@ -312,10 +327,21 @@ public class ComputerRepairStoreController implements Initializable {
 				inventoryList.set(tableIndex, prod);
 			}
 
+			int idx = 0;
+			for (int i = 0; i < purchaseListView.getItems().size(); i++) {
+				if (purchaseListView.getItems().get(i).getItem().equals(tableView
+						.getSelectionModel().getSelectedItem().getItem()));
+				idx = i;
+			}
+
 			tableView.setItems(inventoryList);
 			tableView.refresh();
 
+			System.out.println(purchaseListView.getItems().get(idx));
+
+
 			updateTotalFields();
+
 		} catch (NullPointerException e) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setTitle("No item to delete selected!");
@@ -332,6 +358,9 @@ public class ComputerRepairStoreController implements Initializable {
 		tableView.getItems().clear();
 		updateTotalFields();
 		inventoryList.clear();
+
+		// Need to refresh the purchaseListView quantities
+		purchaseListView.setItems(Update.getProducts());
 	}
 
 	/**
