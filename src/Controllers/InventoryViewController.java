@@ -107,31 +107,28 @@ public class InventoryViewController {
 		searchInventoryListView.setItems(filteredList);
 		
 		//Set the filter Predicate whenever the filter changes
-		inventorySearchBar.textProperty().addListener((obervable, oldValue, newValue) -> {
+		inventorySearch(filteredList, inventorySearchBar);
+
+	}
+
+	// To search the inventory
+	public static void inventorySearch(FilteredList<Product> filteredList, TextField inventorySearchBar) {
+		inventorySearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
 			filteredList.setPredicate(item -> {
 				//If filter text is empty, display all items.
 				if(newValue == null || newValue.isEmpty()) {
 					return true;
 				}
-				//Compare item with all items 
+				//Compare item with all items
 				String lowerCaseFilter = newValue.toLowerCase();
-											
-				if (item.getItem().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
+
+				if (item.getItem().toLowerCase().contains(lowerCaseFilter)) {
 					return true; // Filter matches item
-				
-				}else { 
+				}else {
 					return false; // does not match
 				}
-			
 			});
 		});
-						
-}
-	
-	public InventoryViewController() throws SQLException{}	
-	
-	public void searchList() {
-		
 	}
 
 	@FXML

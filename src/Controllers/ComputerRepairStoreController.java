@@ -1,5 +1,6 @@
 package Controllers;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -10,16 +11,21 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Formatter;
 import java.util.ResourceBundle;
 
+import javax.xml.bind.JAXB;
+
 import DBStructure.DBMethods;
 import DBStructure.Update;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -52,9 +58,6 @@ public class ComputerRepairStoreController implements Initializable {
 
 	@FXML
 	private TextField searchBar;
-
-	@FXML
-	private Button searchBtn;
 
 	@FXML
 	private ListView<Product> purchaseListView;
@@ -113,7 +116,7 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private ChoiceBox<String> pmtMethodField;
 
-	private String[] pmtType = { "Cash", "Check", "Card" };
+	ObservableList<String> pmtType = FXCollections.observableArrayList("Cash", "Check", "Card");
 
 	@FXML
 	private Button printReceiptButton;
@@ -122,13 +125,13 @@ public class ComputerRepairStoreController implements Initializable {
 	private TableView<Product> tableView;
 
 	@FXML
-	private TableColumn<Product, String> itemColumn;
+	protected TableColumn<Product, String> itemColumn;
 
 	@FXML
-	private TableColumn<Product, Integer> quantityColumn;
+	protected TableColumn<Product, Integer> quantityColumn;
 
 	@FXML
-	private TableColumn<Product, Double> amountColumn;
+	protected TableColumn<Product, Double> amountColumn;
 
 	@FXML
 	private Button removeItemButton;
@@ -148,21 +151,29 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private TextField totalDueField;
 
+	Employee e1 = new Employee("111111", "Jane", "Green", "111111", "123");
+	Employee e2 = new Employee("222222", "Max", "Brown", "222222", "123");
+	Employee e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
+	Employee e4 = new Employee("444444", "Dweight", "Howard", "444444", "123");
+	Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
+	Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// set up the columns in the table
 		itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
 		quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
 		amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
-
+		
 		// set custom ListView cell factory
-		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
-			@Override
-			public ListCell<Product> call(ListView<Product> listView) {
-				return new ImageTextCell();
-			}
-		});
-
+				purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
+					@Override
+					public ListCell<Product> call(ListView<Product> listView) {
+						return new ImageTextCell();
+					}
+				});
+				
+						
 		// load database
 		try {
 			Update.runSqlScript("schema");
@@ -194,6 +205,13 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
 		updateTotalFields();
+		
+		FilteredList<Product> filteredList = new FilteredList<>(purchaseListView.getItems(), list -> true);
+		purchaseListView.getItems().setAll(filteredList);
+		InventoryViewController.inventorySearch(filteredList, searchBar);
+
+		pmtMethodField.setValue("Cash");
+
 	}
 
 	/**
@@ -209,9 +227,6 @@ public class ComputerRepairStoreController implements Initializable {
 		InvView.setScene(inventory);
 		InvView.showAndWait();
 	}
-	
-	@FXML
-	void searchBtnPressed(ActionEvent event) {}
 
 	/**
 	 * This method gets the value from the choice box and sets it.
@@ -357,6 +372,44 @@ public class ComputerRepairStoreController implements Initializable {
 
 		// Need to refresh the purchaseListView quantities
 		purchaseListView.setItems(Update.getProducts());
+	}
+	
+	public static void readCurrentUser() {
+	// read currentUser.xml file
+		try (BufferedReader input = Files.newBufferedReader(Paths.get("currentUser.xml"))) {
+			// unmarshal the file's contents
+			Employees employees = JAXB.unmarshal(input, Employees.class);
+
+			System.out.printf("Thank you for your purchase!%n%n");
+		
+			for (Employee employee : employees.getEmployees()) {
+				String line = input.readLine();
+				//String user = " ";
+				if (line.equals(employee.toString())) {
+					//user = employee.getFirstName() + " " + employee.getLastName();
+					System.out.printf("You were helped by %s %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+				} else if (line.equals(employee.toString())) {
+					//user = employee.getFirstName() + " " + employee.getLastName();
+					System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+				} else if (line.equals(employee.toString())) {
+					//user = employee.getFirstName() + " " + employee.getLastName();
+					System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+				} else if (line.equals(employee.toString())) {
+					//user = employee.getFirstName() + " " + employee.getLastName();
+					System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+				} else if (line.equals(employee.toString())) {
+					//user = employee.getFirstName() + " " + employee.getLastName();
+					System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+				} else if (line.equals(employee.toString())) {
+					//user = employee.getFirstName() + " " + employee.getLastName();
+					System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+				}
+
+				System.out.printf("You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
+		}
+	} catch (IOException ioException) {
+		System.err.println("Error opening file.");
+		}
 	}
 
 	/**
