@@ -32,7 +32,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import org.apache.ibatis.jdbc.Null;
 
 import static Controllers.Main.stage;
 
@@ -367,19 +366,18 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
 		Date date = new Date();
-		Employee e1 = new Employee("111111", "Jane", "Green", "password");
 		System.out.println();
 		ObservableList<Product> purchase = tableView.getItems();
 
 		try {
 			File file = new File("invoice.txt");
-			FileWriter fw = new FileWriter(file, true);
-			if(!file.exists()) {
-				file.createNewFile()	;
+			FileWriter fw = new FileWriter(file, false);
+			if (!file.exists()) {
+				file.createNewFile();
 			}
 			PrintWriter pw = new PrintWriter(fw);
 
-			if (pmtChangeField.getText().isEmpty()){
+			if (pmtChangeField.getText().isEmpty()) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Invalid payment");
 				alert.setHeaderText("Please Press Pay Button!");
@@ -387,7 +385,7 @@ public class ComputerRepairStoreController implements Initializable {
 			} else {
 				pw.println();
 				pw.println("**************************************************************************");
-				pw.println("				      CRS						           				   ");
+				pw.println("				              CRS 			           				   ");
 				pw.println("		             Computer Repair Store				         	     ");
 				pw.println("**************************************************************************");
 				pw.println();
@@ -397,16 +395,19 @@ public class ComputerRepairStoreController implements Initializable {
 				pw.println();
 				pw.printf(
 						"SubTotal: $%.2f%nTax: $%.2f%nTotal Due: $%.2f%n%nPayment Method: %s%nPayment Amount: $%.2f%nChange: $%.2f%n",
-						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(), getChange());
+						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(),
+						getChange());
 				pw.println();
-				pw.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", e1.toString());
+				readCurrentUser();
+				pw.printf("Thank you for your purchase!");//"You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.toString());
 				pw.close();
 				pw.println();
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
+
 		}
+
 		System.out.println("Reciept saved to file");
 	}
 
@@ -423,6 +424,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	public void periodButtonPressed(ActionEvent event) {
+
 		if (event.getSource() == buttonPeriod) {
 			if (count < 1) {
 				pmtAmountField.setText(pmtAmountField.getText() + ".");
@@ -555,16 +557,22 @@ public class ComputerRepairStoreController implements Initializable {
 	public void setTotal(double total) {
 		this.total = total;
 	}
+
 	public void setTax(double tax) {
 		this.tax = tax;
 	}
+
 	public void setTotalDue(double totalDue) {
 		this.totalDue = totalDue;
 	}
+
 	public void setChange(double change) {
 		this.change = Math.abs(change);
 	}
-	public void setTotalPaymentAmount(double totalPaymentAmount) { this.totalPaymentAmount = totalPaymentAmount; }
+
+	public void setTotalPaymentAmount(double totalPaymentAmount) {
+		this.totalPaymentAmount = totalPaymentAmount;
+	}
 
 	// Getters
 	public double getTotal() {

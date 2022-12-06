@@ -1,112 +1,19 @@
 
 **************************************************************************
-				      CRS						           				   
+				              CRS 			           				   
 		             Computer Repair Store				         	     
 **************************************************************************
 
-Tue Nov 22 14:00:52 CST 2022
+Fri Dec 02 17:35:24 CST 2022
 
+ddr4 RAM		1		60.99
 
-SubTotal: $0.00
-Tax: $0.00
-Total Due: $0.00
+SubTotal: $60.99
+Tax: $3.05
+Total Due: $64.04
 
 Payment Method: Cash
-Payment Amount: $20
-Change: $20.00
+Payment Amount: $65.00
+Change: $0.96
 
-You were helped by Jane Green
-	Employee #111111.
-
-  Thank you for your purchase!
-
-
-**************************************************************************
-				      CRS						           				   
-		             Computer Repair Store				         	     
-**************************************************************************
-
-Tue Nov 22 14:02:13 CST 2022
-
-
-SubTotal: $0.00
-Tax: $0.00
-Total Due: $0.00
-
-Payment Method: Cash
-Payment Amount: $25
-Change: $25.23
-
-You were helped by Jane Green
-	Employee #111111.
-
-  Thank you for your purchase!
-
-
-**************************************************************************
-				      CRS						           				   
-		             Computer Repair Store				         	     
-**************************************************************************
-
-Tue Nov 22 14:12:57 CST 2022
-
-
-SubTotal: $0.00
-Tax: $0.00
-Total Due: $0.00
-
-Payment Method: Cash
-Payment Amount: $23.10
-Change: $23.10
-
-You were helped by Jane Green
-	Employee #111111.
-
-  Thank you for your purchase!
-
-
-**************************************************************************
-				      CRS						           				   
-		             Computer Repair Store				         	     
-**************************************************************************
-
-Sat Nov 26 11:15:43 CST 2022
-
-
-SubTotal: $0.00
-Tax: $0.00
-Total Due: $0.00
-
-Payment Method: Cash
-Payment Amount: $20.00
-Change: $20.00
-
-You were helped by Jane Green
-	Employee #111111.
-
-  Thank you for your purchase!
-
-
-**************************************************************************
-				      CRS						           				   
-		             Computer Repair Store				         	     
-**************************************************************************
-
-Sat Nov 26 11:36:07 CST 2022
-
-Charging Cord		3		27.96
-Coolermaster CPU AIO Cooler		2		101.98
-
-SubTotal: $129.94
-Tax: $6.50
-Total Due: $136.44
-
-Payment Method: null
-Payment Amount: $200.00
-Change: $63.56
-
-You were helped by Jane Green
-	Employee #111111.
-
-  Thank you for your purchase!
-
+Thank you for your purchase!

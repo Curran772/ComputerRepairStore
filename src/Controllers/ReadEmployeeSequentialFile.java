@@ -15,13 +15,13 @@ public class ReadEmployeeSequentialFile {
          Employees employees = JAXB.unmarshal(input, Employees.class);
          
          // display contents
-         System.out.printf("%-10s%-12s%-12s%n", "Employee ID",
-            "First Name", "Last Name");
+         System.out.printf("%-10s\t%-12s\t%-12s\t%-12s\t%-12s%n", "EmployeeID",
+            "First Name", "Last Name", "Username", "Password");
 
          for (Employee employee : employees.getEmployees()) {
-            System.out.printf("%-10d%-12s%-12s%10.2f%n",  
+            System.out.printf("%-10s%-15s%-15s%-15s%-15s%n" ,  
                employee.getEmployeeID(), employee.getFirstName(), 
-               employee.getLastName());
+               employee.getLastName(), employee.getUsername(), employee.getPassword());
          }
       } 
       catch (IOException ioException) {

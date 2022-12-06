@@ -20,14 +20,14 @@ public class SequentialFile {
 			// stores the employee before XML serialization
 			Employees employees = new Employees();
 
-			System.out.printf("%s%n%s%n? ", "Enter employee ID number, first name and last name.",
+			System.out.printf("%s%n%s%n?", "Enter employee ID number, first name, last name, username and password.",
 					"Enter end-of-file indicator to end input.");
 
 			while (input.hasNext()) {
 				// loop until end-of-file indicator
 				try {
 					// create new record
-					Employee record = new Employee(input.next(), input.next(), input.next(), input.next());
+					Employee record = new Employee(input.next(), input.next(), input.next(), input.next(), input.nextLine());
 
 					// add to EmployeeList
 					employees.getEmployees().add(record);
@@ -45,7 +45,8 @@ public class SequentialFile {
 
 			// write AccountList's XML to output
 			JAXB.marshal(employees, output);
-		} catch (IOException ioException) {
+		} 
+		catch (IOException ioException) {
 			System.err.println("Error opening file. Terminating.");
 		}
 
