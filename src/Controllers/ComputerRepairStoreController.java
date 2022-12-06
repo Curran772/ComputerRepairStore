@@ -1,25 +1,19 @@
 package Controllers;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Formatter;
 import java.util.ResourceBundle;
 
-import javax.xml.bind.JAXB;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
