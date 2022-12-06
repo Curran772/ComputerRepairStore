@@ -151,13 +151,6 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private TextField totalDueField;
 
-	Employee e1 = new Employee("111111", "Jane", "Green", "111111", "123");
-	Employee e2 = new Employee("222222", "Max", "Brown", "222222", "123");
-	Employee e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
-	Employee e4 = new Employee("444444", "Dweight", "Howard", "444444", "123");
-	Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
-	Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// set up the columns in the table
@@ -166,14 +159,13 @@ public class ComputerRepairStoreController implements Initializable {
 		amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
 		
 		// set custom ListView cell factory
-				purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
-					@Override
-					public ListCell<Product> call(ListView<Product> listView) {
-						return new ImageTextCell();
-					}
-				});
-				
-						
+		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
+			@Override
+			public ListCell<Product> call(ListView<Product> listView) {
+				return new ImageTextCell();
+			}
+		});
+
 		// load database
 		try {
 			Update.runSqlScript("schema");
@@ -205,10 +197,24 @@ public class ComputerRepairStoreController implements Initializable {
 		pmtMethodField.setOnAction(this::choiceBoxField);
 
 		updateTotalFields();
-		
+
 		FilteredList<Product> filteredList = new FilteredList<>(purchaseListView.getItems(), list -> true);
-		purchaseListView.getItems().setAll(filteredList);
-		InventoryViewController.inventorySearch(filteredList, searchBar);
+		purchaseListView.setItems(filteredList);
+		searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+			filteredList.setPredicate(list -> {
+				if (newValue == null || newValue.isEmpty()) {
+					return true;
+				}
+				String lowerCaseSearch = newValue.toLowerCase();
+
+				if (list.getItem().toLowerCase().contains(lowerCaseSearch)) {
+					return true; // Filter matches item
+
+				}else {
+					return false; // does not match
+				}
+			});
+		});
 
 		pmtMethodField.setValue("Cash");
 
@@ -373,44 +379,6 @@ public class ComputerRepairStoreController implements Initializable {
 		// Need to refresh the purchaseListView quantities
 		purchaseListView.setItems(Update.getProducts());
 	}
-	
-	public static void readCurrentUser() {
-	// read currentUser.xml file
-		try (BufferedReader input = Files.newBufferedReader(Paths.get("currentUser.xml"))) {
-			// unmarshal the file's contents
-			Employees employees = JAXB.unmarshal(input, Employees.class);
-
-			System.out.printf("Thank you for your purchase!%n%n");
-		
-			for (Employee employee : employees.getEmployees()) {
-				String line = input.readLine();
-				//String user = " ";
-				if (line.equals(employee.toString())) {
-					//user = employee.getFirstName() + " " + employee.getLastName();
-					System.out.printf("You were helped by %s %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-				} else if (line.equals(employee.toString())) {
-					//user = employee.getFirstName() + " " + employee.getLastName();
-					System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-				} else if (line.equals(employee.toString())) {
-					//user = employee.getFirstName() + " " + employee.getLastName();
-					System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-				} else if (line.equals(employee.toString())) {
-					//user = employee.getFirstName() + " " + employee.getLastName();
-					System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-				} else if (line.equals(employee.toString())) {
-					//user = employee.getFirstName() + " " + employee.getLastName();
-					System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-				} else if (line.equals(employee.toString())) {
-					//user = employee.getFirstName() + " " + employee.getLastName();
-					System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-				}
-
-				System.out.printf("You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-		}
-	} catch (IOException ioException) {
-		System.err.println("Error opening file.");
-		}
-	}
 
 	/**
 	 * This method prints a receipt view of purchase totals to the console. Does not
@@ -451,7 +419,6 @@ public class ComputerRepairStoreController implements Initializable {
 						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(),
 						getChange());
 				pw.println();
-				readCurrentUser();
 				pw.printf("Thank you for your purchase!");//"You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.toString());
 				pw.close();
 				pw.println();
