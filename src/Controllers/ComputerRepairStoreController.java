@@ -313,6 +313,14 @@ public class ComputerRepairStoreController implements Initializable {
 					(tableView.getSelectionModel().getSelectedItem().getAmount()
 							/ tableView.getSelectionModel().getSelectedItem().getQuantity());
 
+			for (int i = 0; i < purchaseListView.getItems().size(); i++) {
+				if (purchaseListView.getItems().get(i).getItem().equals(tableView
+						.getSelectionModel().getSelectedItem().getItem())) {
+					purchaseListView.getItems().get(i).setQuantity(
+							purchaseListView.getItems().get(i).getQuantity() + 1);
+				}
+			}
+
 			// Using Formatter here to prevent repeating digits bug in Table View
 			Formatter fmt = new Formatter();
 			fmt.format("%.2f", amt);
@@ -327,18 +335,7 @@ public class ComputerRepairStoreController implements Initializable {
 				inventoryList.set(tableIndex, prod);
 			}
 
-			int idx = 0;
-			for (int i = 0; i < purchaseListView.getItems().size(); i++) {
-				if (purchaseListView.getItems().get(i).getItem().equals(tableView
-						.getSelectionModel().getSelectedItem().getItem()));
-				idx = i;
-			}
-
 			tableView.setItems(inventoryList);
-			tableView.refresh();
-
-			System.out.println(purchaseListView.getItems().get(idx));
-
 
 			updateTotalFields();
 
