@@ -65,27 +65,13 @@ public class InventoryViewController {
 	@FXML
 	private TextField inventoryCostTextField;
 
-		
-		  Product p1 = new Product("Hard Drive", 56.99, 1, "Resources/pictures/ssd.jpg"); 
-		  Product p2 = new Product("Charging Cord", 6.99, 2, "Resources/pictures/usbCAdapter.jpg"); 
-		  Product p3 = new Product("Flash Drive", 15.99, 2,"Resources/pictures/thumbDrives.jpg"); 
-		  Product p4 = new Product("Power Cord", 23.99, 1, "Resources/pictures/usbCadapter.jpg"); 
-		  Product p5 = new Product("USB RJ45", 25.99, 1, "Resources/pictures/usbRJ45.jpg" ); 
-		  Product p6 = new Product("VGA Adapter", 7.59, 1, "Resources/pictures/vgaAdapter.jpg"); 
-		  Product p7 = new Product("RGB Keyboard", 103.99, 1, "Resources/pictures/rgbKeyBoard.jpg"); 
-		  Product p8 = new Product("Mini Display Adapter", 8.99, 1, "Resources/pictures/miniDisplayAdapter.jpg"); 
-		  Product p9 = new Product("I9 Intel", 423.99, 1, "Resources/pictures/i9Intel.jpg"); 
-		  Product p10 = new Product("ddr4 RAM", 60.99, 1, "Resources/pictures/ddr4RAM.jpg"); 
-		  Product p11 = new Product("ddr3 RAM", 16.99, 1, "Resources/pictures/ddr3RAM.jpg"); 
-		  Product p12 = new Product("MSI Coreliquid CPU AIO Cooler", 59.99, 1, "Resources/pictures/cpuCooler2.jpg");
-		  Product p13 = new Product("Coolermaster CPU AIO Cooler", 50.99, 1, "Resources/pictures/cpuCooler1.jpg");
-		 
+	
 	 
 	public void initialize() throws SQLException {
 		searchInventoryListView.setItems(Update.getProducts()); // bind purchaseListView to products 
 		ObservableList<Product> productList = FXCollections.observableArrayList();	
 		  
-		productList.addAll(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13);
+		productList.setAll(searchInventoryListView.getItems());
 				
 				
 		// when ListView selection changes, show product ImageView
