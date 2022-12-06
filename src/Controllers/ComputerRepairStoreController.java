@@ -5,8 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,8 +15,6 @@ import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.xml.bind.JAXB;
 
@@ -333,12 +330,50 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void removeItemButtonPressed() {
-		inventoryList.removeAll(tableView.getSelectionModel().getSelectedItems());
-		tableView.getSelectionModel().clearSelection();
-		tableView.setItems(inventoryList);
-		tableView.refresh();
+		try {
+			Product prod = new Product(tableView.getSelectionModel().getSelectedItem().getItem(),
+					tableView.getSelectionModel().getSelectedItem().getAmount(),
+					tableView.getSelectionModel().getSelectedItem().getQuantity());
 
-		updateTotalFields();
+			int tableIndex = tableView.getSelectionModel().getSelectedIndex();
+			int qty = tableView.getSelectionModel().getSelectedItem().getQuantity() - 1;
+
+			double amt = tableView.getSelectionModel().getSelectedItem().getAmount() -
+					(tableView.getSelectionModel().getSelectedItem().getAmount()
+							/ tableView.getSelectionModel().getSelectedItem().getQuantity());
+
+			for (int i = 0; i < purchaseListView.getItems().size(); i++) {
+				if (purchaseListView.getItems().get(i).getItem().equals(tableView
+						.getSelectionModel().getSelectedItem().getItem())) {
+					purchaseListView.getItems().get(i).setQuantity(
+							purchaseListView.getItems().get(i).getQuantity() + 1);
+				}
+			}
+
+			// Using Formatter here to prevent repeating digits bug in Table View
+			Formatter fmt = new Formatter();
+			fmt.format("%.2f", amt);
+
+			if (prod.getQuantity() == 1) {
+				inventoryList.remove(tableView.getSelectionModel().getSelectedItem());
+			}
+
+			if (prod.getQuantity() > 1) {
+				prod.setQuantity(qty);
+				prod.setAmount(Double.parseDouble(fmt.toString()));
+				inventoryList.set(tableIndex, prod);
+			}
+
+			tableView.setItems(inventoryList);
+
+			updateTotalFields();
+
+		} catch (NullPointerException e) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("No item to delete selected!");
+			alert.setHeaderText("Please select item!");
+			alert.showAndWait();
+		}
 	}
 
 	/**
