@@ -244,7 +244,7 @@ ObservableList<Product> purchaseSearch = FXCollections.observableArrayList();
 				}
 			});
 		});
-		
+		pmtMethodField.setValue("Cash");
 
 	}
 
@@ -271,7 +271,7 @@ ObservableList<Product> purchaseSearch = FXCollections.observableArrayList();
 	 */
 	@FXML
 	public void choiceBoxField(ActionEvent event) {
-		pmtMethodField.setValue("Cash");
+		
 		String pmtChoice = pmtMethodField.getValue();
 		pmtMethodField.setAccessibleText(pmtChoice);
 		

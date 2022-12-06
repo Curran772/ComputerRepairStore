@@ -64,10 +64,8 @@ public class InventoryViewController {
 
 	@FXML
 	private TextField inventoryCostTextField;
-	
-	private int quantity = 0;
-	private double amount = 0;
-			
+
+		
 		  Product p1 = new Product("Hard Drive", 56.99, 1, "Resources/pictures/ssd.jpg"); 
 		  Product p2 = new Product("Charging Cord", 6.99, 2, "Resources/pictures/usbCAdapter.jpg"); 
 		  Product p3 = new Product("Flash Drive", 15.99, 2,"Resources/pictures/thumbDrives.jpg"); 
@@ -83,10 +81,13 @@ public class InventoryViewController {
 		  Product p13 = new Product("Coolermaster CPU AIO Cooler", 50.99, 1, "Resources/pictures/cpuCooler1.jpg");
 		 
 	 
-	
 	public void initialize() throws SQLException {
 		searchInventoryListView.setItems(Update.getProducts()); // bind purchaseListView to products 
-		
+		ObservableList<Product> productList = FXCollections.observableArrayList();	
+		  
+		productList.addAll(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13);
+				
+				
 		// when ListView selection changes, show product ImageView
 		searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(
 				new ChangeListener<Product>() {
@@ -94,15 +95,12 @@ public class InventoryViewController {
 					public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
 						inventoryPic.setImage(new Image(newValue.getThumbImage()));
 						productNameTextField.setText(newValue.getItem());
-						quantityTextField.setText(String.valueOf(quantity));
-						inventoryCostTextField.setText(String.valueOf(amount));
+						quantityTextField.setText(String.valueOf(newValue.getQuantity()));
+						inventoryCostTextField.setText(String.valueOf(newValue.getAmount()));
+										
 					}
 				});
 		 
-				
-		ObservableList<Product> productList = FXCollections.observableArrayList();	
-				  				  
-		productList.addAll(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13);
 				
 		//Wrap the ObservableLists in a FilteredList (initially display all data)
 		FilteredList<Product> filteredList = new FilteredList<>(productList, item -> true);
@@ -127,10 +125,7 @@ public class InventoryViewController {
 			
 			});
 		});
-		
-		
-		
-				
+						
 }
 	
 	public InventoryViewController() throws SQLException{}	
