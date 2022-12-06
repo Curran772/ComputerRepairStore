@@ -20,7 +20,7 @@ public class Update extends DBMethods {
 
             while (rs.next()) {
                 products.add(new Product(rs.getString("item_name"),
-                        rs.getDouble("item_amount"), 1, rs.getString("item_image")));
+                        rs.getDouble("item_amount"), rs.getInt("item_qty"), rs.getString("item_image")));
             }
 
             return products;

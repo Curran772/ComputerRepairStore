@@ -1,5 +1,4 @@
 package Controllers;
-import java.util.function.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -65,14 +64,13 @@ public class InventoryViewController {
 	@FXML
 	private TextField inventoryCostTextField;
 
-	
+
 	 
 	public void initialize() throws SQLException {
-		searchInventoryListView.setItems(Update.getProducts()); // bind purchaseListView to products 
+		searchInventoryListView.setItems(Update.getProducts()); // bind purchaseListView to products
 		ObservableList<Product> productList = FXCollections.observableArrayList();	
 		  
 		productList.setAll(searchInventoryListView.getItems());
-				
 				
 		// when ListView selection changes, show product ImageView
 		searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(

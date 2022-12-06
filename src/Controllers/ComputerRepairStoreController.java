@@ -170,14 +170,13 @@ public class ComputerRepairStoreController implements Initializable {
 		amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
 		
 		// set custom ListView cell factory
-				purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
-					@Override
-					public ListCell<Product> call(ListView<Product> listView) {
-						return new ImageTextCell();
-					}
-				});
-				
-						
+		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
+			@Override
+			public ListCell<Product> call(ListView<Product> listView) {
+				return new ImageTextCell();
+			}
+		});
+
 		// load database
 		try {
 			Update.runSqlScript("schema");
@@ -210,7 +209,7 @@ public class ComputerRepairStoreController implements Initializable {
 
 		updateTotalFields();
 
-	
+
 		FilteredList<Product> filteredList = new FilteredList<>(purchaseListView.getItems(), list -> true);
 		purchaseListView.setItems(filteredList);
 		searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -219,11 +218,11 @@ public class ComputerRepairStoreController implements Initializable {
 					return true;
 				}
 				String lowerCaseSearch = newValue.toLowerCase();
-				
-				if (list.getItem().toLowerCase().indexOf(lowerCaseSearch) != -1 ) {
+
+				if (list.getItem().toLowerCase().contains(lowerCaseSearch)) {
 					return true; // Filter matches item
-				
-				}else { 
+
+				}else {
 					return false; // does not match
 				}
 			});
@@ -252,10 +251,8 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	public void choiceBoxField(ActionEvent event) {
-		
 		String pmtChoice = pmtMethodField.getValue();
 		pmtMethodField.setAccessibleText(pmtChoice);
-		
 	}
 
 	/**
@@ -269,38 +266,58 @@ public class ComputerRepairStoreController implements Initializable {
 	}
 
 	/**
-	 * This method makes it so when the user clicks an item in the list, the item is
-	 * added to the users checkout list
+	 * This method makes it so when the user clicks an item in the list,
+	 * the item is added to the users checkout list
 	 */
 	@FXML
 	void addItemToList(MouseEvent event) {
 		// Create the temporary object to be added to the list
 		Product prod = new Product(purchaseListView.getSelectionModel().getSelectedItem().getItem(),
 				purchaseListView.getSelectionModel().getSelectedItem().getAmount(),
-				purchaseListView.getSelectionModel().getSelectedItem().getQuantity());
+				1);
 
-		// If list is empty check
-		if (inventoryList.size() == 0) {
-			inventoryList.add(prod);
+		if (purchaseListView.getSelectionModel().getSelectedItem().getQuantity() >= 1) {
+
+			// If list is empty check
+			if (inventoryList.size() == 0) {
+				inventoryList.add(prod);
+			} else {
+				/*
+				 * Here you NEED two separate for loops, if you try to combine them...
+				 * You get a duplication bug where the table duplicates the rows being added
+				 */
+				for (int i = 0; i < inventoryList.size(); i++) {
+					if (tableView.getItems().get(i).getItem().equals(prod.getItem())) {
+						int qty = tableView.getItems().get(i).getQuantity();
+						double amt = inventoryList.get(i).getAmount() + purchaseListView.getSelectionModel()
+								.getSelectedItem().getAmount();
+
+						// Using Formatter here to prevent repeating digits bug in Table View
+						Formatter fmt = new Formatter();
+						fmt.format("%.2f", amt);
+
+						prod.setQuantity(qty + 1);
+						prod.setAmount(Double.parseDouble(fmt.toString()));
+						inventoryList.set(i, prod);
+					}
+				}
+				for (int i = 0; i < inventoryList.size(); i++) {
+					if (!inventoryList.contains(prod)) {
+						inventoryList.add(prod);
+					}
+				}
+			}
+
+			// Decreases the total value by 1 each time an item is added to the list.
+			purchaseListView.getSelectionModel().getSelectedItem().setQuantity(
+					purchaseListView.getSelectionModel().getSelectedItem().getQuantity() - 1);
+
 		} else {
-			/**
-			 * Here you NEED two separate for loops, if you try to combine them... You get a
-			 * duplication bug where the table duplicates the rows being added
-			 */
-			for (int i = 0; i < inventoryList.size(); i++) {
-				if (tableView.getItems().get(i).getItem().equals(prod.getItem())) {
-					int qty = tableView.getItems().get(i).getQuantity();
-					prod.setQuantity(qty + 1);
-					double amt = inventoryList.get(i).getAmount();
-					prod.setAmount(amt + purchaseListView.getSelectionModel().getSelectedItem().getAmount());
-					inventoryList.set(i, prod);
-				}
-			}
-			for (int i = 0; i < inventoryList.size(); i++) {
-				if (!inventoryList.contains(prod)) {
-					inventoryList.add(prod);
-				}
-			}
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("No stock left!");
+			alert.setHeaderText("No stock left!" +
+					"\nPlease select a different item...");
+			alert.showAndWait();
 		}
 
 		// Set the table equal to the inventory list
@@ -333,7 +350,7 @@ public class ComputerRepairStoreController implements Initializable {
 		updateTotalFields();
 		inventoryList.clear();
 	}
-	
+
 public static void readCurrentUser() {
 	// read currentUser.xml file
 	try (BufferedReader input = Files.newBufferedReader(Paths.get("currentUser.xml"))) {
@@ -367,7 +384,6 @@ public static void readCurrentUser() {
 			
 			System.out.printf("You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
 		}
-		
 		
 		
 		 

@@ -4,30 +4,17 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 import javax.xml.bind.JAXB;
 
-import DBStructure.DBMethods;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 public class LogInScreenController {
 
@@ -43,14 +30,6 @@ public class LogInScreenController {
 	@FXML
 	private Label wrongLogIn;
 
-	/*
-	 * private ObservableList<Employee> employeeList =
-	 * FXCollections.observableArrayList(); public void
-	 * setEmployeeList(ObservableList<Employee> employees) { this.employeeList =
-	 * employees; } public ObservableList<Employee> getEmployeeList() { return
-	 * this.employeeList; }
-	 */
-
 	Employee e1 = new Employee("111111", "Jane", "Green", "111111", "123");
 	Employee e2 = new Employee("222222", "Max", "Brown", "222222", "123");
 	Employee e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
@@ -58,9 +37,7 @@ public class LogInScreenController {
 	Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
 	Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
 
-	public void initialize() {
-
-	}
+	public void initialize() {}
 
 	public void userLogIn(ActionEvent event) throws IOException {
 		checkLogin();
