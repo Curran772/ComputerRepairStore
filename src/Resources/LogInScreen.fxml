@@ -35,7 +35,7 @@
                   <Font size="26.0" />
                </font>
             </Label>
-            <TextField fx:id="usernameTextField" layoutX="202.0" layoutY="237.0" promptText="Username">
+            <TextField fx:id="usernameTextField" layoutX="202.0" layoutY="237.0" onKeyPressed="#handleEnterPressed" promptText="Username">
                <font>
                   <Font size="14.0" />
                </font>

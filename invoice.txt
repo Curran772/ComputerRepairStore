@@ -4,17 +4,17 @@
 		             Computer Repair Store				         	     
 **************************************************************************
 
-Wed Dec 07 23:21:08 CST 2022
+Thu Dec 08 11:12:57 CST 2022
 
-Charging Cord                           1         6.99      
+Charging Cord                           2         13.98     
 
 
-SubTotal: $6.99
-Tax: $0.35
-Total Due: $7.34
+SubTotal: $13.98
+Tax: $0.70
+Total Due: $14.68
 
 Payment Method: Cash
-Payment Amount: $8.00
-Change: $0.66
+Payment Amount: $20.00
+Change: $5.32
 
 Thank you for your purchase!
