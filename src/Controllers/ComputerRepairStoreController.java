@@ -206,7 +206,6 @@ public class ComputerRepairStoreController implements Initializable {
 
 		updateTotalFields();
 
-
 		FilteredList<Product> filteredList = new FilteredList<>(purchaseListView.getItems(), list -> true);
 		purchaseListView.setItems(filteredList);
 		searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -386,46 +385,7 @@ public class ComputerRepairStoreController implements Initializable {
 		inventoryList.clear();
 	}
 
-public static void readCurrentUser() {
-	// read currentUser.xml file
-	try (BufferedReader input = Files.newBufferedReader(Paths.get("currentUser.xml"))) {
-		// unmarshal the file's contents
-		Employees employees = JAXB.unmarshal(input, Employees.class);
 
-		System.out.printf("Thank you for your purchase!%n%n");
-		
-		for (Employee employee : employees.getEmployees()) {
-			String line = input.readLine();
-			//String user = " ";
-			if (line.equals(employee.toString())) {
-				//user = employee.getFirstName() + " " + employee.getLastName();
-				System.out.printf("You were helped by %s %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-			} else if (line.equals(employee.toString())) {
-				//user = employee.getFirstName() + " " + employee.getLastName();
-				System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-			} else if (line.equals(employee.toString())) {
-				//user = employee.getFirstName() + " " + employee.getLastName();
-				System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-			} else if (line.equals(employee.toString())) {
-				//user = employee.getFirstName() + " " + employee.getLastName();
-				System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-			} else if (line.equals(employee.toString())) {
-				//user = employee.getFirstName() + " " + employee.getLastName();
-				System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-			} else if (line.equals(employee.toString())) {
-				//user = employee.getFirstName() + " " + employee.getLastName();
-				System.out.printf("You were helped by %s.%n%n  Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-			}
-			
-			System.out.printf("You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.getFirstName(), employee.getLastName());
-		}
-		
-		
-		 
-	} catch (IOException ioException) {
-		System.err.println("Error opening file.");
-	}
-	}
 
 	/**
 	 * This method prints a receipt view of purchase totals to the console. Does not
@@ -466,7 +426,6 @@ public static void readCurrentUser() {
 						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(),
 						getChange());
 				pw.println();
-				readCurrentUser();
 				pw.printf("Thank you for your purchase!");//"You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.toString());
 				pw.close();
 				pw.println();

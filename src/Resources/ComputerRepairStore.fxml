@@ -3,243 +3,283 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ComputerRepairStoreController">
-   <children>
-      <Pane layoutY="551.0" prefHeight="250.0" prefWidth="525.0">
+<BorderPane prefHeight="800.0" prefWidth="1450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ComputerRepairStoreController">
+   <bottom>
+      <GridPane prefHeight="200.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="261.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="261.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="265.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="265.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <TextField editable="false" focusTraversable="false" layoutX="14.0" layoutY="25.0" prefHeight="50.0" prefWidth="230.0" text="Sub Total">
+            <Button fx:id="clearPurchaseButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clearPurchaseButtonPressed" text="Clear Purchase" GridPane.columnIndex="5">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
                <font>
-                  <Font size="20.0" />
+                  <Font size="18.0" />
+               </font></Button>
+            <Button fx:id="checkInventoryButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#switchToInventoryView" text="Check Inventory" GridPane.columnIndex="5" GridPane.rowIndex="1">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <Button fx:id="removeItemButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#removeItemButtonPressed" text="Remove Item" GridPane.columnIndex="4">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <Button fx:id="payButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#payButtonPressed" text="Pay" GridPane.columnIndex="4" GridPane.rowIndex="1">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Sub Total">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Tax (5%)" GridPane.rowIndex="1">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Total Due" GridPane.rowIndex="2">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Payment Method" GridPane.columnIndex="2">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Payment Amount" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Change" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <Button fx:id="printReceiptButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#printReceiptButtonPressed" text="Print Receipt" GridPane.columnIndex="4" GridPane.rowIndex="2">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <Button fx:id="exitButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#exitButtonPressed" text="Exit" GridPane.columnIndex="5" GridPane.rowIndex="2">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <TextField fx:id="subTotalField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#totalBoxes" GridPane.columnIndex="1">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="18.0" />
                </font>
             </TextField>
-            <TextField editable="false" focusTraversable="false" layoutX="14.0" layoutY="100.0" prefHeight="50.0" prefWidth="230.0" text="Tax (5%)">
+            <TextField fx:id="taxField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#totalBoxes" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
                <font>
-                  <Font size="20.0" />
+                  <Font size="18.0" />
                </font>
             </TextField>
-            <TextField editable="false" focusTraversable="false" layoutX="14.0" layoutY="172.0" prefHeight="50.0" prefWidth="230.0" text="Total Due">
+            <TextField fx:id="totalDueField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#totalBoxes" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
                <font>
-                  <Font size="20.0" />
+                  <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="subTotalField" editable="false" focusTraversable="false" layoutX="270.0" layoutY="27.0" onAction="#totalBoxes" prefHeight="50.0" prefWidth="230.0">
+            <TextField fx:id="pmtAmountField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
                <font>
-                  <Font size="20.0" />
+                  <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="taxField" editable="false" focusTraversable="false" layoutX="270.0" layoutY="102.0" onAction="#totalBoxes" prefHeight="50.0" prefWidth="230.0">
+            <TextField fx:id="pmtChangeField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#payButtonPressed" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
                <font>
-                  <Font size="20.0" />
+                  <Font size="18.0" />
                </font>
             </TextField>
-            <TextField fx:id="totalDueField" editable="false" focusTraversable="false" layoutX="270.0" layoutY="174.0" onAction="#totalBoxes" prefHeight="50.0" prefWidth="230.0">
+            <ChoiceBox fx:id="pmtMethodField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </ChoiceBox>
+         </children>
+      </GridPane>
+   </bottom>
+   <center>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="button7" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#numberButtonPressed" text="7">
                <font>
-                  <Font size="20.0" />
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="button8" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#numberButtonPressed" text="8" GridPane.columnIndex="1">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="button9" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#numberButtonPressed" text="9" GridPane.columnIndex="2">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="button4" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#numberButtonPressed" text="4" GridPane.rowIndex="1">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="button5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#numberButtonPressed" text="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="button6" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#numberButtonPressed" text="6" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="button1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#numberButtonPressed" text="1" GridPane.rowIndex="2">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="button0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#numberButtonPressed" text="0" GridPane.rowIndex="3">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="button2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#numberButtonPressed" text="2" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="button3" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#numberButtonPressed" text="3" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="buttonPeriod" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#periodButtonPressed" text="." GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="buttonClear" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonClearPressed" text="C" GridPane.columnIndex="2" GridPane.rowIndex="3">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+         </children>
+      </GridPane>
+   </center>
+   <right>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="searchBar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" promptText="Enter Item Name">
+               <font>
+                  <Font size="18.0" />
                </font>
             </TextField>
-         </children></Pane>
-      <TableView fx:id="tableView" layoutX="-1.0" layoutY="5.0" prefHeight="550.0" prefWidth="525.0">
+            <ListView fx:id="purchaseListView" prefHeight="563.0" prefWidth="530.0" />
+         </children></VBox>
+   </right>
+   <left>
+      <TableView fx:id="tableView" prefWidth="530.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="itemColumn" prefWidth="185.33331298828125" text="Item" />
-          <TableColumn fx:id="quantityColumn" onEditCommit="#changeQuantityColumnEvent" prefWidth="102.6666259765625" text="Quantity" />
-          <TableColumn fx:id="amountColumn" prefWidth="112.0" text="Amount" />
+          <TableColumn fx:id="itemColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="252.33331298828125" text="Item" />
+          <TableColumn fx:id="quantityColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" onEditCommit="#changeQuantityColumnEvent" prefWidth="98.66668701171875" text="Quantity" />
+            <TableColumn fx:id="amountColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="180.66668701171875" text="Cost" />
         </columns>
       </TableView>
-      <Pane layoutX="525.0" layoutY="551.0" prefHeight="250.0" prefWidth="400.0">
-         <children>
-            <TextField editable="false" focusTraversable="false" layoutX="14.0" layoutY="28.0" prefHeight="50.0" prefWidth="200.0" text="Payment Method">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </TextField>
-            <TextField editable="false" focusTraversable="false" layoutX="14.0" layoutY="101.0" prefHeight="50.0" prefWidth="200.0" text="Payment Amount">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </TextField>
-            <TextField editable="false" focusTraversable="false" layoutX="14.0" layoutY="173.0" prefHeight="50.0" prefWidth="200.0" text="Change">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="pmtAmountField" layoutX="227.0" layoutY="101.0" prefHeight="50.0" />
-            <TextField fx:id="pmtChangeField" editable="false" focusTraversable="false" layoutX="227.0" layoutY="173.0" onAction="#payButtonPressed" prefHeight="50.0" />
-            <ChoiceBox fx:id="pmtMethodField" layoutX="227.0" layoutY="28.0" prefHeight="50.0" prefWidth="150.0" />
-         </children>
-      </Pane>
-      <Pane layoutX="924.0" layoutY="77.0" prefHeight="478.0" prefWidth="525.0">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-         <children>
-            <ListView fx:id="purchaseListView" onMouseClicked="#addItemToList" prefHeight="478.0" prefWidth="517.0">
-               <padding>
-                  <Insets top="8.0" />
-               </padding>
-            </ListView>
-         </children>
-      </Pane>
-      <Pane layoutX="916.0" layoutY="551.0" prefHeight="250.0" prefWidth="525.0">
-         <children>
-            <Button fx:id="removeItemButton" layoutX="14.0" layoutY="27.0" mnemonicParsing="false" onAction="#removeItemButtonPressed" prefHeight="50.0" prefWidth="210.0" text="Remove Item">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="payButton" layoutX="14.0" layoutY="100.0" mnemonicParsing="false" onAction="#payButtonPressed" prefHeight="50.0" prefWidth="210.0" text="Pay">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="printReceiptButton" layoutX="14.0" layoutY="174.0" mnemonicParsing="false" onAction="#printReceiptButtonPressed" prefHeight="50.0" prefWidth="210.0" text="Print Receipt">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="clearPurchaseButton" layoutX="252.0" layoutY="27.0" mnemonicParsing="false" onAction="#clearPurchaseButtonPressed" prefHeight="50.0" prefWidth="210.0" text="Clear Purchase">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="checkInventoryButton" layoutX="252.0" layoutY="100.0" mnemonicParsing="false" onAction="#switchToInventoryView" prefHeight="50.0" prefWidth="210.0" text="Check Inventory">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Button fx:id="exitButton" layoutX="252.0" layoutY="174.0" mnemonicParsing="false" onAction="#exitButtonPressed" prefHeight="50.0" prefWidth="210.0" text="Exit">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-         </children>
-      </Pane>
-      <Pane layoutX="525.0" layoutY="14.0" prefHeight="550.0" prefWidth="400.0">
-         <children>
-            <Button fx:id="button7" layoutX="10.0" layoutY="11.0" mnemonicParsing="false" onAction="#numberButtonPressed" prefHeight="118.0" prefWidth="119.0" text="7">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-            <Button fx:id="button8" layoutX="143.0" layoutY="11.0" mnemonicParsing="false" onAction="#numberButtonPressed" prefHeight="118.0" prefWidth="119.0" text="8">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-            <Button fx:id="button9" layoutX="270.0" layoutY="11.0" mnemonicParsing="false" onAction="#numberButtonPressed" prefHeight="118.0" prefWidth="119.0" text="9">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-            <Button fx:id="button4" layoutX="14.0" layoutY="152.0" mnemonicParsing="false" onAction="#numberButtonPressed" prefHeight="118.0" prefWidth="119.0" text="4">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-            <Button fx:id="button5" layoutX="141.0" layoutY="152.0" mnemonicParsing="false" onAction="#numberButtonPressed" prefHeight="118.0" prefWidth="119.0" text="5">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-            <Button fx:id="button6" layoutX="270.0" layoutY="152.0" mnemonicParsing="false" onAction="#numberButtonPressed" prefHeight="118.0" prefWidth="119.0" text="6">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-            <Button fx:id="button1" layoutX="14.0" layoutY="281.0" mnemonicParsing="false" onAction="#numberButtonPressed" prefHeight="118.0" prefWidth="119.0" text="1">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-            <Button fx:id="button0" layoutX="14.0" layoutY="418.0" mnemonicParsing="false" onAction="#numberButtonPressed" prefHeight="118.0" prefWidth="119.0" text="0">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-            <Button fx:id="button2" layoutX="141.0" layoutY="280.0" mnemonicParsing="false" onAction="#numberButtonPressed" prefHeight="118.0" prefWidth="119.0" text="2">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-            <Button fx:id="button3" layoutX="270.0" layoutY="280.0" mnemonicParsing="false" onAction="#numberButtonPressed" prefHeight="118.0" prefWidth="119.0" text="3">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-            <Button fx:id="buttonPeriod" layoutX="141.0" layoutY="418.0" mnemonicParsing="false" onAction="#periodButtonPressed" prefHeight="118.0" prefWidth="119.0" text=".">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-            <Button fx:id="buttonClear" layoutX="270.0" layoutY="418.0" mnemonicParsing="false" onAction="#buttonClearPressed" prefHeight="118.0" prefWidth="119.0" text="C">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Button>
-         </children>
-      </Pane>
-      <Pane layoutX="924.0" layoutY="5.0" prefHeight="74.0" prefWidth="525.0">
-         <children>
-            <HBox layoutX="-2.0" layoutY="1.0" prefHeight="74.0" prefWidth="525.0">
-               <children>
-                  <TextField fx:id="searchBar" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="502.0" promptText="Enter Item Name To Search For">
-                     <HBox.margin>
-                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </padding>
-                  </TextField>
-               </children>
-            </HBox>
-         </children>
-      </Pane>
-   </children>
-</AnchorPane>
+   </left>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</BorderPane>
