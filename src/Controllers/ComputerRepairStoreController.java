@@ -151,14 +151,6 @@ public class ComputerRepairStoreController implements Initializable {
 	@FXML
 	private TextField totalDueField;
 
-	Employee e1 = new Employee("111111", "Jane", "Green", "111111", "123");
-	Employee e2 = new Employee("222222", "Max", "Brown", "222222", "123");
-	Employee e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
-	Employee e4 = new Employee("444444", "Dweight", "Howard", "444444", "123");
-	Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
-	Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
-	
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// set up the columns in the table
