@@ -267,7 +267,7 @@
                   <Font size="18.0" />
                </font>
             </TextField>
-            <ListView fx:id="purchaseListView" prefHeight="563.0" prefWidth="530.0" />
+            <ListView fx:id="purchaseListView" onMouseClicked="#addItemToList" prefHeight="563.0" prefWidth="530.0" />
          </children></VBox>
    </right>
    <left>

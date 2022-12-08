@@ -436,6 +436,9 @@ public class ComputerRepairStoreController implements Initializable {
 		}
 
 		System.out.println("Reciept saved to file");
+		tableView.getItems().clear();
+		pmtAmountField.clear();
+		pmtChangeField.clear();
 	}
 
 	/**
