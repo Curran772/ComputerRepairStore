@@ -1,5 +1,6 @@
 package Controllers;
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.sql.SQLException;
 
 import DBStructure.Update;
@@ -15,10 +16,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class InventoryViewController {
+
+	private ObservableList<Product> productList = FXCollections.observableArrayList();
 
 	@FXML
 	private Button returnButton;
@@ -49,10 +53,9 @@ public class InventoryViewController {
 	 
 	public void initialize() throws SQLException {
 		searchInventoryListView.setItems(Update.getProducts()); // bind purchaseListView to products
-		ObservableList<Product> productList = FXCollections.observableArrayList();	
-		  
+
 		productList.setAll(searchInventoryListView.getItems());
-				
+
 		// when ListView selection changes, show product ImageView
 		searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(
 				new ChangeListener<Product>() {
@@ -62,7 +65,7 @@ public class InventoryViewController {
 						productNameTextField.setText(newValue.getItem());
 						quantityTextField.setText(String.valueOf(newValue.getQuantity()));
 						inventoryCostTextField.setText(String.valueOf(newValue.getAmount()));
-										
+
 					}
 				});
 				
@@ -95,7 +98,18 @@ public class InventoryViewController {
 	}
 
 	@FXML
-	void updateInventoryPressed(ActionEvent event) {}
+	void updateInventoryPressed(ActionEvent event) throws SQLException {
+		String quantity = quantityTextField.getText();
+		String name = productNameTextField.getText();
+		int index = searchInventoryListView.getSelectionModel().getSelectedIndex();
+
+		productList.get(index).setQuantity(Integer.parseInt(quantity));
+		searchInventoryListView.getItems().get(index).setQuantity(Integer.parseInt(quantity));
+
+		Update.updateProductQty(name, quantity);
+
+		searchInventoryListView.refresh();
+	}
 
 	@FXML
 	void switchToComputerRepairStoreView(ActionEvent event) throws IOException {

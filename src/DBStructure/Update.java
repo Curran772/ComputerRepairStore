@@ -91,7 +91,7 @@ public class Update extends DBMethods {
         // Declare the UPDATE sql statement
         String updateStatement = "   UPDATE item_db.inventory\n" +
                 "       SET item_qty = '" + productQty + "'\n" +
-                "   WHERE item_name = " + productName + ";";
+                "   WHERE item_name = '" + productName + "';";
         try {
             dataExecuteUpdate(updateStatement);
         } catch (SQLException e) {
