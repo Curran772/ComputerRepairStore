@@ -30,39 +30,10 @@ public class Update extends DBMethods {
         }
     }
 
-    // Use ResultSet from DB as parameter and set Employee Object's attributes and
-    // return employee object.
-    private static Product getProdFromResultSet(ResultSet rs) throws SQLException {
-        Product prod;
-        if (rs.next()) {
-            prod = new Product(rs.getString("item_name"), rs.getDouble("item_amount"),
-                    rs.getInt("item_qty"), rs.getString("item_image"));
-            return prod;
-        } else {
-            return null;
-        }
-    }
-
-    // Search the products
-    public static Product searchProducts(String searchProducts) throws SQLException, ClassNotFoundException {
-        // Execute SELECT statement
-        try {
-            // ResultSet from dataExecuteQuery method
-            ResultSet rs = dataExecuteQuery("SELECT * FROM item_db.inventory" +
-                    "WHERE item_name=" + searchProducts);
-
-            return getProdFromResultSet(rs);
-
-        } catch (SQLException e) {
-            System.out.println("SQL select operation failed: " + e);
-            throw e;
-        }
-    }
-
     // Edit the name of an item
     public static void updateProductName(String nameOld, String nameNew) throws SQLException {
         String updateStatement = "  UPDATE item_db.inventory\n" + " SET item_name= '" +
-                nameNew + "'\n" + " WHERE item_name = " + nameOld + ";";
+                nameNew + "'\n" + " WHERE item_name = '" + nameOld + "';";
 
         try {
             dataExecuteUpdate(updateStatement);
@@ -77,7 +48,7 @@ public class Update extends DBMethods {
         // Declare the UPDATE sql statement
         String updateStatement = "   UPDATE item_db.inventory\n" +
                 "       SET item_amount = '" + productAmount + "'\n" +
-                "   WHERE item_name = " + productName + ";";
+                "   WHERE item_name = '" + productName + "';";
         try {
             dataExecuteUpdate(updateStatement);
         } catch (SQLException e) {

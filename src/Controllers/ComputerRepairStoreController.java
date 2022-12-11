@@ -375,6 +375,7 @@ public class ComputerRepairStoreController implements Initializable {
 		tableView.getItems().clear();
 		updateTotalFields();
 		inventoryList.clear();
+		purchaseListView.setItems(Update.getProducts());
 	}
 
 
@@ -426,7 +427,7 @@ public class ComputerRepairStoreController implements Initializable {
 			e.printStackTrace();
 		}
 
-		System.out.println("Reciept saved to file");
+		System.out.println("Receipt saved to file");
 		tableView.getItems().clear();
 		pmtAmountField.clear();
 		pmtChangeField.clear();
@@ -464,10 +465,8 @@ public class ComputerRepairStoreController implements Initializable {
 				throw new RuntimeException(e);
 			}
 		}
-
 		System.out.println(getUser());
 		Main.exitButtonPressed(stage);
-
 	}
 
 	public static ObservableList<Product> getXmlAsList(File file) {

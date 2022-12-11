@@ -50,9 +50,7 @@ public class InventoryViewController {
 	private Button updateInventory;
 
 	@FXML
-	private TextField inventoryCostTextField;
-
-
+	private TextField productCostTextField;
 	 
 	public void initialize() throws SQLException {
 		searchInventoryListView.setItems(Update.getProducts()); // bind purchaseListView to products
@@ -67,18 +65,17 @@ public class InventoryViewController {
 						inventoryPic.setImage(new Image(newValue.getThumbImage()));
 						productNameTextField.setText(newValue.getItem());
 						quantityTextField.setText(String.valueOf(newValue.getQuantity()));
-						inventoryCostTextField.setText(String.valueOf(newValue.getAmount()));
+						productCostTextField.setText(String.valueOf(newValue.getAmount()));
 
 					}
 				});
-		 
 				
 		//Wrap the ObservableLists in a FilteredList (initially display all data)
 		FilteredList<Product> filteredList = new FilteredList<>(productList, item -> true);
 		searchInventoryListView.setItems(filteredList);
 		
 		//Set the filter Predicate whenever the filter changes
-		inventorySearchBar.textProperty().addListener((obervable, oldValue, newValue) -> {
+		inventorySearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
 			filteredList.setPredicate(item -> {
 				//If filter text is empty, display all items.
 				if(newValue == null || newValue.isEmpty()) {
@@ -89,33 +86,35 @@ public class InventoryViewController {
 											
 				if (item.getItem().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
 					return true; // Filter matches item
-				
-				}else { 
+				} else {
 					return false; // does not match
 				}
-			
 			});
 		});
-						
-}
-	
-	public InventoryViewController() throws SQLException{}	
-	
-	public void searchList() {
-		
 	}
+	
+	public InventoryViewController() {}
 
 	@FXML
 	void updateInventoryPressed(ActionEvent event) throws SQLException {
 		String quantity = quantityTextField.getText();
-		String name = productNameTextField.getText();
+		String newName = productNameTextField.getText();
+		String cost = productCostTextField.getText();
+
 		int index = searchInventoryListView.getSelectionModel().getSelectedIndex();
+		String oldName = productList.get(index).getItem();
 
 		productList.get(index).setQuantity(Integer.parseInt(quantity));
+		productList.get(index).setAmount(Double.parseDouble(cost));
+		productList.get(index).setItem(newName);
+
+		Update.updateProductName(oldName, newName);
+		Update.updateProductQty(newName, quantity);
+		Update.updateProductAmount(newName, cost);
+
+		searchInventoryListView.getItems().get(index).setItem(newName);
 		searchInventoryListView.getItems().get(index).setQuantity(Integer.parseInt(quantity));
-
-		Update.updateProductQty(name, quantity);
-
+		searchInventoryListView.getItems().get(index).setAmount(Double.parseDouble(cost));
 		searchInventoryListView.refresh();
 	}
 
