@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Update extends DBMethods {
+
+
     /**
      * Method that returns an observable list of the items in the database table
      */
@@ -28,6 +30,23 @@ public class Update extends DBMethods {
             System.out.println("DB Connection failed at table population!");
             throw e;
         }
+    }
+
+    /**
+     * Get the quantity of the passed in item from the db table
+     */
+    public static int getQuantity(String item) throws SQLException {
+        int qty = 0;
+
+        ResultSet rs = Update.dataExecuteQuery("SELECT item_qty FROM item_db.inventory " +
+                "WHERE item_name = '" + item + "';");
+
+        // Loop through the result set to get the item quantity
+        while (rs.next()) {
+            qty = rs.getInt("item_qty");
+        }
+
+        return qty;
     }
 
     // Edit the name of an item

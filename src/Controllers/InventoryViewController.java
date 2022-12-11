@@ -97,25 +97,29 @@ public class InventoryViewController {
 
 	@FXML
 	void updateInventoryPressed(ActionEvent event) throws SQLException {
-		String quantity = quantityTextField.getText();
-		String newName = productNameTextField.getText();
-		String cost = productCostTextField.getText();
+		try {
+			String quantity = quantityTextField.getText();
+			String newName = productNameTextField.getText();
+			String cost = productCostTextField.getText();
 
-		int index = searchInventoryListView.getSelectionModel().getSelectedIndex();
-		String oldName = productList.get(index).getItem();
+			int index = searchInventoryListView.getSelectionModel().getSelectedIndex();
+			String oldName = productList.get(index).getItem();
 
-		productList.get(index).setQuantity(Integer.parseInt(quantity));
-		productList.get(index).setAmount(Double.parseDouble(cost));
-		productList.get(index).setItem(newName);
+			productList.get(index).setQuantity(Integer.parseInt(quantity));
+			productList.get(index).setAmount(Double.parseDouble(cost));
+			productList.get(index).setItem(newName);
 
-		Update.updateProductName(oldName, newName);
-		Update.updateProductQty(newName, quantity);
-		Update.updateProductAmount(newName, cost);
+			Update.updateProductName(oldName, newName);
+			Update.updateProductQty(newName, quantity);
+			Update.updateProductAmount(newName, cost);
 
-		searchInventoryListView.getItems().get(index).setItem(newName);
-		searchInventoryListView.getItems().get(index).setQuantity(Integer.parseInt(quantity));
-		searchInventoryListView.getItems().get(index).setAmount(Double.parseDouble(cost));
-		searchInventoryListView.refresh();
+			searchInventoryListView.getItems().get(index).setItem(newName);
+			searchInventoryListView.getItems().get(index).setQuantity(Integer.parseInt(quantity));
+			searchInventoryListView.getItems().get(index).setAmount(Double.parseDouble(cost));
+			searchInventoryListView.refresh();
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println("Didn't select an item before updating inventory!");
+		}
 	}
 
 	@FXML
@@ -123,7 +127,6 @@ public class InventoryViewController {
 		Stage MainView = new Stage();
 		MainView.initModality(Modality.APPLICATION_MODAL);
 		MainView.setTitle("Computer Repair Store");
-
 		Stage stage = (Stage) returnButton.getScene().getWindow();
 		stage.hide();
 	}

@@ -13,6 +13,8 @@ import java.text.NumberFormat;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -22,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
@@ -198,6 +201,7 @@ public class ComputerRepairStoreController implements Initializable {
 
 		updateTotalFields();
 
+		// Allows searching the list
 		FilteredList<Product> filteredList = new FilteredList<>(purchaseListView.getItems(), list -> true);
 		purchaseListView.setItems(filteredList);
 		searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -216,7 +220,6 @@ public class ComputerRepairStoreController implements Initializable {
 			});
 		});
 		pmtMethodField.setValue("Cash");
-
 	}
 
 	/**
@@ -233,7 +236,6 @@ public class ComputerRepairStoreController implements Initializable {
 		InvView.showAndWait();
 	}
 
-
 	/**
 	 * This method gets the value from the choice box and sets it.
 	 */
@@ -241,16 +243,6 @@ public class ComputerRepairStoreController implements Initializable {
 	public void choiceBoxField(ActionEvent event) {
 		String pmtChoice = pmtMethodField.getValue();
 		pmtMethodField.setAccessibleText(pmtChoice);
-	}
-
-	/**
-	 * This method allows user to double-click on the quantity column cell and edit
-	 * it to update the purchase table
-	 */
-	@FXML
-	public void changeQuantityColumnEvent(TableColumn.CellEditEvent<Product, Integer> editedCell) {
-		Product quantitySelected = tableView.getSelectionModel().getSelectedItem();
-		quantitySelected.setQuantity(editedCell.getNewValue());
 	}
 
 	/**
@@ -377,8 +369,6 @@ public class ComputerRepairStoreController implements Initializable {
 		inventoryList.clear();
 		purchaseListView.setItems(Update.getProducts());
 	}
-
-
 
 	/**
 	 * This method prints a receipt view of purchase totals to the console. Does not
@@ -509,7 +499,8 @@ public class ComputerRepairStoreController implements Initializable {
 	 * the pay button is pressed
 	 */
 	@FXML
-	private void payButtonPressed(ActionEvent event) {
+	private void payButtonPressed(ActionEvent event) throws SQLException {
+
 		try {
 			BigDecimal pmtAmount = new BigDecimal(String.valueOf(pmtAmountField.getText()));
 			setTotalPaymentAmount(pmtAmount.doubleValue());
@@ -524,6 +515,16 @@ public class ComputerRepairStoreController implements Initializable {
 				alert.showAndWait();
 			} else {
 				pmtChangeField.setText(currency.format(change));
+
+				for (Product p : tableView.getItems()) {
+					int idx = inventoryList.indexOf(p);
+					Update.updateProductQty(inventoryList.get(idx).getItem(), String.format(
+							"%d", Update.getQuantity(p.getItem()) - inventoryList.get(idx).getQuantity()));
+				}
+
+				inventoryList.clear();
+				tableView.setItems(inventoryList);
+				tableView.refresh();
 			}
 
 		} catch (IllegalArgumentException e) {
@@ -534,6 +535,7 @@ public class ComputerRepairStoreController implements Initializable {
 				alert.showAndWait();
 			}
 		}
+
 	}
 
 	/**
@@ -636,6 +638,7 @@ public class ComputerRepairStoreController implements Initializable {
 	}
 
 	public void setUser(String user) { this.user = user; }
+
 
 	// Getters
 	public double getTotal() {
