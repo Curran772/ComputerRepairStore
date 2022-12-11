@@ -1,4 +1,6 @@
-package Controllers;
+package Objects;
+
+import javax.xml.bind.annotation.XmlType;
 
 public class Product {
 
@@ -21,7 +23,11 @@ public class Product {
 		this.amount = amount;
 	}
 
-    // Product variable setters
+	public Product() {
+		this("", 0, 0);
+	}
+
+	// Product variable setters
 	public void setItem(String item) {
 		this.item = item;
 	}
@@ -36,7 +42,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return String.format("%-40.40s %-10d %-10.2f\n", getItem(), getQuantity(), getAmount());
+		return String.format("%-40s%-10d%-10.2f\n", getItem(), getQuantity(), getAmount());
 	}
 }
 	

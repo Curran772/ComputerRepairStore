@@ -4,16 +4,17 @@
 		             Computer Repair Store				         	     
 **************************************************************************
 
-Fri Dec 02 17:35:24 CST 2022
+Thu Dec 08 11:12:57 CST 2022
 
-ddr4 RAM		1		60.99
+Charging Cord                           2         13.98     
 
-SubTotal: $60.99
-Tax: $3.05
-Total Due: $64.04
+
+SubTotal: $13.98
+Tax: $0.70
+Total Due: $14.68
 
 Payment Method: Cash
-Payment Amount: $65.00
-Change: $0.96
+Payment Amount: $20.00
+Change: $5.32
 
 Thank you for your purchase!

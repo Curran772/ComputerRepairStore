@@ -4,7 +4,7 @@ INSERT INTO inventory (item_name, item_amount, item_qty, item_image) VALUES
 ("Hard Drive", 56.99, 1.0, "Resources/pictures/ssd.jpg"),
 ("Charging Cord", 6.99, 2.0, "Resources/pictures/usbCAdapter.jpg"),
 ("Flash Drive", 15.99, 2.0, "Resources/pictures/thumbDrives.jpg"),
-("Power Cord", 23.99, 1.0, "Resources/pictures/usbCadapter.jpg"),
+("Power Cord", 7.99, 1.0, "Resources/pictures/powerCord.jpg"),
 ("USB RJ45", 25.99, 1, "Resources/pictures/usbRJ45.jpg"),
 ("VGA Adapter", 7.59, 1, "Resources/pictures/vgaAdapter.jpg"),
 ("RGB Keyboard", 103.99, 1, "Resources/pictures/rgbKeyBoard.jpg"),

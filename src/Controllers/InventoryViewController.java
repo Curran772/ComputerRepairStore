@@ -4,6 +4,7 @@ import java.net.Inet4Address;
 import java.sql.SQLException;
 
 import DBStructure.Update;
+import Objects.Product;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -50,6 +51,8 @@ public class InventoryViewController {
 
 	@FXML
 	private TextField inventoryCostTextField;
+
+
 	 
 	public void initialize() throws SQLException {
 		searchInventoryListView.setItems(Update.getProducts()); // bind purchaseListView to products
@@ -68,33 +71,38 @@ public class InventoryViewController {
 
 					}
 				});
+		 
 				
 		//Wrap the ObservableLists in a FilteredList (initially display all data)
 		FilteredList<Product> filteredList = new FilteredList<>(productList, item -> true);
 		searchInventoryListView.setItems(filteredList);
 		
 		//Set the filter Predicate whenever the filter changes
-		inventorySearch(filteredList, inventorySearchBar);
-	}
-
-	// To search the inventory
-	public static void inventorySearch(FilteredList<Product> filteredList, TextField inventorySearchBar) {
-		inventorySearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+		inventorySearchBar.textProperty().addListener((obervable, oldValue, newValue) -> {
 			filteredList.setPredicate(item -> {
 				//If filter text is empty, display all items.
 				if(newValue == null || newValue.isEmpty()) {
 					return true;
 				}
-				//Compare item with all items
+				//Compare item with all items 
 				String lowerCaseFilter = newValue.toLowerCase();
-
-				if (item.getItem().toLowerCase().contains(lowerCaseFilter)) {
+											
+				if (item.getItem().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
 					return true; // Filter matches item
-				}else {
+				
+				}else { 
 					return false; // does not match
 				}
+			
 			});
 		});
+						
+}
+	
+	public InventoryViewController() throws SQLException{}	
+	
+	public void searchList() {
+		
 	}
 
 	@FXML

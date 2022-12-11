@@ -1,19 +1,15 @@
 package Controllers;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.Date;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.util.Formatter;
-import java.util.ResourceBundle;
-
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
@@ -25,15 +21,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import static Controllers.Main.stage;
+import Objects.*;
+import javafx.util.Callback;
+
+import javax.xml.bind.JAXB;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 public class ComputerRepairStoreController implements Initializable {
 
@@ -50,8 +51,13 @@ public class ComputerRepairStoreController implements Initializable {
 	private double change = 0;
 	private double totalPaymentAmount = 0;
 
+	private String user = "";
+
 	@FXML
 	private TextField searchBar;
+
+	@FXML
+	private Button searchBtn;
 
 	@FXML
 	private ListView<Product> purchaseListView;
@@ -209,7 +215,6 @@ public class ComputerRepairStoreController implements Initializable {
 				}
 			});
 		});
-
 		pmtMethodField.setValue("Cash");
 
 	}
@@ -228,6 +233,7 @@ public class ComputerRepairStoreController implements Initializable {
 		InvView.showAndWait();
 	}
 
+
 	/**
 	 * This method gets the value from the choice box and sets it.
 	 */
@@ -242,7 +248,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * it to update the purchase table
 	 */
 	@FXML
-	public void changeQuantityColumnEvent(CellEditEvent<Product, Integer> editedCell) {
+	public void changeQuantityColumnEvent(TableColumn.CellEditEvent<Product, Integer> editedCell) {
 		Product quantitySelected = tableView.getSelectionModel().getSelectedItem();
 		quantitySelected.setQuantity(editedCell.getNewValue());
 	}
@@ -369,10 +375,9 @@ public class ComputerRepairStoreController implements Initializable {
 		tableView.getItems().clear();
 		updateTotalFields();
 		inventoryList.clear();
-
-		// Need to refresh the purchaseListView quantities
-		purchaseListView.setItems(Update.getProducts());
 	}
+
+
 
 	/**
 	 * This method prints a receipt view of purchase totals to the console. Does not
@@ -419,10 +424,12 @@ public class ComputerRepairStoreController implements Initializable {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-
 		}
 
 		System.out.println("Reciept saved to file");
+		tableView.getItems().clear();
+		pmtAmountField.clear();
+		pmtChangeField.clear();
 	}
 
 	/**
@@ -430,7 +437,48 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void exitButtonPressed(ActionEvent event) {
+		Employee employee;
+
+		try (BufferedReader input = Files.newBufferedReader(Paths.get("currentUser.xml"))) {
+			employee = JAXB.unmarshal(input, Employee.class);
+
+			setUser(employee.getUsername());
+
+			System.out.println(getUser());
+
+		} catch (IOException e) {
+			System.out.println("Failed to open current user :(");
+		}
+
+		if (!tableView.getItems().isEmpty()) {
+			try(BufferedWriter output =
+						Files.newBufferedWriter(Paths.get("src/XmlFiles/table.xml"))) {
+				Products products = new Products();
+				products.setUser(user);
+				for (Product p : tableView.getItems()) {
+					products.addToList(p);
+				}
+
+				JAXB.marshal(products, output);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		System.out.println(getUser());
 		Main.exitButtonPressed(stage);
+
+	}
+
+	public static ObservableList<Product> getXmlAsList(File file) {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Products.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			Products products = (Products) jaxbUnmarshaller.unmarshal(file);
+			return FXCollections.observableArrayList(products.getProducts());
+		} catch (JAXBException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -588,18 +636,28 @@ public class ComputerRepairStoreController implements Initializable {
 		this.totalPaymentAmount = totalPaymentAmount;
 	}
 
+	public void setUser(String user) { this.user = user; }
+
 	// Getters
 	public double getTotal() {
 		return this.total;
 	}
+
 	public double getTax() {
 		return this.tax;
 	}
+
 	public double getTotalDue() {
 		return this.totalDue;
 	}
+
 	public double getChange() {
 		return this.change;
 	}
-	public double getTotalPaymentAmount() { return this.totalPaymentAmount; }
+
+	public double getTotalPaymentAmount() {
+		return this.totalPaymentAmount;
+	}
+
+	public String getUser() { return this.user; }
 }

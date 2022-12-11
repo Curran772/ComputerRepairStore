@@ -1,4 +1,4 @@
-package Controllers;
+package Objects;
 
 public class Employee {
 	

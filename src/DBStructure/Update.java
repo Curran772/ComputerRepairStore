@@ -1,6 +1,6 @@
 package DBStructure;
 
-import Controllers.Product;
+import Objects.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

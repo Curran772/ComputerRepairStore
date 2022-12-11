@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 
 import javax.xml.bind.JAXB;
 
+import Objects.Employee;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -43,72 +44,70 @@ public class LogInScreenController {
 		checkLogin();
 	}
 
-	protected void checkLogin() throws IOException {
+	protected void checkLogin() {
 		// check username and password for login and create xml file to hold the information of the current user
 		try (BufferedWriter output = Files.newBufferedWriter(Paths.get("currentUser.xml"))) {
-			
-		if (usernameTextField.getText().equals(e1.getUsername())
+			if (usernameTextField.getText().equals(e1.getUsername())
 				&& passwordTextField.getText().contains(e1.getPassword())) {
-			wrongLogIn.setText("Success!");
+				wrongLogIn.setText("Success!");
 
-			Main.setRoot("ComputerRepairStore");
-			Main.changeStageTitle("Computer Repair Store");
-			JAXB.marshal(e1.toString(), output);
-		
-		} else if (usernameTextField.getText().equals(e2.getUsername())
+				Main.setRoot("ComputerRepairStore", true);
+				Main.changeStageTitle("Computer Repair Store");
+				JAXB.marshal(e1.toString(), output);
+
+			} else if (usernameTextField.getText().equals(e2.getUsername())
 				&& passwordTextField.getText().contains(e2.getPassword())) {
-			wrongLogIn.setText("Success!");
+				wrongLogIn.setText("Success!");
 
-			Main.setRoot("ComputerRepairStore");
-			Main.changeStageTitle("Computer Repair Store");
-			JAXB.marshal(e2.toString(), output);
+				Main.setRoot("ComputerRepairStore", true);
+				Main.changeStageTitle("Computer Repair Store");
+				JAXB.marshal(e2.toString(), output);
 
-		} else if (usernameTextField.getText().equals(e3.getUsername())
+			} else if (usernameTextField.getText().equals(e3.getUsername())
 				&& passwordTextField.getText().contains(e3.getPassword())) {
-			wrongLogIn.setText("Success!");
+				wrongLogIn.setText("Success!");
 
-			Main.setRoot("ComputerRepairStore");
-			Main.changeStageTitle("Computer Repair Store");
-			JAXB.marshal(e3.toString(), output);
+				Main.setRoot("ComputerRepairStore", true);
+				Main.changeStageTitle("Computer Repair Store");
+				JAXB.marshal(e3.toString(), output);
 
-		} else if (usernameTextField.getText().equals(e4.getUsername())
+			} else if (usernameTextField.getText().equals(e4.getUsername())
 				&& passwordTextField.getText().contains(e4.getPassword())) {
-			wrongLogIn.setText("Success!");
+				wrongLogIn.setText("Success!");
 
-			Main.setRoot("ComputerRepairStore");
-			Main.changeStageTitle("Computer Repair Store");
-			JAXB.marshal(e4.toString(), output);
+				Main.setRoot("ComputerRepairStore", true);
+				Main.changeStageTitle("Computer Repair Store");
+				JAXB.marshal(e4.toString(), output);
 
-		} else if (usernameTextField.getText().equals(e5.getUsername())
+			} else if (usernameTextField.getText().equals(e5.getUsername())
 				&& passwordTextField.getText().contains(e5.getPassword())) {
-			wrongLogIn.setText("Success!");
+				wrongLogIn.setText("Success!");
 
-			Main.setRoot("ComputerRepairStore");
-			Main.changeStageTitle("Computer Repair Store");
-			JAXB.marshal(e5.toString(), output);
+				Main.setRoot("ComputerRepairStore", true);
+				Main.changeStageTitle("Computer Repair Store");
+				JAXB.marshal(e5.toString(), output);
 
-		} else if (usernameTextField.getText().equals(e6.getUsername())
+			} else if (usernameTextField.getText().equals(e6.getUsername())
 				&& passwordTextField.getText().contains(e6.getPassword())) {
-			wrongLogIn.setText("Success!");
+				wrongLogIn.setText("Success!");
 
-			Main.setRoot("ComputerRepairStore");
-			Main.changeStageTitle("Computer Repair Store");
-			JAXB.marshal(e6.toString(), output);
+				Main.setRoot("ComputerRepairStore", true);
+				Main.changeStageTitle("Computer Repair Store");
+				JAXB.marshal(e6.toString(), output);
 
-		} else if (usernameTextField.getText().equals("") && passwordTextField.getText().contains("")) {
-			wrongLogIn.setText("Success!");
+			} else if (usernameTextField.getText().equals("") && passwordTextField.getText().contains("")) {
+				wrongLogIn.setText("Success!");
 
-			Main.setRoot("ComputerRepairStore");
-			Main.changeStageTitle("Computer Repair Store");
-			JAXB.marshal("Admin", output);
+				Main.setRoot("ComputerRepairStore", true);
+				Main.changeStageTitle("Computer Repair Store");
+				JAXB.marshal("Admin", output);
 
-		} else if (usernameTextField.getText().isEmpty() && passwordTextField.getText().isEmpty()) {
-			wrongLogIn.setText("Please enter your username and password.");
+			} else if (usernameTextField.getText().isEmpty() && passwordTextField.getText().isEmpty()) {
+				wrongLogIn.setText("Please enter your username and password.");
 
-		} else {
-			wrongLogIn.setText("Wrong username or password!");
-		}
-		
+			} else {
+				wrongLogIn.setText("Wrong username or password!");
+			}
 		} catch (IOException ioException) {
 			System.err.println("Error opening file. Terminating.");
 		}
