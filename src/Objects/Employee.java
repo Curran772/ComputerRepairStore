@@ -52,26 +52,16 @@ public class Employee {
 		}
 				
 	}
-	
-	
-	public String getfName() {
-		return fName;
-	}
 
-	public void setfName(String fName) {
-		this.fName = fName;
-	}
-
-	public String getlName() {
-		return lName;
-	}
-
-	public void setlName(String lName) {
-		this.lName = lName;
-	}
+	public void setFName(String fName) { this.fName = fName; }
+	public void setLName(String lName) { this.lName = lName; }
 
 	public void setPassword(String password) {
-		this.password = "123"; 
+		if (password.isEmpty()) {
+			System.out.println("Must enter employee password");
+		} else {
+			this.password = "123";
+		}
 	}
 	
 	public void setUsername(String username) {
@@ -79,10 +69,6 @@ public class Employee {
 	}
 		
 	public String toString() {
-		String s = String.format("%s %s%n", 
-				getFName(), getLName());		
-		return s;
+		return String.format("%s %s", getFName(), getLName());
 	}
 }
-	 
-	

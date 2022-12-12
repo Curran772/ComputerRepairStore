@@ -1,5 +1,4 @@
 package Controllers;
-import Objects.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,6 +8,8 @@ import java.nio.file.Paths;
 
 import javax.xml.bind.JAXB;
 
+import Objects.Employee;
+import Objects.Employees;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,57 +33,47 @@ public class LogInScreenController {
 	@FXML
 	private Label wrongLogIn;
 
-	Employee e1 = new Employee("111111", "Jane", "Green", "111111", "123");
-	Employee e2 = new Employee("222222", "Max", "Brown", "222222", "123");
-	Employee e3 = new Employee("333333", "Rob", "Schneider", "333333", "123");
-	Employee e4 = new Employee("444444", "Dweight", "Howard", "444444", "123");
-	Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
-	Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
-
 	public void initialize() {}
 
 	public void userLogIn(ActionEvent event) throws IOException {
 		checkLogin();
 	}
-		
 
 	protected void checkLogin() {
-		try(BufferedReader input = Files.newBufferedReader(Paths.get("employees.xml"))) {
-			
-			Employees employees = JAXB.unmarshal(input, Employees.class);
-						
 		// check username and password for login and create xml file to hold the information of the current user
-		
+		try (BufferedReader input = Files.newBufferedReader(Paths.get("employees.xml"))) {
+			Employees employees;
+			employees = JAXB.unmarshal(input, Employees.class);
 			try (BufferedWriter output = Files.newBufferedWriter(Paths.get("currentUser.xml"))) {
-			 for (Employee employee : employees.getEmployees()) {
-						
-			if (usernameTextField.getText().equals(employee.getUsername())
-				&& passwordTextField.getText().contains(employee.getPassword())) {
-				wrongLogIn.setText("Success!");
+				for (Employee e : employees.getEmployees()) {
+					if (usernameTextField.getText().equals(e.getUsername())
+					&& passwordTextField.getText().contains(e.getPassword())) {
+						wrongLogIn.setText("Success!");
 
-				Main.setRoot("ComputerRepairStore", true);
-				Main.changeStageTitle("Computer Repair Store");
-				JAXB.marshal(employee.toString(), output);
+						Main.setRoot("ComputerRepairStore", true);
+						Main.changeStageTitle("Computer Repair Store");
+						JAXB.marshal(e.toString(), output);
+						break;
+					} else if (usernameTextField.getText().equals("")
+							&& passwordTextField.getText().contains("")) {
+						wrongLogIn.setText("Success!");
 
-			} else if(usernameTextField.getText().isEmpty() && passwordTextField.getText().isEmpty()) {
-				wrongLogIn.setText("Please enter your username and password.");
-				
-				Main.setRoot("ComputerRepairStore", true);
-				Main.changeStageTitle("Computer Repair Store");
-				JAXB.marshal("Admin", output);
+						Main.setRoot("ComputerRepairStore", true);
+						Main.changeStageTitle("Computer Repair Store");
+						JAXB.marshal("Admin", output);
+						break;
+					} else {
+						wrongLogIn.setText("Wrong username or password!");
+					}
+				}
 
-			//} else {
-				//wrongLogIn.setText("Wrong username or password!");
+			} catch (IOException ioException) {
+				System.err.println("Error opening file. Terminating.");
 			}
-			}
-		} catch (IOException ioException) {
-			System.err.println("Error opening file. Terminating.");
-		}
+
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
-		
 	}
 
 	@FXML
@@ -92,4 +83,3 @@ public class LogInScreenController {
 		}
 	}
 }
-

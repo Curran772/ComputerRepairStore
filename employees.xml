@@ -2,6 +2,8 @@
 <employees>
     <employee>
         <employeeID>111111</employeeID>
+        <fName>Jane</fName>
+        <lName>Green</lName>
         <password> 123</password>
         <username>111111</username>
         <fName>Jane</fName>
@@ -9,6 +11,8 @@
     </employee>
     <employee>
         <employeeID>222222</employeeID>
+        <fName>Jane</fName>
+        <lName>Green</lName>
         <password> 123</password>
         <username>222222</username>
         <fName>Max</fName>
@@ -16,6 +20,8 @@
     </employee>
     <employee>
         <employeeID>333333</employeeID>
+        <fName>Jane</fName>
+        <lName>Green</lName>
         <password> 123</password>
         <username>333333</username>
         <fName>Rob</fName>
@@ -23,6 +29,8 @@
     </employee>
     <employee>
         <employeeID>444444</employeeID>
+        <fName>Jane</fName>
+        <lName>Green</lName>
         <password> 123</password>
         <username>444444</username>
         <fName>Dweight</fName>
@@ -30,6 +38,8 @@
     </employee>
     <employee>
         <employeeID>555555</employeeID>
+        <fName>Jane</fName>
+        <lName>Green</lName>
         <password> 123</password>
         <username>555555</username>
         <fName>Amy</fName>
@@ -37,9 +47,18 @@
     </employee>
     <employee>
         <employeeID>666666</employeeID>
+        <fName>Jane</fName>
+        <lName>Green</lName>
         <password> 123</password>
         <username>666666</username>
         <fName>Stacy</fName>
         <lName>Anderson</lName>
+    </employee>
+    <employee>
+        <employeeID></employeeID>
+        <fName>Admin</fName>
+        <lName></lName>
+        <password></password>
+        <username></username>
     </employee>
 </employees>

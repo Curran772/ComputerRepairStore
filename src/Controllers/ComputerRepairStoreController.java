@@ -1,6 +1,5 @@
 package Controllers;
 
-import java.sql.Array;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,6 +13,7 @@ import java.text.NumberFormat;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -32,8 +32,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import static Controllers.Main.stage;
-import javafx.util.Callback;
 import Objects.*;
+import javafx.util.Callback;
 
 import javax.xml.bind.JAXB;
 import javax.xml.bind.JAXBContext;
@@ -129,13 +129,13 @@ public class ComputerRepairStoreController implements Initializable {
 	private TableView<Product> tableView;
 
 	@FXML
-	private TableColumn<Product, String> itemColumn;
+	protected TableColumn<Product, String> itemColumn;
 
 	@FXML
-	private TableColumn<Product, Integer> quantityColumn;
+	protected TableColumn<Product, Integer> quantityColumn;
 
 	@FXML
-	private TableColumn<Product, Double> amountColumn;
+	protected TableColumn<Product, Double> amountColumn;
 
 	@FXML
 	private Button removeItemButton;
@@ -221,7 +221,6 @@ public class ComputerRepairStoreController implements Initializable {
 			});
 		});
 		pmtMethodField.setValue("Cash");
-		
 	}
 
 	/**
@@ -380,20 +379,19 @@ public class ComputerRepairStoreController implements Initializable {
 		purchaseListView.setItems(Update.getProducts());
 	}
 
-	public static String readCurrentUser() {
+	/**
+	 * Reads the current user xml file
+	 */
+	private static String readCurrentUser() {
 		String user = "";
-		
-		try(BufferedReader input = Files.newBufferedReader(Paths.get("currentUser.xml"))) {
-	         // unmarshal the file's contents
+
+		try (BufferedReader input = Files.newBufferedReader(Paths.get("currentUser.xml"))) {
 			user = JAXB.unmarshal(input, String.class);
-	      } 
-	      catch (IOException ioException) {
-	         System.err.println("Error opening file.");
-	      } 
+		} catch (IOException e) {
+			System.out.println(":(");
+		}
 		return user;
-	   }
-		     
-		  
+	}
 
 	/**
 	 * This method prints a receipt view of purchase totals to the console. Does not
@@ -419,7 +417,6 @@ public class ComputerRepairStoreController implements Initializable {
 				alert.setHeaderText("Please Press Pay Button!");
 				alert.showAndWait();
 			} else {
-				System.out.println();
 				pw.println();
 				pw.println("**************************************************************************");
 				pw.println("				              CRS 			           				   ");
@@ -435,14 +432,13 @@ public class ComputerRepairStoreController implements Initializable {
 						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(),
 						getChange());
 				pw.println();
-				//pw.printf("%s",ReadEmployeeSequentialFile());
+				pw.println(readCurrentUser());
 				pw.printf("Thank you for your purchase!");//"You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.toString());
 				pw.close();
 				pw.println();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-
 		}
 
 		System.out.println("Receipt saved to file");
@@ -473,9 +469,9 @@ public class ComputerRepairStoreController implements Initializable {
 			try(BufferedWriter output =
 						Files.newBufferedWriter(Paths.get("src/XmlFiles/table.xml"))) {
 				Products products = new Products();
-				// products.setUser(user);
+				products.setUser(user);
 				for (Product p : tableView.getItems()) {
-					// products.addToList(p);
+					products.addToList(p);
 				}
 
 				JAXB.marshal(products, output);
@@ -486,17 +482,6 @@ public class ComputerRepairStoreController implements Initializable {
 		System.out.println(getUser());
 		Main.exitButtonPressed(stage);
 	}
-
-//	public static ObservableList<Product> getXmlAsList(File file) {
-//		try {
-//			JAXBContext jaxbContext = JAXBContext.newInstance(Products.class);
-//			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-//			Products products = (Products) jaxbUnmarshaller.unmarshal(file);
-//			return FXCollections.observableArrayList(products.getProducts());
-//		} catch (JAXBException e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
 
 	/**
 	 * This method adds a period if the payment field does not contain a "."
@@ -563,6 +548,7 @@ public class ComputerRepairStoreController implements Initializable {
 				alert.showAndWait();
 			}
 		}
+
 	}
 
 	/**
@@ -665,6 +651,7 @@ public class ComputerRepairStoreController implements Initializable {
 	}
 
 	public void setUser(String user) { this.user = user; }
+
 
 	// Getters
 	public double getTotal() {
