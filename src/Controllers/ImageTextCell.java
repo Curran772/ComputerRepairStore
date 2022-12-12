@@ -40,7 +40,7 @@ public class ImageTextCell extends ListCell<Product> {
       else {
          // set ImageView's image
          imageView.setImage(new Image(item.getThumbImage()));
-         label.setText(item.getItem()+ "   $" + item.getAmount()); // configure Label's text
+         label.setText(item.getItem()+ "   $" + item.getAmount() + "  qty: " + item.getQuantity()); // configure Label's text
          setGraphic(vbox); // attach custom layout to ListView cell
       }
    }

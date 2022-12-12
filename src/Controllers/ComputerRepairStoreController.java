@@ -300,6 +300,14 @@ public class ComputerRepairStoreController implements Initializable {
 			alert.showAndWait();
 		}
 
+		// set custom ListView cell factory
+		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
+			@Override
+			public ListCell<Product> call(ListView<Product> listView) {
+				return new ImageTextCell();
+			}
+		});
+
 		// Set the table equal to the inventory list
 		tableView.setItems(inventoryList);
 		tableView.refresh();
