@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="800.0" prefWidth="1450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ComputerRepairStoreController">
+<BorderPane prefHeight="800.0" prefWidth="1450.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ComputerRepairStoreController">
    <bottom>
       <GridPane prefHeight="200.0" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -274,7 +274,7 @@
       <TableView fx:id="tableView" prefWidth="530.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="itemColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="252.33331298828125" text="Item" />
-          <TableColumn fx:id="quantityColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" onEditCommit="#changeQuantityColumnEvent" prefWidth="98.66668701171875" text="Quantity" />
+          <TableColumn fx:id="quantityColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="98.66668701171875" text="Quantity" />
             <TableColumn fx:id="amountColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="180.66668701171875" text="Cost" />
         </columns>
       </TableView>

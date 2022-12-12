@@ -1,10 +1,5 @@
 package Controllers;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.sql.Array;
 import java.io.*;
 import java.nio.file.Files;
@@ -37,8 +32,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import static Controllers.Main.stage;
-import Objects.*;
 import javafx.util.Callback;
+import Objects.*;
 
 import javax.xml.bind.JAXB;
 import javax.xml.bind.JAXBContext;
@@ -226,6 +221,7 @@ public class ComputerRepairStoreController implements Initializable {
 			});
 		});
 		pmtMethodField.setValue("Cash");
+		
 	}
 
 	/**
@@ -384,30 +380,20 @@ public class ComputerRepairStoreController implements Initializable {
 		purchaseListView.setItems(Update.getProducts());
 	}
 
-	public static void ReadEmployeeSequentialFile() {
-
-		      // try to open file for deserialization
-		      try(BufferedReader input =
-		         Files.newBufferedReader(Paths.get("currentUser.xml"))) {
-		         // unmarshal the file's contents
-		         Employees employees = JAXB.unmarshal(input, Employees.class);
-
-		         // display contents
-		         System.out.printf("%-20s%-20s%-20s%10s%10s%n", "EmployeeID",
-		            "First Name", "Last Name", "Username", "Password");
-
-		         for (Employee employee : employees.getEmployees()) {
-		           System.out.printf("%-20s%-20s%-20s%10s%10s%n",
-		               employee.getEmployeeID(), employee.getFName(), employee.getLName(), employee.getUsername(), employee.getPassword());
-
-		         }
-
-		      }
-		      catch (IOException ioException) {
-		         System.err.println("Error opening file.");
-		      }
-
-		   }
+	public static String readCurrentUser() {
+		String user = "";
+		
+		try(BufferedReader input = Files.newBufferedReader(Paths.get("currentUser.xml"))) {
+	         // unmarshal the file's contents
+			user = JAXB.unmarshal(input, String.class);
+	      } 
+	      catch (IOException ioException) {
+	         System.err.println("Error opening file.");
+	      } 
+		return user;
+	   }
+		     
+		  
 
 	/**
 	 * This method prints a receipt view of purchase totals to the console. Does not
@@ -415,9 +401,6 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	private void printReceiptButtonPressed(ActionEvent event) {
-
-		System.out.println();
-
 		Date date = new Date();
 		System.out.println();
 		ObservableList<Product> purchase = tableView.getItems();
@@ -452,6 +435,7 @@ public class ComputerRepairStoreController implements Initializable {
 						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(),
 						getChange());
 				pw.println();
+				//pw.printf("%s",ReadEmployeeSequentialFile());
 				pw.printf("Thank you for your purchase!");//"You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.toString());
 				pw.close();
 				pw.println();

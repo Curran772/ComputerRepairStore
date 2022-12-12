@@ -1,5 +1,7 @@
 package Controllers;
+import Objects.*;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,7 +9,6 @@ import java.nio.file.Paths;
 
 import javax.xml.bind.JAXB;
 
-import Objects.Employee;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -43,73 +44,43 @@ public class LogInScreenController {
 	public void userLogIn(ActionEvent event) throws IOException {
 		checkLogin();
 	}
+		
 
 	protected void checkLogin() {
+		try(BufferedReader input = Files.newBufferedReader(Paths.get("employees.xml"))) {
+			
+			Employees employees = JAXB.unmarshal(input, Employees.class);
+						
 		// check username and password for login and create xml file to hold the information of the current user
-		try (BufferedWriter output = Files.newBufferedWriter(Paths.get("currentUser.xml"))) {
-			if (usernameTextField.getText().equals(e1.getUsername())
-				&& passwordTextField.getText().contains(e1.getPassword())) {
+		
+			try (BufferedWriter output = Files.newBufferedWriter(Paths.get("currentUser.xml"))) {
+			 for (Employee employee : employees.getEmployees()) {
+						
+			if (usernameTextField.getText().equals(employee.getUsername())
+				&& passwordTextField.getText().contains(employee.getPassword())) {
 				wrongLogIn.setText("Success!");
 
 				Main.setRoot("ComputerRepairStore", true);
 				Main.changeStageTitle("Computer Repair Store");
-				JAXB.marshal(e1.toString(), output);
+				JAXB.marshal(employee.toString(), output);
 
-			} else if (usernameTextField.getText().equals(e2.getUsername())
-				&& passwordTextField.getText().contains(e2.getPassword())) {
-				wrongLogIn.setText("Success!");
-
-				Main.setRoot("ComputerRepairStore", true);
-				Main.changeStageTitle("Computer Repair Store");
-				JAXB.marshal(e2.toString(), output);
-
-			} else if (usernameTextField.getText().equals(e3.getUsername())
-				&& passwordTextField.getText().contains(e3.getPassword())) {
-				wrongLogIn.setText("Success!");
-
-				Main.setRoot("ComputerRepairStore", true);
-				Main.changeStageTitle("Computer Repair Store");
-				JAXB.marshal(e3.toString(), output);
-
-			} else if (usernameTextField.getText().equals(e4.getUsername())
-				&& passwordTextField.getText().contains(e4.getPassword())) {
-				wrongLogIn.setText("Success!");
-
-				Main.setRoot("ComputerRepairStore", true);
-				Main.changeStageTitle("Computer Repair Store");
-				JAXB.marshal(e4.toString(), output);
-
-			} else if (usernameTextField.getText().equals(e5.getUsername())
-				&& passwordTextField.getText().contains(e5.getPassword())) {
-				wrongLogIn.setText("Success!");
-
-				Main.setRoot("ComputerRepairStore", true);
-				Main.changeStageTitle("Computer Repair Store");
-				JAXB.marshal(e5.toString(), output);
-
-			} else if (usernameTextField.getText().equals(e6.getUsername())
-				&& passwordTextField.getText().contains(e6.getPassword())) {
-				wrongLogIn.setText("Success!");
-
-				Main.setRoot("ComputerRepairStore", true);
-				Main.changeStageTitle("Computer Repair Store");
-				JAXB.marshal(e6.toString(), output);
-
-			} else if (usernameTextField.getText().equals("") && passwordTextField.getText().contains("")) {
-				wrongLogIn.setText("Success!");
-
+			} else if(usernameTextField.getText().isEmpty() && passwordTextField.getText().isEmpty()) {
+				wrongLogIn.setText("Please enter your username and password.");
+				
 				Main.setRoot("ComputerRepairStore", true);
 				Main.changeStageTitle("Computer Repair Store");
 				JAXB.marshal("Admin", output);
 
-			} else if (usernameTextField.getText().isEmpty() && passwordTextField.getText().isEmpty()) {
-				wrongLogIn.setText("Please enter your username and password.");
-
-			} else {
-				wrongLogIn.setText("Wrong username or password!");
+			//} else {
+				//wrongLogIn.setText("Wrong username or password!");
+			}
 			}
 		} catch (IOException ioException) {
 			System.err.println("Error opening file. Terminating.");
+		}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
@@ -121,3 +92,4 @@ public class LogInScreenController {
 		}
 	}
 }
+

@@ -53,9 +53,25 @@ public class Employee {
 				
 	}
 	
-		
+	
+	public String getfName() {
+		return fName;
+	}
+
+	public void setfName(String fName) {
+		this.fName = fName;
+	}
+
+	public String getlName() {
+		return lName;
+	}
+
+	public void setlName(String lName) {
+		this.lName = lName;
+	}
+
 	public void setPassword(String password) {
-		this.password = "123"; //employeeID.substring(0,4).concat(fName.substring(0,1));
+		this.password = "123"; 
 	}
 	
 	public void setUsername(String username) {
@@ -63,8 +79,10 @@ public class Employee {
 	}
 		
 	public String toString() {
-		String s = String.format("%s %s%n\tEmployee #%s", 
-				getFName(), getLName(), getEmployeeID());		
+		String s = String.format("%s %s%n", 
+				getFName(), getLName());		
 		return s;
 	}
 }
+	 
+	

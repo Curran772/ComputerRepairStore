@@ -15,12 +15,11 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
+import Objects.*;
 import javax.swing.SortOrder;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
-import Objects.Product;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
