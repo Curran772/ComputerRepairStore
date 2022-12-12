@@ -37,7 +37,8 @@ public class LogInScreenController {
 	Employee e5 = new Employee("555555", "Amy", "Smith", "555555", "123");
 	Employee e6 = new Employee("666666", "Stacy", "Anderson", "666666", "123");
 
-	public void initialize() {}
+	public void initialize() {
+	}
 
 	public void userLogIn(ActionEvent event) throws IOException {
 		checkLogin();
@@ -54,6 +55,7 @@ public class LogInScreenController {
 			Main.setRoot("ComputerRepairStore");
 			Main.changeStageTitle("Computer Repair Store");
 			JAXB.marshal(e1.toString(), output);
+			
 		
 		} else if (usernameTextField.getText().equals(e2.getUsername())
 				&& passwordTextField.getText().contains(e2.getPassword())) {
@@ -112,6 +114,7 @@ public class LogInScreenController {
 		} catch (IOException ioException) {
 			System.err.println("Error opening file. Terminating.");
 		}
+		
 		
 	}
 

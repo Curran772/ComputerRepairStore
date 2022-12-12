@@ -26,11 +26,11 @@ public class Employee {
 		return employeeID;
 	}
 	
-	public String getFirstName() {
+	public String getFName() {
 		return fName;
 	}
 		
-	public String getLastName() {
+	public String getLName() {
 		return lName;
 	}
 	
@@ -53,6 +53,7 @@ public class Employee {
 				
 	}
 	
+		
 	public void setPassword(String password) {
 		this.password = "123"; //employeeID.substring(0,4).concat(fName.substring(0,1));
 	}
@@ -63,7 +64,7 @@ public class Employee {
 		
 	public String toString() {
 		String s = String.format("%s %s%n\tEmployee #%s", 
-				getFirstName(), getLastName(), getEmployeeID());		
+				getFName(), getLName(), getEmployeeID());		
 		return s;
 	}
 }

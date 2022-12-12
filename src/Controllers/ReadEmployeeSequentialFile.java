@@ -20,7 +20,7 @@ public class ReadEmployeeSequentialFile {
 
 	         for (Employee employee : employees.getEmployees()) {
 	            System.out.printf("%-20s%-20s%-20s%10s%10s%n",  
-	               employee.getEmployeeID(), employee.getFirstName(), employee.getLastName(), employee.getUsername(), employee.getPassword());
+	               employee.getEmployeeID(), employee.getFName(), employee.getLName(), employee.getUsername(), employee.getPassword());
 	         }
 	      } 
 	      catch (IOException ioException) {

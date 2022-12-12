@@ -1,20 +1,28 @@
 package Controllers;
+
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Formatter;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.swing.SortOrder;
+import javax.xml.bind.JAXB;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
@@ -26,6 +34,8 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -64,62 +74,72 @@ public class InventoryViewController {
 	@FXML
 	private TextField inventoryCostTextField;
 
+	private ObservableList<Product> productList = FXCollections.observableArrayList();
 
-	 
 	public void initialize() throws SQLException {
+
+		quantityTextField.setEditable(true);
+
 		searchInventoryListView.setItems(Update.getProducts()); // bind purchaseListView to products
-		ObservableList<Product> productList = FXCollections.observableArrayList();	
-		  
+
 		productList.setAll(searchInventoryListView.getItems());
-				
+
 		// when ListView selection changes, show product ImageView
-		searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(
-				new ChangeListener<Product>() {
-					@Override
-					public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
-						inventoryPic.setImage(new Image(newValue.getThumbImage()));
-						productNameTextField.setText(newValue.getItem());
-						quantityTextField.setText(String.valueOf(newValue.getQuantity()));
-						inventoryCostTextField.setText(String.valueOf(newValue.getAmount()));
-										
-					}
-				});
-		 
-				
-		//Wrap the ObservableLists in a FilteredList (initially display all data)
+		searchInventoryListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Product>() {
+			@Override
+			public void changed(ObservableValue<? extends Product> ov, Product oldValue, Product newValue) {
+				inventoryPic.setImage(new Image(newValue.getThumbImage()));
+				productNameTextField.setText(newValue.getItem());
+				quantityTextField.setText(String.valueOf(newValue.getQuantity()));
+				inventoryCostTextField.setText(String.valueOf(newValue.getAmount()));
+
+			}
+		});
+
+		// Wrap the ObservableLists in a FilteredList (initially display all data)
 		FilteredList<Product> filteredList = new FilteredList<>(productList, item -> true);
 		searchInventoryListView.setItems(filteredList);
-		
-		//Set the filter Predicate whenever the filter changes
+
+		// Set the filter Predicate whenever the filter changes
 		inventorySearchBar.textProperty().addListener((obervable, oldValue, newValue) -> {
 			filteredList.setPredicate(item -> {
-				//If filter text is empty, display all items.
-				if(newValue == null || newValue.isEmpty()) {
+				// If filter text is empty, display all items.
+				if (newValue == null || newValue.isEmpty()) {
 					return true;
 				}
-				//Compare item with all items 
+				// Compare item with all items
 				String lowerCaseFilter = newValue.toLowerCase();
-											
-				if (item.getItem().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
+
+				if (item.getItem().toLowerCase().indexOf(lowerCaseFilter) != -1) {
 					return true; // Filter matches item
-				
-				}else { 
+
+				} else {
 					return false; // does not match
 				}
-			
+
 			});
 		});
-						
-}
 	
-	public InventoryViewController() throws SQLException{}	
+	}
+
 	
-	public void searchList() {
-		
+
+	public InventoryViewController() throws SQLException {
 	}
 
 	@FXML
-	void updateInventoryPressed(ActionEvent event) {}
+    void updateInventoryPressed(ActionEvent event) throws SQLException {
+        String quantity = quantityTextField.getText();
+        String name = productNameTextField.getText();
+        int index = searchInventoryListView.getSelectionModel().getSelectedIndex();
+
+        productList.get(index).setQuantity(Integer.parseInt(quantity));
+        searchInventoryListView.getItems().get(index).setQuantity(Integer.parseInt(quantity));
+
+        Update.updateProductQty(name, quantity);
+
+        searchInventoryListView.refresh();
+    }
 
 	@FXML
 	void switchToComputerRepairStoreView(ActionEvent event) throws IOException {
@@ -129,5 +149,7 @@ public class InventoryViewController {
 
 		Stage stage = (Stage) returnButton.getScene().getWindow();
 		stage.hide();
+		
+		
 	}
 }
