@@ -59,9 +59,10 @@ public class Main extends Application {
 	}
 
 	// Change the root scene
-	public static void setRoot(String fxml) throws IOException {
+	public static void setRoot(String fxml, boolean resizeable) throws IOException {
 		scene.setRoot(loadFXML(fxml));
 		stage.sizeToScene();
+		stage.setResizable(resizeable);
 	}
 
 	// Change the window title

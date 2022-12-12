@@ -4,19 +4,17 @@
 		             Computer Repair Store				         	     
 **************************************************************************
 
-Sun Dec 11 21:36:58 CST 2022
+Thu Dec 08 11:12:57 CST 2022
 
-Charging Cable                          1         6.99      
-
-Coolermaster CPU AIO Cooler             2         101.98    
+Charging Cord                           2         13.98     
 
 
-SubTotal: $108.97
-Tax: $5.45
-Total Due: $114.42
+SubTotal: $13.98
+Tax: $0.70
+Total Due: $14.68
 
 Payment Method: Cash
-Payment Amount: $115.00
-Change: $0.58
+Payment Amount: $20.00
+Change: $5.32
 
 Thank you for your purchase!

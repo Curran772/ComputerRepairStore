@@ -1,4 +1,6 @@
-package Controllers;
+package Objects;
+
+import javax.xml.bind.annotation.XmlType;
 
 
 
@@ -34,7 +36,11 @@ public class Product {
 		this.amount = amount;
 	}
 
-    // Product variable setters
+	public Product() {
+		this("", 0, 0);
+	}
+
+	// Product variable setters
 	public void setItem(String item) {
 		this.item = item;
 	}
