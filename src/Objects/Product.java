@@ -1,9 +1,5 @@
 package Objects;
 
-import javax.xml.bind.annotation.XmlType;
-
-
-
 public class Product {
 
 	// Class variables
@@ -18,17 +14,6 @@ public class Product {
 		this.amount = amount;
 		this.thumbImage = thumbImage;
 	}
-
-	public void update(UpdateInventory ui) {
-		// Check if the product quantity and updateInventory quantity are equal
-		if (getQuantity() != ui.getQuantity()) {
-			setQuantity(ui.getQuantity());
-		}
-		// Check if the product amount and updateInventory amount are equal
-		if (getAmount() != ui.getAmount()) {
-			setAmount(ui.getAmount());
-		}
-		}
 		
 	public Product(String item, double amount, int quantity) {
 		this.item = item;

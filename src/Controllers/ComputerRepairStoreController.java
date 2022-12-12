@@ -489,9 +489,9 @@ public class ComputerRepairStoreController implements Initializable {
 			try(BufferedWriter output =
 						Files.newBufferedWriter(Paths.get("src/XmlFiles/table.xml"))) {
 				Products products = new Products();
-				products.setUser(user);
+				// products.setUser(user);
 				for (Product p : tableView.getItems()) {
-					products.addToList(p);
+					// products.addToList(p);
 				}
 
 				JAXB.marshal(products, output);
@@ -503,16 +503,16 @@ public class ComputerRepairStoreController implements Initializable {
 		Main.exitButtonPressed(stage);
 	}
 
-	public static ObservableList<Product> getXmlAsList(File file) {
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Products.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			Products products = (Products) jaxbUnmarshaller.unmarshal(file);
-			return FXCollections.observableArrayList(products.getProducts());
-		} catch (JAXBException e) {
-			throw new RuntimeException(e);
-		}
-	}
+//	public static ObservableList<Product> getXmlAsList(File file) {
+//		try {
+//			JAXBContext jaxbContext = JAXBContext.newInstance(Products.class);
+//			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+//			Products products = (Products) jaxbUnmarshaller.unmarshal(file);
+//			return FXCollections.observableArrayList(products.getProducts());
+//		} catch (JAXBException e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
 
 	/**
 	 * This method adds a period if the payment field does not contain a "."

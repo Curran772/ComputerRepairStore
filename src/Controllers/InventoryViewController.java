@@ -140,18 +140,6 @@ public class InventoryViewController {
 			System.out.println("Didn't select an item before updating inventory!");
 		}
 	}
-    void updateInventoryPressed(ActionEvent event) throws SQLException {
-        String quantity = quantityTextField.getText();
-        String name = productNameTextField.getText();
-        int index = searchInventoryListView.getSelectionModel().getSelectedIndex();
-
-        productList.get(index).setQuantity(Integer.parseInt(quantity));
-        searchInventoryListView.getItems().get(index).setQuantity(Integer.parseInt(quantity));
-
-        Update.updateProductQty(name, quantity);
-
-        searchInventoryListView.refresh();
-    }
 
 	@FXML
 	void switchToComputerRepairStoreView(ActionEvent event) throws IOException {
