@@ -13,6 +13,7 @@ import java.text.NumberFormat;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -379,6 +380,20 @@ public class ComputerRepairStoreController implements Initializable {
 	}
 
 	/**
+	 * Reads the current user xml file
+	 */
+	private static String readCurrentUser() {
+		String user = "";
+
+		try (BufferedReader input = Files.newBufferedReader(Paths.get("currentUser.xml"))) {
+			user = JAXB.unmarshal(input, String.class);
+		} catch (IOException e) {
+			System.out.println(":(");
+		}
+		return user;
+	}
+
+	/**
 	 * This method prints a receipt view of purchase totals to the console. Does not
 	 * show the products purchased.
 	 */
@@ -417,6 +432,7 @@ public class ComputerRepairStoreController implements Initializable {
 						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(),
 						getChange());
 				pw.println();
+				pw.println(readCurrentUser());
 				pw.printf("Thank you for your purchase!");//"You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.toString());
 				pw.close();
 				pw.println();
@@ -465,17 +481,6 @@ public class ComputerRepairStoreController implements Initializable {
 		}
 		System.out.println(getUser());
 		Main.exitButtonPressed(stage);
-	}
-
-	public static ObservableList<Product> getXmlAsList(File file) {
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Products.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			Products products = (Products) jaxbUnmarshaller.unmarshal(file);
-			return FXCollections.observableArrayList(products.getProducts());
-		} catch (JAXBException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	/**
