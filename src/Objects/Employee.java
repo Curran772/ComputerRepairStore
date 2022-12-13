@@ -26,11 +26,11 @@ public class Employee {
 		return employeeID;
 	}
 	
-	public String getFName() {
+	public String getfName() {
 		return fName;
 	}
 		
-	public String getLName() {
+	public String getlName() {
 		return lName;
 	}
 	
@@ -53,8 +53,8 @@ public class Employee {
 				
 	}
 
-	public void setFName(String fName) { this.fName = fName; }
-	public void setLName(String lName) { this.lName = lName; }
+	public void setfName(String fName) { this.fName = fName; }
+	public void setlName(String lName) { this.lName = lName; }
 
 	public void setPassword(String password) {
 		if (password.isEmpty()) {
@@ -69,6 +69,6 @@ public class Employee {
 	}
 		
 	public String toString() {
-		return String.format("%s %s", getFName(), getLName());
+		return String.format("%s %s", getfName(), getlName());
 	}
 }
