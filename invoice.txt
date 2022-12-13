@@ -4,16 +4,16 @@
 		             Computer Repair Store				         	     
 **************************************************************************
 
-Mon Dec 12 15:25:31 CST 2022
+Mon Dec 12 18:58:07 CST 2022
 
 
-SubTotal: $6.99
-Tax: $0.35
-Total Due: $7.34
+SubTotal: $149.94
+Tax: $7.50
+Total Due: $157.44
 
 Payment Method: Cash
-Payment Amount: $10.00
-Change: $2.66
+Payment Amount: $200.00
+Change: $42.56
 
 Admin
 Thank you for your purchase!

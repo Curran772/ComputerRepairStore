@@ -2,23 +2,8 @@
 <products>
     <user></user>
     <product>
-        <amount>13.98</amount>
+        <amount>41.94</amount>
         <item>Charging Cable</item>
-        <quantity>2</quantity>
-    </product>
-    <product>
-        <amount>356.93</amount>
-        <item>Coolermaster CPU AIO Cooler</item>
-        <quantity>7</quantity>
-    </product>
-    <product>
-        <amount>101.94</amount>
-        <item>ddr3 RAM</item>
         <quantity>6</quantity>
-    </product>
-    <product>
-        <amount>60.99</amount>
-        <item>ddr4 RAM</item>
-        <quantity>1</quantity>
     </product>
 </products>

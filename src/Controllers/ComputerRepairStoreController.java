@@ -13,9 +13,6 @@ import java.text.NumberFormat;
 
 import DBStructure.DBMethods;
 import DBStructure.Update;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -25,9 +22,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -36,9 +30,6 @@ import Objects.*;
 import javafx.util.Callback;
 
 import javax.xml.bind.JAXB;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 public class ComputerRepairStoreController implements Initializable {
 
@@ -46,7 +37,7 @@ public class ComputerRepairStoreController implements Initializable {
 
 	private ObservableList<Product> inventoryList = FXCollections.observableArrayList();
 
-	private BigDecimal taxPercentage = new BigDecimal(0.07);
+	private final BigDecimal taxPercentage = new BigDecimal("0.07");
 
 	private int count = 0;
 	private double total = 0;
@@ -61,16 +52,7 @@ public class ComputerRepairStoreController implements Initializable {
 	private TextField searchBar;
 
 	@FXML
-	private Button searchBtn;
-
-	@FXML
 	private ListView<Product> purchaseListView;
-
-	@FXML
-	private ImageView productImageView;
-
-	@FXML
-	private Button returnButton;
 
 	@FXML
 	private Button button0;
@@ -103,13 +85,7 @@ public class ComputerRepairStoreController implements Initializable {
 	private Button button9;
 
 	@FXML
-	private Button buttonClear;
-
-	@FXML
 	private Button buttonPeriod;
-
-	@FXML
-	private Button payButton;
 
 	@FXML
 	private TextField pmtAmountField;
@@ -121,9 +97,6 @@ public class ComputerRepairStoreController implements Initializable {
 	private ChoiceBox<String> pmtMethodField;
 
 	ObservableList<String> pmtType = FXCollections.observableArrayList("Cash", "Check", "Card");
-
-	@FXML
-	private Button printReceiptButton;
 
 	@FXML
 	private TableView<Product> tableView;
@@ -138,15 +111,6 @@ public class ComputerRepairStoreController implements Initializable {
 	protected TableColumn<Product, Double> amountColumn;
 
 	@FXML
-	private Button removeItemButton;
-
-	@FXML
-	private Button clearPurchaseButton;
-
-	@FXML
-	private Button checkInventoryButton;
-
-	@FXML
 	private TextField subTotalField;
 
 	@FXML
@@ -158,17 +122,12 @@ public class ComputerRepairStoreController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// set up the columns in the table
-		itemColumn.setCellValueFactory(new PropertyValueFactory<Product, String>("item"));
-		quantityColumn.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
-		amountColumn.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
+		itemColumn.setCellValueFactory(new PropertyValueFactory<>("item"));
+		quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+		amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
 		
 		// set custom ListView cell factory
-		purchaseListView.setCellFactory(new Callback<ListView<Product>, ListCell<Product>>() {
-			@Override
-			public ListCell<Product> call(ListView<Product> listView) {
-				return new ImageTextCell();
-			}
-		});
+		purchaseListView.setCellFactory(listView -> new ImageTextCell());
 
 		// load database
 		try {
@@ -212,12 +171,8 @@ public class ComputerRepairStoreController implements Initializable {
 				}
 				String lowerCaseSearch = newValue.toLowerCase();
 
-				if (list.getItem().toLowerCase().contains(lowerCaseSearch)) {
-					return true; // Filter matches item
-
-				}else {
-					return false; // does not match
-				}
+				// does not match
+				return list.getItem().toLowerCase().contains(lowerCaseSearch); // Filter matches item
 			});
 		});
 		pmtMethodField.setValue("Cash");
@@ -227,7 +182,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * This method allows us to switch to the InventoryView FXML file
 	 */
 	@FXML
-	public void switchToInventoryView(ActionEvent event) throws IOException {
+	public void switchToInventoryView() throws IOException {
 		Stage InvView = new Stage();
 		InvView.initModality(Modality.APPLICATION_MODAL);
 		InvView.setTitle("Inventory");
@@ -251,7 +206,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * the item is added to the users checkout list
 	 */
 	@FXML
-	void addItemToList(MouseEvent event) {
+	void addItemToList() {
 		// Create the temporary object to be added to the list
 		Product prod = new Product(purchaseListView.getSelectionModel().getSelectedItem().getItem(),
 				purchaseListView.getSelectionModel().getSelectedItem().getAmount(),
@@ -372,7 +327,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * Action event when the clear purchase button is pressed
 	 */
 	@FXML
-	private void clearPurchaseButtonPressed(ActionEvent event) throws SQLException {
+	private void clearPurchaseButtonPressed() throws SQLException {
 		tableView.getItems().clear();
 		updateTotalFields();
 		inventoryList.clear();
@@ -398,7 +353,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * show the products purchased.
 	 */
 	@FXML
-	private void printReceiptButtonPressed(ActionEvent event) {
+	private void printReceiptButtonPressed() {
 		Date date = new Date();
 		System.out.println();
 		ObservableList<Product> purchase = tableView.getItems();
@@ -451,7 +406,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * This method exits the program when exit button is pressed
 	 */
 	@FXML
-	private void exitButtonPressed(ActionEvent event) {
+	private void exitButtonPressed() {
 		Employee employee;
 
 		try (BufferedReader input = Files.newBufferedReader(Paths.get("currentUser.xml"))) {
@@ -501,7 +456,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * This method clears the payment and change fields
 	 */
 	@FXML
-	public void buttonClearPressed(ActionEvent event) {
+	public void buttonClearPressed() {
 		pmtAmountField.setText("");
 		pmtChangeField.setText("");
 		count = 0;
@@ -512,12 +467,12 @@ public class ComputerRepairStoreController implements Initializable {
 	 * the pay button is pressed
 	 */
 	@FXML
-	private void payButtonPressed(ActionEvent event) throws SQLException {
+	private void payButtonPressed() throws SQLException {
 
 		try {
 			BigDecimal pmtAmount = new BigDecimal(String.valueOf(pmtAmountField.getText()));
 			setTotalPaymentAmount(pmtAmount.doubleValue());
-			BigDecimal total = new BigDecimal(getTotalDue());
+			BigDecimal total = BigDecimal.valueOf(getTotalDue());
 			BigDecimal change = total.subtract(pmtAmount);
 			setChange(getTotalDue() - getTotalPaymentAmount());
 
@@ -548,7 +503,6 @@ public class ComputerRepairStoreController implements Initializable {
 				alert.showAndWait();
 			}
 		}
-
 	}
 
 	/**
@@ -556,7 +510,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * calculates the tax and adds it to the subtotal, then calculates the total due
 	 */
 	@FXML //
-	private void totalBoxes(ActionEvent event) {
+	private void totalBoxes() {
 		try {
 			BigDecimal itemCost = new BigDecimal(amountColumn.getText());
 			BigDecimal subtotal = itemCost.add(itemCost);
