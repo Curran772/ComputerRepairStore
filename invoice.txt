@@ -4,16 +4,19 @@
 		             Computer Repair Store				         	     
 **************************************************************************
 
-Mon Dec 12 18:58:07 CST 2022
+Tue Dec 13 11:49:05 CST 2022
+
+Coolermaster CPU AIO Cooler             2         101.98    
 
 
-SubTotal: $149.94
-Tax: $7.50
-Total Due: $157.44
+SubTotal: $101.98
+Tax: $5.10
+Total Due: $107.08
 
 Payment Method: Cash
-Payment Amount: $200.00
-Change: $42.56
+Payment Amount: $300.00
+Change: $192.92
 
-Admin
+You were helped by Admin.
+
 Thank you for your purchase!

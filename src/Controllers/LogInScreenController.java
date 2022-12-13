@@ -43,20 +43,19 @@ public class LogInScreenController {
 
 	public void initialize() {}
 
-	public void userLogIn(ActionEvent event) throws IOException {
-		checkLogin();
-	}
+	public void userLogIn() { checkLogin(); }
 
 	protected void checkLogin() {
 		// check username and password for login and create xml file to hold the information of the current user
 		try (BufferedReader input = Files.newBufferedReader(Paths.get("employees.xml"))) {
-			Employees employees;
-			employees = JAXB.unmarshal(input, Employees.class);
+			Employees employees = JAXB.unmarshal(input, Employees.class);
 			try (BufferedWriter output = Files.newBufferedWriter(Paths.get("currentUser.xml"))) {
 				for (Employee e : employees.getEmployees()) {
 					if (usernameTextField.getText().equals(e.getUsername())
 					&& passwordTextField.getText().contains(e.getPassword())) {
 						wrongLogIn.setText("Success!");
+
+						System.out.println(e.toString());
 
 						Main.setRoot("ComputerRepairStore", true);
 						Main.changeStageTitle("Computer Repair Store");
@@ -74,13 +73,11 @@ public class LogInScreenController {
 						wrongLogIn.setText("Wrong username or password!");
 					}
 				}
-
 			} catch (IOException ioException) {
 				System.err.println("Error opening file. Terminating.");
 			}
-
 		} catch (IOException e) {
-
+			System.out.println("Could not read old employee file!");
 		}
 	}
 

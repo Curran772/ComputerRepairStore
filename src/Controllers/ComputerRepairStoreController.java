@@ -57,8 +57,6 @@ public class ComputerRepairStoreController implements Initializable {
 	private double change = 0;
 	private double totalPaymentAmount = 0;
 
-	private String user = "";
-
 	@FXML
 	private TextField searchBar;
 
@@ -193,7 +191,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * This method allows us to switch to the InventoryView FXML file
 	 */
 	@FXML
-	public void switchToInventoryView(ActionEvent event) throws IOException {
+	public void switchToInventoryView() throws IOException {
 		if(readCurrentUser().contains("Jane") || readCurrentUser().contains("Rob")) {
 
 		Stage InvView = new Stage();
@@ -347,7 +345,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * Action event when the clear purchase button is pressed
 	 */
 	@FXML
-	private void clearPurchaseButtonPressed(ActionEvent event) throws SQLException {
+	private void clearPurchaseButtonPressed() throws SQLException {
 		tableView.getItems().clear();
 		updateTotalFields();
 		inventoryList.clear();
@@ -373,7 +371,7 @@ public class ComputerRepairStoreController implements Initializable {
 	 * show the products purchased.
 	 */
 	@FXML
-	private void printReceiptButtonPressed(ActionEvent event) {
+	private void printReceiptButtonPressed() {
 		Date date = new Date();
 		System.out.println();
 		ObservableList<Product> purchase = tableView.getItems();
@@ -598,9 +596,6 @@ public class ComputerRepairStoreController implements Initializable {
 		this.totalPaymentAmount = totalPaymentAmount;
 	}
 
-	public void setUser(String user) { this.user = user; }
-
-
 	// Getters
 	public double getTotal() {
 		return this.total;
@@ -621,6 +616,4 @@ public class ComputerRepairStoreController implements Initializable {
 	public double getTotalPaymentAmount() {
 		return this.totalPaymentAmount;
 	}
-
-	public String getUser() { return this.user; }
 }

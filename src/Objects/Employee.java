@@ -51,7 +51,6 @@ public class Employee {
 		}else {
 			this.employeeID = employeeID;
 		}
-				
 	}
 
 	public void setfName(String fName) { this.fName = fName; }
@@ -64,7 +63,6 @@ public class Employee {
 			this.password = "123";
 		}
 	}
-
 	
 	public void setUsername(String username) {
 			this.username = employeeID;
