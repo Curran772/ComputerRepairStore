@@ -27,7 +27,7 @@ public class Main extends Application {
 			stage.setTitle("System Log In"); // displayed in window's title bar
 			stage.setScene(scene); // attach scene to stage
 			stage.show(); // display the stage
-			stage.setResizable(false);
+			
 			stage.getIcons().add(new Image(Main.class.getResourceAsStream("/Resources/ComputerIcon.png")));
 			
 			stage.setOnCloseRequest(event -> {// alert box confirming exit will show before closing

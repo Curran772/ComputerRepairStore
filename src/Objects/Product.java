@@ -1,7 +1,5 @@
 package Objects;
 
-import javax.xml.bind.annotation.XmlType;
-
 public class Product {
 
 	// Class variables
@@ -16,7 +14,7 @@ public class Product {
 		this.amount = amount;
 		this.thumbImage = thumbImage;
 	}
-
+		
 	public Product(String item, double amount, int quantity) {
 		this.item = item;
 		this.quantity = quantity;

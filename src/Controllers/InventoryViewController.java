@@ -1,10 +1,25 @@
 package Controllers;
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.sql.SQLException;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import Objects.*;
+import javax.swing.SortOrder;
+
+import DBStructure.DBMethods;
 import DBStructure.Update;
-import Objects.Product;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -53,6 +68,9 @@ public class InventoryViewController {
 	private TextField productCostTextField;
 	 
 	public void initialize() throws SQLException {
+
+		quantityTextField.setEditable(true);
+
 		searchInventoryListView.setItems(Update.getProducts()); // bind purchaseListView to products
 
 		productList.setAll(searchInventoryListView.getItems());
@@ -73,18 +91,18 @@ public class InventoryViewController {
 		//Wrap the ObservableLists in a FilteredList (initially display all data)
 		FilteredList<Product> filteredList = new FilteredList<>(productList, item -> true);
 		searchInventoryListView.setItems(filteredList);
-		
-		//Set the filter Predicate whenever the filter changes
+
+		// Set the filter Predicate whenever the filter changes
 		inventorySearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
 			filteredList.setPredicate(item -> {
-				//If filter text is empty, display all items.
-				if(newValue == null || newValue.isEmpty()) {
+				// If filter text is empty, display all items.
+				if (newValue == null || newValue.isEmpty()) {
 					return true;
 				}
-				//Compare item with all items 
+				// Compare item with all items
 				String lowerCaseFilter = newValue.toLowerCase();
-											
-				if (item.getItem().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
+
+				if (item.getItem().toLowerCase().indexOf(lowerCaseFilter) != -1) {
 					return true; // Filter matches item
 				} else {
 					return false; // does not match
@@ -92,7 +110,7 @@ public class InventoryViewController {
 			});
 		});
 	}
-	
+
 	public InventoryViewController() {}
 
 	@FXML

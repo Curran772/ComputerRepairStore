@@ -18,6 +18,7 @@ public class Employee {
 		this.lName = lName;
 		this.username = username;
 		this.password = password;
+		
 	}
 	
 	
@@ -41,7 +42,7 @@ public class Employee {
 	public String getPassword() {
 		return password;
 	}
-		
+	
 	//setter methods
 	public void setEmployeeID(String employeeID) {
 							
@@ -63,6 +64,7 @@ public class Employee {
 			this.password = "123";
 		}
 	}
+
 	
 	public void setUsername(String username) {
 			this.username = employeeID;
