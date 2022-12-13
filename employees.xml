@@ -2,63 +2,44 @@
 <employees>
     <employee>
         <employeeID>111111</employeeID>
-        <fName>Jane</fName>
-        <lName>Green</lName>
-        <password> 123</password>
+        <FName>Jane</FName>
+        <LName>Green</LName>
+        <password>123</password>
         <username>111111</username>
-        <fName>Jane</fName>
-        <lName>Green</lName>
     </employee>
     <employee>
         <employeeID>222222</employeeID>
-        <fName>Jane</fName>
-        <lName>Green</lName>
-        <password> 123</password>
+        <FName>Max</FName>
+        <LName>Brown</LName>
+        <password>123</password>
         <username>222222</username>
-        <fName>Max</fName>
-        <lName>Brown</lName>
     </employee>
     <employee>
         <employeeID>333333</employeeID>
-        <fName>Jane</fName>
-        <lName>Green</lName>
+        <FName>Rob</FName>
+        <LName>Schneider</LName>
         <password> 123</password>
         <username>333333</username>
-        <fName>Rob</fName>
-        <lName>Schneider</lName>
     </employee>
     <employee>
         <employeeID>444444</employeeID>
-        <fName>Jane</fName>
-        <lName>Green</lName>
+        <FName>Dweight</FName>
+        <LName>Howard</LName>
         <password> 123</password>
         <username>444444</username>
-        <fName>Dweight</fName>
-        <lName>Howard</lName>
     </employee>
     <employee>
         <employeeID>555555</employeeID>
-        <fName>Jane</fName>
-        <lName>Green</lName>
+        <FName>Amy</FName>
+        <LName>Smith</LName>
         <password> 123</password>
         <username>555555</username>
-        <fName>Amy</fName>
-        <lName>Smith</lName>
     </employee>
     <employee>
         <employeeID>666666</employeeID>
-        <fName>Jane</fName>
-        <lName>Green</lName>
+        <FName>Stacy</FName>
+        <LName>Anderson</LName>
         <password> 123</password>
         <username>666666</username>
-        <fName>Stacy</fName>
-        <lName>Anderson</lName>
-    </employee>
-    <employee>
-        <employeeID></employeeID>
-        <fName>Admin</fName>
-        <lName></lName>
-        <password></password>
-        <username></username>
     </employee>
 </employees>

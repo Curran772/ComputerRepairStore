@@ -1,3 +1,14 @@
+/**
+ * Class Name: ComputerRepairStoreContoller
+ * Class Description: The purpose of this class is to allow a user to make
+ * a purchase from the computer Repair Store inventory.  The user may be an 
+ * employee who is helping a customer make a purchase or a customer using a self
+ * checkout and making a purchase for themselves.  Through this class you can 
+ * add items to the purchase list, view totals and make payments.  A receipt will 
+ * be printed to an invoice file.  
+ * 
+ * @author Amber Robertson and Curran Buss
+ */
 package Controllers;
 
 import java.io.*;
@@ -228,6 +239,8 @@ public class ComputerRepairStoreController implements Initializable {
 	 */
 	@FXML
 	public void switchToInventoryView(ActionEvent event) throws IOException {
+		if(readCurrentUser().contains("Jane") || readCurrentUser().contains("Rob")) {
+					
 		Stage InvView = new Stage();
 		InvView.initModality(Modality.APPLICATION_MODAL);
 		InvView.setTitle("Inventory");
@@ -235,6 +248,13 @@ public class ComputerRepairStoreController implements Initializable {
 
 		InvView.setScene(inventory);
 		InvView.showAndWait();
+	}else {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Not Authorized.");
+		alert.setHeaderText("You are not authorized to check inventory.");
+		alert.showAndWait();
+		
+	}
 	}
 
 	/**
@@ -428,12 +448,15 @@ public class ComputerRepairStoreController implements Initializable {
 				purchase.forEach(pw::println);
 				pw.println();
 				pw.printf(
-						"SubTotal: $%.2f%nTax: $%.2f%nTotal Due: $%.2f%n%nPayment Method: %s%nPayment Amount: $%.2f%nChange: $%.2f%n",
-						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), getTotalPaymentAmount(),
+						"SubTotal: $%.2f%nTax: $%.2f%nTotal Due: $%.2f%n%nPayment Method: "
+						+ "%s%nPayment Amount: $%.2f%nChange: $%.2f%n",
+						getTotal(), getTax(), getTotalDue(), pmtMethodField.getValue(), 
+						getTotalPaymentAmount(),
 						getChange());
 				pw.println();
-				pw.println(readCurrentUser());
-				pw.printf("Thank you for your purchase!");//"You were helped by %s.%n%n Thank you for your purchase!%n%n", employee.toString());
+				pw.println("You were helped by " + readCurrentUser() + ".");
+				pw.println();
+				pw.printf("Thank you for your purchase!");
 				pw.close();
 				pw.println();
 			}
@@ -535,7 +558,7 @@ public class ComputerRepairStoreController implements Initializable {
 							"%d", Update.getQuantity(p.getItem()) - inventoryList.get(idx).getQuantity()));
 				}
 
-				inventoryList.clear();
+				//inventoryList.clear();
 				tableView.setItems(inventoryList);
 				tableView.refresh();
 			}

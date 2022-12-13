@@ -1,3 +1,11 @@
+/**
+ * Class Name: LogInScreenContoller
+ * Class Description: The purpose of this class is to allow a user to login to the 
+ * computer store main screen.  User must have a username and password that matches
+ * one from the Employee Files.
+ * 
+ * @author Amber Robertson and Curran Buss
+ */
 package Controllers;
 
 import java.io.BufferedReader;
@@ -54,8 +62,8 @@ public class LogInScreenController {
 						Main.changeStageTitle("Computer Repair Store");
 						JAXB.marshal(e.toString(), output);
 						break;
-					} else if (usernameTextField.getText().equals("")
-							&& passwordTextField.getText().contains("")) {
+					} else if (usernameTextField.getText().isEmpty()
+							&& passwordTextField.getText().isEmpty()){
 						wrongLogIn.setText("Success!");
 
 						Main.setRoot("ComputerRepairStore", true);

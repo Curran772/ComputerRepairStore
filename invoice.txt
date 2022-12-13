@@ -4,16 +4,19 @@
 		             Computer Repair Store				         	     
 **************************************************************************
 
-Mon Dec 12 15:25:31 CST 2022
+Mon Dec 12 22:46:08 CST 2022
+
+ddr3 RAM                                1         16.99     
 
 
-SubTotal: $6.99
-Tax: $0.35
-Total Due: $7.34
+SubTotal: $16.99
+Tax: $0.85
+Total Due: $17.84
 
 Payment Method: Cash
-Payment Amount: $10.00
-Change: $2.66
+Payment Amount: $20.00
+Change: $2.16
 
-Admin
+You were helped by Jane Green
+
 Thank you for your purchase!
